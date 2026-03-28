@@ -45,7 +45,7 @@ const AdminCoordinators = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await apiClient.get("/api/auth/coordinators", authHeader());
+      const res = await apiClient.get("/auth/coordinators", authHeader());
       if (res.data.success) setUsers(res.data.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load users");
@@ -74,7 +74,7 @@ const AdminCoordinators = () => {
           setError("Password must be at least 6 characters");
           return;
         }
-        await apiClient.post("/api/auth/coordinators", formData, authHeader());
+        await apiClient.post("/auth/coordinators", formData, authHeader());
         setSuccess("Coordinator created successfully");
       }
       fetchUsers();

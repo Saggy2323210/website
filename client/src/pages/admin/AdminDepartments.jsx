@@ -21,7 +21,7 @@ const AdminDepartments = () => {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const res = await apiClient.get("/api/pages", {
+        const res = await apiClient.get("/pages", {
           params: { category: "departments" },
         });
         if (res.data?.success) {

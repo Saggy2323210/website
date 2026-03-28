@@ -71,7 +71,7 @@ const AdminPlacements = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get("/api/placements/stats");
+      const res = await apiClient.get("/placements/stats");
       setStats(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch {
       setError("Failed to load placement statistics.");
@@ -100,7 +100,7 @@ const AdminPlacements = () => {
         await apiClient.put(`/api/placements/stats/${editingId}`, payload, authHeader());
         setSuccess("Statistics updated successfully.");
       } else {
-        await apiClient.post("/api/placements/stats", payload, authHeader());
+        await apiClient.post("/placements/stats", payload, authHeader());
         setSuccess("Statistics added successfully.");
       }
       fetchStats();

@@ -383,7 +383,7 @@ const AdminPages = () => {
 
   const fetchPages = async () => {
     try {
-      const res = await apiClient.get("/api/pages");
+      const res = await apiClient.get("/pages");
       if (res.data.success) {
         setPages(res.data.data || []);
         setError("");

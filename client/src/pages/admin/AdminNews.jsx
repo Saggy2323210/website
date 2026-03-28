@@ -31,7 +31,7 @@ const AdminNews = () => {
 
   const fetchNews = async () => {
     try {
-      const res = await apiClient.get("/api/news");
+      const res = await apiClient.get("/news");
       if (res.data.success) {
         setNews(res.data.data);
         setError("");
@@ -53,7 +53,7 @@ const AdminNews = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await apiClient.post("/api/news", formData, {
+        await apiClient.post("/news", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }

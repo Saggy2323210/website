@@ -61,7 +61,7 @@ const AdminFaculty = () => {
       } else if (filterDept) {
         params.department = filterDept;
       }
-      const res = await apiClient.get("/api/faculty", { params, ...authHeader() });
+      const res = await apiClient.get("/faculty", { params, ...authHeader() });
       setFaculty(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to load faculty");
@@ -86,7 +86,7 @@ const AdminFaculty = () => {
         await apiClient.put(`/api/faculty/${editingId}`, payload, authHeader());
         setSuccess("Faculty updated successfully");
       } else {
-        await apiClient.post("/api/faculty", payload, authHeader());
+        await apiClient.post("/faculty", payload, authHeader());
         setSuccess("Faculty added successfully");
       }
       fetchFaculty();

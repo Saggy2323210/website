@@ -47,7 +47,7 @@ const AdminTestimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get("/api/placements/testimonials");
+      const res = await apiClient.get("/placements/testimonials");
       setTestimonials(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch {
       setError("Failed to load testimonials.");
@@ -63,7 +63,7 @@ const AdminTestimonials = () => {
     try {
       setUploading(true);
       setError("");
-      const res = await apiClient.post("/api/upload/image", fd, {
+      const res = await apiClient.post("/upload/image", fd, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           "Content-Type": "multipart/form-data",
@@ -86,7 +86,7 @@ const AdminTestimonials = () => {
         await apiClient.put(`/api/placements/testimonials/${editingId}`, formData, authHeader());
         setSuccess("Testimonial updated successfully.");
       } else {
-        await apiClient.post("/api/placements/testimonials", formData, authHeader());
+        await apiClient.post("/placements/testimonials", formData, authHeader());
         setSuccess("Testimonial added successfully.");
       }
       fetchTestimonials();

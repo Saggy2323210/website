@@ -36,7 +36,7 @@ const AdminEditLogs = () => {
       setError("");
       const params = {};
       if (filterPage) params.pageId = filterPage;
-      const res = await apiClient.get("/api/pages/edit-logs", {
+      const res = await apiClient.get("/pages/edit-logs", {
         params,
         ...authHeader(),
       });

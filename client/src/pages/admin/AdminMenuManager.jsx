@@ -57,8 +57,8 @@ const AdminMenuManager = () => {
   const fetchData = async () => {
     try {
       const [pagesRes, menuRes] = await Promise.all([
-        apiClient.get("/api/pages"),
-        apiClient.get("/api/pages/menu-structure"),
+        apiClient.get("/pages"),
+        apiClient.get("/pages/menu-structure"),
       ]);
 
       if (pagesRes.data.success) {

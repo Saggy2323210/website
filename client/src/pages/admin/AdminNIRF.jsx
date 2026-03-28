@@ -66,7 +66,7 @@ const AdminNIRF = () => {
   const fetchEntries = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get("/api/nirf/admin/all", authHeader());
+      const res = await apiClient.get("/nirf/admin/all", authHeader());
       setEntries(res.data.data || []);
     } catch {
       setError("Failed to load NIRF entries.");
@@ -87,7 +87,7 @@ const AdminNIRF = () => {
     try {
       const fd = new FormData();
       fd.append("pdf", file);
-      const res = await apiClient.post("/api/upload/nirf-pdf", fd, {
+      const res = await apiClient.post("/upload/nirf-pdf", fd, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           "Content-Type": "multipart/form-data",
@@ -124,7 +124,7 @@ const AdminNIRF = () => {
         await apiClient.put(`/api/nirf/admin/${editingId}`, payload, authHeader());
         setSuccess("Entry updated successfully.");
       } else {
-        await apiClient.post("/api/nirf/admin/create", payload, authHeader());
+        await apiClient.post("/nirf/admin/create", payload, authHeader());
         setSuccess("Entry added successfully.");
       }
       fetchEntries();

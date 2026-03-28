@@ -64,7 +64,7 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await apiClient.get("/api/pages");
+      const res = await apiClient.get("/pages");
       if (res.data.success) {
         const pages = (res.data.data || []).filter(
           (page) => !isLegacyAcademicsPage(page),
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
     setSeeding(true);
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await apiClient.post("/api/pages/seed-all", {}, {
+      const res = await apiClient.post("/pages/seed-all", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {

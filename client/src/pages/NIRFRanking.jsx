@@ -183,7 +183,7 @@ const NIRFRanking = () => {
       const fd = new FormData();
       fd.append("pdf", file);
       const token = localStorage.getItem("adminToken");
-      const uploadRes = await apiClient.post("/api/upload/nirf-pdf", fd, {
+      const uploadRes = await apiClient.post("/upload/nirf-pdf", fd, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

@@ -66,7 +66,7 @@ const EditableImage = ({
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await apiClient.post("/api/upload", formData, {
+      const response = await apiClient.post("/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

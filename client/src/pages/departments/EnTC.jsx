@@ -932,7 +932,7 @@ const EnTC = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -1029,7 +1029,7 @@ const EnTC = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
       });
       if (response.data.fileUrl) {
@@ -1192,7 +1192,7 @@ const EnTC = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
       });
       if (!response.data.fileUrl) throw new Error("Upload did not return a file URL.");
@@ -1838,7 +1838,7 @@ const EnTC = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2064,7 +2064,7 @@ const EnTC = () => {
     if (!token) return;
 
     try {
-      await apiClient.delete("/api/upload/file", {
+      await apiClient.delete("/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -2140,7 +2140,7 @@ const EnTC = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2313,7 +2313,7 @@ const EnTC = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2446,7 +2446,7 @@ const EnTC = () => {
     if (!token) return;
 
     try {
-      await apiClient.delete("/api/upload/file", {
+      await apiClient.delete("/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -2492,7 +2492,7 @@ const EnTC = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

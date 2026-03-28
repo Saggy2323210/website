@@ -1401,7 +1401,7 @@ const MarkdownEditor = ({
       const formData = new FormData();
       formData.append("image", file);
       const token = localStorage.getItem("adminToken");
-      const res = await apiClient.post("/api/upload/image", formData, {
+      const res = await apiClient.post("/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -1430,7 +1430,7 @@ const MarkdownEditor = ({
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const res = await apiClient.post("/api/upload/file", formData, {
+      const res = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

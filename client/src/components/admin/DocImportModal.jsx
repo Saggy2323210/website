@@ -153,7 +153,7 @@ const DocImportModal = ({ onClose }) => {
       const formData = new FormData();
       formData.append("document", file);
 
-      const res = await apiClient.post("/api/convert/document", formData, {
+      const res = await apiClient.post("/convert/document", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

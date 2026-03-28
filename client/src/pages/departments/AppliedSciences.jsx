@@ -1011,7 +1011,7 @@ const AppliedSciences = () => {
       formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

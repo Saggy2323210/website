@@ -3,6 +3,7 @@
 Use this checklist to track your deployment progress.
 
 ## Phase 1: Preparation ✅
+
 - [ ] Read DEPLOYMENT_GUIDE.md completely
 - [ ] Initialize Git repository (if needed)
 - [ ] Update root package.json
@@ -10,6 +11,7 @@ Use this checklist to track your deployment progress.
 - [ ] Test local development (`npm run dev`)
 
 ## Phase 2: Database Setup
+
 - [ ] Create MongoDB Atlas account
 - [ ] Create a free tier cluster
 - [ ] Create database user with credentials
@@ -18,6 +20,7 @@ Use this checklist to track your deployment progress.
 - [ ] Test connection locally
 
 ## Phase 3: GitHub
+
 - [ ] Create GitHub repository
 - [ ] Initialize Git locally
 - [ ] Add remote: `git remote add origin <repo-url>`
@@ -25,6 +28,7 @@ Use this checklist to track your deployment progress.
 - [ ] Verify all files are uploaded
 
 ## Phase 4: Backend Deployment (Render)
+
 - [ ] Create Render account with GitHub
 - [ ] Create new Web Service
 - [ ] Select GitHub repository
@@ -36,6 +40,7 @@ Use this checklist to track your deployment progress.
 - [ ] Database auto-seeds (if configured)
 
 ## Phase 5: Frontend Deployment (Vercel)
+
 - [ ] Create Vercel account with GitHub
 - [ ] Import GitHub repository
 - [ ] Set Root Directory to `client`
@@ -47,12 +52,14 @@ Use this checklist to track your deployment progress.
 - [ ] Verify API connectivity
 
 ## Phase 6: Connect Backend & Frontend
+
 - [ ] Update Render CORS_ORIGIN with Vercel URL
 - [ ] Update Vercel VITE_BACKEND_URL with Render URL
 - [ ] Redeploy both services
 - [ ] Test backend ↔ frontend communication
 
 ## Phase 7: GitHub Actions CI/CD
+
 - [ ] Verify `.github/workflows/deploy.yml` exists
 - [ ] Go to GitHub Settings → Secrets and variables
 - [ ] Add secret: `RENDER_DEPLOY_HOOK` with webhook URL
@@ -62,6 +69,7 @@ Use this checklist to track your deployment progress.
 - [ ] Verify services auto-deployed
 
 ## Phase 8: Testing
+
 - [ ] Test frontend loads: https://your-frontend.vercel.app
 - [ ] Test backend API: curl https://your-backend.onrender.com/api/health
 - [ ] Test form submissions
@@ -72,6 +80,7 @@ Use this checklist to track your deployment progress.
 - [ ] Check browser console for errors
 
 ## Phase 9: Production Readiness
+
 - [ ] Review and update admin credentials
 - [ ] Disable ADMIN_AUTO_SEED in production
 - [ ] Enable HTTPS everywhere
@@ -82,6 +91,7 @@ Use this checklist to track your deployment progress.
 - [ ] Set up custom domains (optional)
 
 ## Phase 10: Maintenance
+
 - [ ] Monitor Render logs regularly
 - [ ] Check Vercel deployment status
 - [ ] Monitor MongoDB Atlas usage
@@ -95,11 +105,13 @@ Use this checklist to track your deployment progress.
 ## Quick Commands Reference
 
 ### Local Development
+
 ```bash
 npm run dev  # Starts both frontend and backend
 ```
 
 ### Deploy Manually
+
 ```bash
 git add .
 git commit -m "Your message"
@@ -107,6 +119,7 @@ git push origin main  # Triggers CI/CD automatically
 ```
 
 ### Useful Links
+
 - 🔗 GitHub: https://github.com/YOUR_USERNAME/ssgmce-website
 - 🔗 Vercel Dashboard: https://vercel.com/dashboard
 - 🔗 Render Dashboard: https://dashboard.render.com
@@ -116,6 +129,7 @@ git push origin main  # Triggers CI/CD automatically
 ---
 
 ## Estimated Timeline
+
 - Phase 1-3: 10 minutes
 - Phase 4: 10 minutes (waiting for Render)
 - Phase 5: 10 minutes (waiting for Vercel)
@@ -129,6 +143,7 @@ git push origin main  # Triggers CI/CD automatically
 ## Problem Solver
 
 ### If nothing works:
+
 1. Check error logs (Render, Vercel, GitHub Actions)
 2. Verify all environment variables
 3. Ensure MongoDB connection string is correct
@@ -136,6 +151,7 @@ git push origin main  # Triggers CI/CD automatically
 5. Review API endpoints match frontend calls
 
 ### Need Help?
+
 - Render Support: https://render.com/support
 - Vercel Support: https://vercel.com/support
 - MongoDB Docs: https://docs.mongodb.com

@@ -1,6 +1,7 @@
 # 🚀 Quick Start Deployment Guide (5 Simple Steps)
 
 ## Step 1: Prepare Your Project (5 min)
+
 ```bash
 # Verify git is initialized
 git init
@@ -11,14 +12,17 @@ git commit -m "Ready for deployment"
 ```
 
 ## Step 2: Set Up Database (10 min)
+
 1. Go to: https://www.mongodb.com/cloud/atlas
 2. Sign up (free) → Create cluster → Create user
 3. Copy the connection string
 4. Update `server/.env` with MongoDB URI
 
 ## Step 3: Push to GitHub (5 min)
+
 1. Create repo: https://github.com/new
 2. Run these commands:
+
 ```bash
 git remote add origin https://github.com/YOUR_USERNAME/ssgmce-website.git
 git branch -M main
@@ -26,6 +30,7 @@ git push -u origin main
 ```
 
 ## Step 4: Deploy Backend to Render (10 min)
+
 1. Go to: https://render.com
 2. Sign up with GitHub
 3. Click "New +" → "Web Service"
@@ -39,6 +44,7 @@ git push -u origin main
 8. Copy your backend URL (e.g., `https://ssgmce-backend.onrender.com`)
 
 ## Step 5: Deploy Frontend to Vercel (10 min)
+
 1. Go to: https://vercel.com
 2. Sign up with GitHub
 3. Click "New Project"
@@ -56,6 +62,7 @@ git push -u origin main
 8. Copy your frontend URL (e.g., `https://ssgmce-website.vercel.app`)
 
 ## Step 6: Update CORS (2 min)
+
 1. Go to Render dashboard
 2. Update environment variable:
    ```
@@ -64,6 +71,7 @@ git push -u origin main
 3. Redeploy
 
 ## Step 7: Set Up Auto-Deployment (5 min)
+
 1. Go to Render dashboard
 2. Settings → Deploy Hook → Copy webhook URL
 3. Go to GitHub → Settings → Secrets and variables
@@ -73,6 +81,7 @@ git push -u origin main
 ---
 
 ## ✅ Verify It Works
+
 - Visit: https://ssgmce-website.vercel.app
 - Check logs in Render if issues
 - Test API calls from frontend

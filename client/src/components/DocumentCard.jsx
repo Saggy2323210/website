@@ -13,7 +13,7 @@ import {
   FaInfoCircle,
   FaTimes,
 } from "react-icons/fa";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import { logUnexpectedError } from "../utils/apiErrors";
 
 /**
@@ -85,7 +85,7 @@ const DocumentCard = ({ document }) => {
     if (!safeFileUrl) return;
 
     try {
-      await axios.post(`/api/documents/${_id}/download`);
+      await apiClient.post(`/api/documents/${_id}/download`);
       openFile();
     } catch (error) {
       logUnexpectedError("Error tracking download:", error);

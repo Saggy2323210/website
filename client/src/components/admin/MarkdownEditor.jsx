@@ -4,7 +4,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import MarkdownIt from "markdown-it";
 import markdownItAttrs from "markdown-it-attrs";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { useEdit } from "../../contexts/EditContext";
 import {
   FaCheck,
@@ -1401,7 +1401,7 @@ const MarkdownEditor = ({
       const formData = new FormData();
       formData.append("image", file);
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("/api/upload/image", formData, {
+      const res = await apiClient.post("/api/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -1430,7 +1430,7 @@ const MarkdownEditor = ({
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("/api/upload/file", formData, {
+      const res = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

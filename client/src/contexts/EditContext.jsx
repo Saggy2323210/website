@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useRef, useState } from "react";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 
 const EditContext = createContext();
 
@@ -113,7 +113,7 @@ export const EditProvider = ({ children, pageId, initialData = {} }) => {
         };
       }
 
-      const response = await axios.put(
+      const response = await apiClient.put(
         `/api/pages/${pageId}`,
         data, // send the full data object directly so the server can merge top-level fields
         {

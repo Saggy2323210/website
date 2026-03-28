@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaGraduationCap,
@@ -66,7 +66,7 @@ const AdminNIRF = () => {
   const fetchEntries = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/nirf/admin/all", authHeader());
+      const res = await apiClient.get("/api/nirf/admin/all", authHeader());
       setEntries(res.data.data || []);
     } catch {
       setError("Failed to load NIRF entries.");
@@ -87,7 +87,7 @@ const AdminNIRF = () => {
     try {
       const fd = new FormData();
       fd.append("pdf", file);
-      const res = await axios.post("/api/upload/nirf-pdf", fd, {
+      const res = await apiClient.post("/api/upload/nirf-pdf", fd, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           "Content-Type": "multipart/form-data",
@@ -121,10 +121,10 @@ const AdminNIRF = () => {
         isActive: formData.isActive,
       };
       if (editingId) {
-        await axios.put(`/api/nirf/admin/${editingId}`, payload, authHeader());
+        await apiClient.put(`/api/nirf/admin/${editingId}`, payload, authHeader());
         setSuccess("Entry updated successfully.");
       } else {
-        await axios.post("/api/nirf/admin/create", payload, authHeader());
+        await apiClient.post("/api/nirf/admin/create", payload, authHeader());
         setSuccess("Entry added successfully.");
       }
       fetchEntries();
@@ -154,7 +154,7 @@ const AdminNIRF = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/nirf/admin/${id}`, authHeader());
+      await apiClient.delete(`/api/nirf/admin/${id}`, authHeader());
       setSuccess("Entry deleted.");
       setDeleteConfirm(null);
       fetchEntries();

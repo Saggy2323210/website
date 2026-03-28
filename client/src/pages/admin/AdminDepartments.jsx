@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaUniversity,
@@ -21,7 +21,7 @@ const AdminDepartments = () => {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const res = await axios.get("/api/pages", {
+        const res = await apiClient.get("/api/pages", {
           params: { category: "departments" },
         });
         if (res.data?.success) {

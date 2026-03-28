@@ -21,17 +21,17 @@ const Placements = () => {
   ];
 
   useEffect(() => {
-    axios.get('/api/placements/stats').then((r) => {
+    apiClient.get('/api/placements/stats').then((r) => {
       const data = Array.isArray(r.data) ? r.data : r.data.data || [];
       setLiveStats(data.sort((a, b) => b.academicYear.localeCompare(a.academicYear)));
     }).catch(() => {});
 
-    axios.get('/api/placements/recruiters').then((r) => {
+    apiClient.get('/api/placements/recruiters').then((r) => {
       const data = Array.isArray(r.data) ? r.data : r.data.data || [];
       setLiveRecruiters(data.sort((a, b) => a.order - b.order || a.name.localeCompare(b.name)));
     }).catch(() => {});
 
-    axios.get('/api/placements/testimonials').then((r) => {
+    apiClient.get('/api/placements/testimonials').then((r) => {
       setTestimonials(Array.isArray(r.data) ? r.data : r.data.data || []);
     }).catch(() => {});
   }, []);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaEye,
@@ -39,7 +39,7 @@ const AdminPopupBanner = () => {
 
   const fetchBanners = async () => {
     try {
-      const response = await axios.get("/api/popup-banners");
+      const response = await apiClient.get("/api/popup-banners");
       if (response.data.success) {
         setBanners(response.data.data);
       }
@@ -59,7 +59,7 @@ const AdminPopupBanner = () => {
 
     setUploading(true);
     try {
-      const response = await axios.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/api/upload/image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       
@@ -82,13 +82,13 @@ const AdminPopupBanner = () => {
     try {
       if (editingId) {
         // Update existing banner
-        const response = await axios.put(`/api/popup-banners/${editingId}`, formData);
+        const response = await apiClient.put(`/api/popup-banners/${editingId}`, formData);
         if (response.data.success) {
           alert("Banner updated successfully!");
         }
       } else {
         // Create new banner
-        const response = await axios.post("/api/popup-banners", formData);
+        const response = await apiClient.post("/api/popup-banners", formData);
         if (response.data.success) {
           alert("Banner created successfully!");
         }
@@ -123,7 +123,7 @@ const AdminPopupBanner = () => {
     if (!confirm("Are you sure you want to delete this banner?")) return;
 
     try {
-      const response = await axios.delete(`/api/popup-banners/${id}`);
+      const response = await apiClient.delete(`/api/popup-banners/${id}`);
       if (response.data.success) {
         alert("Banner deleted successfully!");
         fetchBanners();
@@ -136,7 +136,7 @@ const AdminPopupBanner = () => {
 
   const toggleActive = async (id) => {
     try {
-      const response = await axios.patch(`/api/popup-banners/${id}/toggle`);
+      const response = await apiClient.patch(`/api/popup-banners/${id}/toggle`);
       if (response.data.success) {
         fetchBanners();
       }

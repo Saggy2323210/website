@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
     if (token && savedUser) {
       setUser(JSON.parse(savedUser));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
     setLoading(false);
   }, []);
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
 
-      const response = await axios.post(`${API_URL}/auth/login`, {
+      const response = await apiClient.post(`${API_URL}/auth/login`, {
         email,
         password,
       });
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('adminUser', JSON.stringify(userData));
 
         // Set axios default header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         setUser(userData);
         return { success: true };
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
 
-      const response = await axios.post(`${API_URL}/auth/register`, {
+      const response = await apiClient.post(`${API_URL}/auth/register`, {
         name,
         email,
         password
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
         localStorage.setItem('adminToken', token);
         localStorage.setItem('adminUser', JSON.stringify(userData));
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
         setUser(userData);
         return { success: true };
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
-    delete axios.defaults.headers.common['Authorization'];
+    delete apiClient.defaults.headers.common['Authorization'];
     setUser(null);
   };
 

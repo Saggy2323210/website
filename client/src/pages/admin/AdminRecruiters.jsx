@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaUsers,
@@ -56,7 +56,7 @@ const AdminRecruiters = () => {
   const fetchRecruiters = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/placements/recruiters");
+      const res = await apiClient.get("/api/placements/recruiters");
       setRecruiters(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch {
       setError("Failed to load recruiters.");
@@ -72,7 +72,7 @@ const AdminRecruiters = () => {
     try {
       setUploading(true);
       setError("");
-      const res = await axios.post("/api/upload/image", fd, {
+      const res = await apiClient.post("/api/upload/image", fd, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           "Content-Type": "multipart/form-data",
@@ -97,10 +97,10 @@ const AdminRecruiters = () => {
     try {
       const payload = { ...formData, order: Number(formData.order) };
       if (editingId) {
-        await axios.put(`/api/placements/recruiters/${editingId}`, payload, authHeader());
+        await apiClient.put(`/api/placements/recruiters/${editingId}`, payload, authHeader());
         setSuccess("Recruiter updated successfully.");
       } else {
-        await axios.post("/api/placements/recruiters", payload, authHeader());
+        await apiClient.post("/api/placements/recruiters", payload, authHeader());
         setSuccess("Recruiter added successfully.");
       }
       fetchRecruiters();
@@ -126,7 +126,7 @@ const AdminRecruiters = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/placements/recruiters/${id}`, authHeader());
+      await apiClient.delete(`/api/placements/recruiters/${id}`, authHeader());
       setSuccess("Recruiter deleted.");
       setDeleteConfirm(null);
       fetchRecruiters();

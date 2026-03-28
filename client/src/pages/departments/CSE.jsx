@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
@@ -2231,7 +2231,7 @@ const CSE = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2720,7 +2720,7 @@ const CSE = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2833,7 +2833,7 @@ const CSE = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -3078,7 +3078,7 @@ const CSE = () => {
     if (!token) return;
 
     try {
-      await axios.delete("/api/upload/file", {
+      await apiClient.delete("/api/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -3154,7 +3154,7 @@ const CSE = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -3409,7 +3409,7 @@ const CSE = () => {
     if (!token) return;
 
     try {
-      await axios.delete("/api/upload/file", {
+      await apiClient.delete("/api/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -3450,7 +3450,7 @@ const CSE = () => {
       formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/api/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

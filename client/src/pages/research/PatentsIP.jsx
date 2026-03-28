@@ -52,7 +52,7 @@ const PatentsIP = () => {
       if (filter.type) params.append('type', filter.type);
       params.append('limit', '50');
 
-      const res = await axios.get(`/api/research/patents?${params}`);
+      const res = await apiClient.get(`/api/research/patents?${params}`);
       setPatents(res.data.patents);
       setError("");
 

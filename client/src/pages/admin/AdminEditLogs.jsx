@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaHistory,
@@ -36,7 +36,7 @@ const AdminEditLogs = () => {
       setError("");
       const params = {};
       if (filterPage) params.pageId = filterPage;
-      const res = await axios.get("/api/pages/edit-logs", {
+      const res = await apiClient.get("/api/pages/edit-logs", {
         params,
         ...authHeader(),
       });
@@ -60,7 +60,7 @@ const AdminEditLogs = () => {
     setError("");
     setSuccess("");
     try {
-      const res = await axios.post(
+      const res = await apiClient.post(
         `/api/pages/reset/${logId}`,
         {},
         authHeader()

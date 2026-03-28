@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaPlus,
@@ -31,7 +31,7 @@ const AdminNews = () => {
 
   const fetchNews = async () => {
     try {
-      const res = await axios.get("/api/news");
+      const res = await apiClient.get("/api/news");
       if (res.data.success) {
         setNews(res.data.data);
         setError("");
@@ -49,11 +49,11 @@ const AdminNews = () => {
     try {
       const token = localStorage.getItem("adminToken");
       if (editingId) {
-        await axios.put(`/api/news/${editingId}`, formData, {
+        await apiClient.put(`/api/news/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await axios.post("/api/news", formData, {
+        await apiClient.post("/api/news", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
@@ -86,7 +86,7 @@ const AdminNews = () => {
     if (!confirm("Are you sure you want to delete this news item?")) return;
     try {
       const token = localStorage.getItem("adminToken");
-      await axios.delete(`/api/news/${id}`, {
+      await apiClient.delete(`/api/news/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchNews();

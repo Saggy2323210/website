@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import GenericPage from "../components/GenericPage";
 import { motion } from "framer-motion";
 import {
@@ -408,7 +408,7 @@ export const useFacultyDirectoryData = () => {
         ];
 
         const responses = await Promise.allSettled(
-          pageRequests.map(([, url]) => axios.get(url)),
+          pageRequests.map(([, url]) => apiClient.get(url)),
         );
 
         if (!isMounted) return;

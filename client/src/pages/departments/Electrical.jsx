@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
@@ -1110,7 +1110,7 @@ const Electrical = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -1212,7 +1212,7 @@ const Electrical = () => {
       formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/api/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -1303,7 +1303,7 @@ const Electrical = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
       });
       if (response.data.fileUrl) {
@@ -1519,7 +1519,7 @@ const Electrical = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
       });
       if (!response.data.fileUrl) throw new Error("Upload did not return a file URL.");
@@ -2155,7 +2155,7 @@ const Electrical = () => {
       const formData = new FormData();
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2302,7 +2302,7 @@ const Electrical = () => {
     if (!token) return;
 
     try {
-      await axios.delete("/api/upload/file", {
+      await apiClient.delete("/api/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -2378,7 +2378,7 @@ const Electrical = () => {
       formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/file", formData, {
+      const response = await apiClient.post("/api/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -2506,7 +2506,7 @@ const Electrical = () => {
     if (!token) return;
 
     try {
-      await axios.delete("/api/upload/file", {
+      await apiClient.delete("/api/upload/file", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -2547,7 +2547,7 @@ const Electrical = () => {
       formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/api/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

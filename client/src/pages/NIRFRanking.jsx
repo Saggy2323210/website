@@ -10,7 +10,7 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import PageHeader from "../components/PageHeader";
@@ -183,7 +183,7 @@ const NIRFRanking = () => {
       const fd = new FormData();
       fd.append("pdf", file);
       const token = localStorage.getItem("adminToken");
-      const uploadRes = await axios.post("/api/upload/nirf-pdf", fd, {
+      const uploadRes = await apiClient.post("/api/upload/nirf-pdf", fd, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -193,13 +193,13 @@ const NIRFRanking = () => {
       const authHdr = { headers: { Authorization: `Bearer ${token}` } };
       const existingId = nirfEntryIds[key];
       if (existingId) {
-        await axios.put(
+        await apiClient.put(
           `/api/nirf/admin/${existingId}`,
           { reportUrl: fileUrl },
           authHdr,
         );
       } else {
-        const createRes = await axios.post(
+        const createRes = await apiClient.post(
           "/api/nirf/admin/create",
           {
             year,

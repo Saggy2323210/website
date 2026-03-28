@@ -9,7 +9,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import appliedSciencesBanner from "../../assets/images/departments/applied-sciences/banner.png";
 import { AnimatePresence, motion } from "framer-motion";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { getPathWithTab, getRequestedTab } from "../../utils/navigation";
 import {
   FaLaptopCode,
@@ -1011,7 +1011,7 @@ const AppliedSciences = () => {
       formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await axios.post("/api/upload/image", formData, {
+      const response = await apiClient.post("/api/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, Navigate, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { EditProvider } from "../../contexts/EditContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import GenericContentPage from "../../components/GenericContentPage";
@@ -106,7 +106,7 @@ const VisualPageEditor = () => {
       setPageNotFound(false);
       setError(null);
       try {
-        const res = await axios.get(`/api/pages/${pageId}`);
+        const res = await apiClient.get(`/api/pages/${pageId}`);
         if (res.data.success) {
           setInitialData(res.data.data);
         } else {
@@ -137,7 +137,7 @@ const VisualPageEditor = () => {
     setCreating(true);
     try {
       const { pageTitle, category, route } = derivePageMeta(pageId);
-      const res = await axios.post(
+      const res = await apiClient.post(
         "/api/pages",
         {
           pageId,

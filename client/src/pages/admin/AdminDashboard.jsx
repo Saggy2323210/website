@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAuth } from "../../hooks/useAuth";
 import { DASHBOARD_SECTIONS } from "../../constants/navConfig";
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await axios.get("/api/pages");
+      const res = await apiClient.get("/api/pages");
       if (res.data.success) {
         const pages = (res.data.data || []).filter(
           (page) => !isLegacyAcademicsPage(page),
@@ -117,7 +117,7 @@ const AdminDashboard = () => {
     setSeeding(true);
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await axios.post("/api/pages/seed-all", {}, {
+      const res = await apiClient.post("/api/pages/seed-all", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {

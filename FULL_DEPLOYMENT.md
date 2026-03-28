@@ -1,6 +1,7 @@
 # 🎯 Complete Deployment Guide - Full Setup (2 Hours)
 
 ## Prerequisites Check ✅
+
 - [x] Code pushed to GitHub: https://github.com/Saggy2323210/website
 - [x] CORS fixed in server.js
 - [x] Frontend builds successfully
@@ -12,6 +13,7 @@
 ## Phase 1: MongoDB Atlas Setup (15 minutes)
 
 ### Step 1.1: Create MongoDB Atlas Account
+
 1. **Go to**: https://www.mongodb.com/cloud/atlas
 2. **Click**: "Sign Up" (top right)
 3. **Choose**: "Create one for free"
@@ -23,6 +25,7 @@
 6. **Verify email** from MongoDB
 
 ### Step 1.2: Create Database Cluster
+
 1. **After login**, click **"Create"** (green button)
 2. **Choose**: "M0" (Free tier) - should be pre-selected
 3. **Click**: "Create Deployment"
@@ -34,6 +37,7 @@
 6. **You'll see**: "SSGMCE_cluster-0" created
 
 ### Step 1.3: Create Database User
+
 1. **Go to**: "Database Access" (left menu)
 2. **Click**: "Add New Database User"
 3. **Fill**:
@@ -43,6 +47,7 @@
 4. **Click**: "Add User"
 
 ### Step 1.4: Get Connection String
+
 1. **Go to**: "Clusters" (left menu)
 2. **Click**: Connect button on your cluster
 3. **Choose**: "Connect your application"
@@ -56,11 +61,12 @@
 8. **Save it safely** - you'll need it soon
 
 ### Step 1.5: Whitelist IP Address (Allow All for Testing)
+
 1. **Go to**: "Database Access" → "Network Access" (left menu)
 2. **Click**: "Add IP Address"
 3. **Choose**: "Allow access from anywhere" (0.0.0.0/0)
 4. **Confirm**: Click "Confirm"
-⚠️ *For production, restrict to specific IPs later*
+   ⚠️ _For production, restrict to specific IPs later_
 
 ---
 
@@ -106,6 +112,7 @@ ADMIN_NAME=Admin
 ## Phase 3: Deploy Backend to Render (20 minutes)
 
 ### Step 3.1: Create Render Account
+
 1. **Go to**: https://render.com
 2. **Click**: "Sign up"
 3. **Choose**: "Continue with GitHub"
@@ -114,24 +121,27 @@ ADMIN_NAME=Admin
 6. **Verify email**
 
 ### Step 3.2: Create Web Service
+
 1. **After login**, click **"New +"** (top left)
 2. **Select**: "Web Service"
 3. **Select your repo**: `website` from dropdown
 4. **Connect** your GitHub account
 
 ### Step 3.3: Configure Service
+
 Fill in these settings:
 
-| Field | Value |
-|-------|-------|
-| Name | `ssgmce-backend` |
-| Runtime | `Node` |
-| Root Directory | `server` |
-| Build Command | `npm install` |
-| Start Command | `npm start` |
-| Region | Choose closest to you |
+| Field          | Value                 |
+| -------------- | --------------------- |
+| Name           | `ssgmce-backend`      |
+| Runtime        | `Node`                |
+| Root Directory | `server`              |
+| Build Command  | `npm install`         |
+| Start Command  | `npm start`           |
+| Region         | Choose closest to you |
 
 ### Step 3.4: Add Environment Variables
+
 1. **Scroll down** to "Environment" section
 2. **Click**: "Add Environment Variable"
 3. **Add each** from your `.env` file:
@@ -153,6 +163,7 @@ ADMIN_NAME=Admin
 ⚠️ **CORS_ORIGIN**: Update later after Vercel deployment
 
 ### Step 3.5: Deploy
+
 1. **Click**: "Create Web Service"
 2. **Wait** 5-10 minutes for deployment
 3. **Check**: Green checkmark = success ✅
@@ -165,6 +176,7 @@ ADMIN_NAME=Admin
 ## Phase 4: Deploy Frontend to Vercel (15 minutes)
 
 ### Step 4.1: Create Vercel Account
+
 1. **Go to**: https://vercel.com
 2. **Click**: "Sign up"
 3. **Choose**: "Continue with GitHub"
@@ -172,12 +184,14 @@ ADMIN_NAME=Admin
 5. **Verify email**
 
 ### Step 4.2: Import Project
+
 1. **After login**, click **"Add New..."** (top)
 2. **Select**: "Project"
 3. **Choose repo**: `Saggy2323210/website`
 4. **Click**: "Import"
 
 ### Step 4.3: Configure Project
+
 1. **Framework**: Select "Vite"
 2. **Root Directory**: Change to `client`
 3. **Build Command**: `npm run build`
@@ -189,6 +203,7 @@ ADMIN_NAME=Admin
 6. **Click**: "Deploy"
 
 ### Step 4.4: Wait for Deployment
+
 1. **Watch** the build process
 2. **Wait** 3-5 minutes
 3. **Success** = Blue "Visit" button appears
@@ -200,6 +215,7 @@ ADMIN_NAME=Admin
 ## Phase 5: Update CORS & Test Connection (5 minutes)
 
 ### Step 5.1: Update Render Backend CORS
+
 1. **Go to**: https://dashboard.render.com
 2. **Select**: `ssgmce-backend` service
 3. **Go to**: "Environment" tab
@@ -211,6 +227,7 @@ ADMIN_NAME=Admin
 6. **Auto-redeploy** happens (watch status)
 
 ### Step 5.2: Test Connection
+
 1. **Go to**: https://ssgmce-website.vercel.app
 2. **Open**: Browser DevTools (F12)
 3. **Check**: Console tab - should NOT show CORS errors
@@ -222,6 +239,7 @@ ADMIN_NAME=Admin
 ## Phase 6: GitHub Secrets for Auto-Deployment (5 minutes)
 
 ### Step 6.1: Get Render Deploy Hook
+
 1. **Go to**: https://dashboard.render.com
 2. **Select**: `ssgmce-backend`
 3. **Go to**: "Settings" tab
@@ -232,6 +250,7 @@ ADMIN_NAME=Admin
    ```
 
 ### Step 6.2: Add Secret to GitHub
+
 1. **Go to**: https://github.com/Saggy2323210/website
 2. **Click**: Settings tab
 3. **Left menu**: "Secrets and variables" → "Actions"
@@ -241,6 +260,7 @@ ADMIN_NAME=Admin
 7. **Click**: "Add secret"
 
 ### Step 6.3: Test Auto-Deployment
+
 1. **Go to**: GitHub repo
 2. **Make a small change** (e.g., update README)
 3. **Commit**: `git add . && git commit -m "test: CI/CD trigger"`
@@ -255,29 +275,34 @@ ADMIN_NAME=Admin
 ## 🎯 Verification Checklist
 
 ### ✅ MongoDB
+
 - [ ] Cluster created
 - [ ] User created with username/password
 - [ ] Connection string copied
 - [ ] IP whitelisted (0.0.0.0/0)
 
 ### ✅ Backend (Render)
+
 - [ ] Service deployed successfully
 - [ ] Environment variables added
 - [ ] Health check passes: `https://ssgmce-backend.onrender.com/`
 - [ ] Can see: `"SSGMCE API Server Running"`
 
 ### ✅ Frontend (Vercel)
+
 - [ ] Project deployed successfully
 - [ ] Environment variables added
 - [ ] Website loads: `https://ssgmce-website.vercel.app`
 - [ ] No CORS errors in console
 
 ### ✅ Connection
+
 - [ ] Frontend can reach backend (no CORS errors)
 - [ ] Backend has correct CORS_ORIGIN
 - [ ] API calls work from frontend
 
 ### ✅ GitHub Automation
+
 - [ ] `RENDER_DEPLOY_HOOK` secret added
 - [ ] Push triggers GitHub Actions
 - [ ] Render auto-deploys
@@ -287,12 +312,12 @@ ADMIN_NAME=Admin
 
 ## 🚀 Summary
 
-| Service | URL | Status |
-|---------|-----|--------|
-| **MongoDB** | https://cloud.mongodb.com | ✅ Up |
-| **Backend** | https://ssgmce-backend.onrender.com | ✅ Running |
-| **Frontend** | https://ssgmce-website.vercel.app | ✅ Live |
-| **GitHub** | https://github.com/Saggy2323210/website | ✅ Auto-deploy |
+| Service      | URL                                     | Status         |
+| ------------ | --------------------------------------- | -------------- |
+| **MongoDB**  | https://cloud.mongodb.com               | ✅ Up          |
+| **Backend**  | https://ssgmce-backend.onrender.com     | ✅ Running     |
+| **Frontend** | https://ssgmce-website.vercel.app       | ✅ Live        |
+| **GitHub**   | https://github.com/Saggy2323210/website | ✅ Auto-deploy |
 
 ---
 
@@ -310,21 +335,25 @@ ADMIN_NAME=Admin
 ## 🆘 Troubleshooting
 
 ### CORS Errors in Browser
+
 ```
 Solution: Check CORS_ORIGIN in Render matches your Vercel URL
 ```
 
 ### Backend not responding
+
 ```
 Solution: Check Render logs, ensure MongoDB URI is correct
 ```
 
 ### Frontend builds fail
+
 ```
 Solution: Check Vercel logs, ensure VITE_BACKEND_URL is set
 ```
 
 ### Database connection fails
+
 ```
 Solution: Check MongoDB IP whitelist, verify connection string
 ```

@@ -11,7 +11,7 @@ import {
   FaStar,
   FaHandshake,
 } from "react-icons/fa";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
 
 // Skeleton
@@ -43,7 +43,7 @@ const InnovationCell = () => {
       if (filter.status) params.append("status", filter.status);
       params.append("limit", "50");
 
-      const res = await axios.get(`/api/research/innovations?${params}`);
+      const res = await apiClient.get(`/api/research/innovations?${params}`);
       setInnovations(res.data.innovations);
       setError("");
     } catch (error) {

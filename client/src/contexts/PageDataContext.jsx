@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import {
   getErrorMessage,
   isNotFoundError,
@@ -45,7 +45,7 @@ export const PageDataProvider = ({ children, pageId }) => {
 
       try {
         setLoading(true);
-        const response = await axios.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/api/pages/${pageId}`);
 
         if (response.data.success) {
           setData(response.data.data || {});

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useEdit } from "../../contexts/EditContext";
 import { FaUpload, FaTrash, FaTimes } from "react-icons/fa";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 
 /**
  * EditableImage Component
@@ -66,7 +66,7 @@ const EditableImage = ({
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await axios.post("/api/upload", formData, {
+      const response = await apiClient.post("/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

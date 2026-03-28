@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { useSearchParams } from "react-router-dom";
 import { FaEdit, FaFileAlt, FaSpinner } from "react-icons/fa";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -48,7 +48,7 @@ const AdminAcademics = () => {
   const fetchPageData = async (pageId) => {
     setLoading(true);
     try {
-      const res = await axios.get(`/api/pages/${pageId}`);
+      const res = await apiClient.get(`/api/pages/${pageId}`);
       if (res.data.success) {
         setPageData(res.data.data);
         return;
@@ -58,7 +58,7 @@ const AdminAcademics = () => {
       if (err?.response?.status === 404 || err?.message === "Page not found") {
         const meta = findPageMeta(pageId);
         try {
-          const created = await axios.post(
+          const created = await apiClient.post(
             "/api/pages",
             {
               pageId,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAuth } from "../../hooks/useAuth";
 import {
@@ -61,7 +61,7 @@ const AdminFaculty = () => {
       } else if (filterDept) {
         params.department = filterDept;
       }
-      const res = await axios.get("/api/faculty", { params, ...authHeader() });
+      const res = await apiClient.get("/api/faculty", { params, ...authHeader() });
       setFaculty(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to load faculty");
@@ -83,10 +83,10 @@ const AdminFaculty = () => {
       }
 
       if (editingId) {
-        await axios.put(`/api/faculty/${editingId}`, payload, authHeader());
+        await apiClient.put(`/api/faculty/${editingId}`, payload, authHeader());
         setSuccess("Faculty updated successfully");
       } else {
-        await axios.post("/api/faculty", payload, authHeader());
+        await apiClient.post("/api/faculty", payload, authHeader());
         setSuccess("Faculty added successfully");
       }
       fetchFaculty();
@@ -119,7 +119,7 @@ const AdminFaculty = () => {
     if (!confirm("Are you sure you want to delete this faculty member?")) return;
     setError("");
     try {
-      await axios.delete(`/api/faculty/${id}`, authHeader());
+      await apiClient.delete(`/api/faculty/${id}`, authHeader());
       setSuccess("Faculty deleted");
       fetchFaculty();
     } catch (err) {

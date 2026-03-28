@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import DocumentCard from "./DocumentCard";
 import { FaSearch, FaFilter, FaFileAlt } from "react-icons/fa";
 import { getErrorMessage, logUnexpectedError } from "../utils/apiErrors";
@@ -21,7 +21,7 @@ const DocumentGrid = ({ category, title, description }) => {
     const fetchDocuments = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`/api/documents/category/${category}`);
+        const res = await apiClient.get(`/api/documents/category/${category}`);
         if (res.data.success) {
           setDocuments(res.data.data);
           setAvailableYears(res.data.years || []);

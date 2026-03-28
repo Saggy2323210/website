@@ -25,14 +25,14 @@
 
 After following this guide:
 
-| What | Where | Cost |
-|------|-------|------|
-| **Live Frontend** | vercel.app | 🟢 FREE |
-| **Live Backend API** | onrender.com | 🟢 FREE |
-| **Database** | MongoDB Atlas | 🟢 FREE |
-| **Auto-Deploy** | GitHub Actions | 🟢 FREE |
-| **HTTPS** | Automatic | 🟢 FREE |
-| **Custom Domain** | Optional | $ Paid |
+| What                 | Where          | Cost    |
+| -------------------- | -------------- | ------- |
+| **Live Frontend**    | vercel.app     | 🟢 FREE |
+| **Live Backend API** | onrender.com   | 🟢 FREE |
+| **Database**         | MongoDB Atlas  | 🟢 FREE |
+| **Auto-Deploy**      | GitHub Actions | 🟢 FREE |
+| **HTTPS**            | Automatic      | 🟢 FREE |
+| **Custom Domain**    | Optional       | $ Paid  |
 
 **Total Cost: $0/month forever** ✅
 
@@ -57,12 +57,15 @@ Total:                        (60 min) ⏳
 ## 🚀 Quick Start (Choose Your Path)
 
 ### Path A: I want detailed step-by-step
+
 👉 **Read**: `FULL_DEPLOYMENT.md` (complete with all details)
 
 ### Path B: I want a checklist to mark off
+
 👉 **Use**: `DEPLOYMENT_CHECKLIST_INTERACTIVE.md` (follow each step)
 
 ### Path C: I want a summary first
+
 👉 **Read below** for overview, then follow links
 
 ---
@@ -70,6 +73,7 @@ Total:                        (60 min) ⏳
 ## 📚 Complete Guide Overview
 
 ### Step 1️⃣ MongoDB Setup (15 min)
+
 **What**: Set up free database in the cloud
 **Where**: https://www.mongodb.com/cloud/atlas
 **Result**: Connection string
@@ -79,15 +83,18 @@ Total:                        (60 min) ⏳
 ---
 
 ### Step 2️⃣ Create .env File (5 min)
+
 **What**: Create environment variables for your backend
 **Where**: `server/.env` (in your project)
 **Contains**:
+
 - MongoDB connection string
 - JWT secrets
 - Admin credentials
 - Other config
 
 **Template**:
+
 ```env
 PORT=5000
 NODE_ENV=production
@@ -107,11 +114,13 @@ ADMIN_NAME=Admin
 ---
 
 ### Step 3️⃣ Deploy Backend (20 min)
+
 **What**: Deploy your API to the cloud
 **Where**: https://render.com
 **Result**: `https://ssgmce-backend.onrender.com`
 
 **Steps**:
+
 1. Sign up with GitHub
 2. Create "Web Service"
 3. Configure (root: `server`, build: `npm install`, start: `npm start`)
@@ -123,11 +132,13 @@ ADMIN_NAME=Admin
 ---
 
 ### Step 4️⃣ Deploy Frontend (15 min)
+
 **What**: Deploy your React app to the cloud
 **Where**: https://vercel.com
 **Result**: `https://ssgmce-website.vercel.app`
 
 **Steps**:
+
 1. Sign up with GitHub
 2. Import project
 3. Configure (root: `client`, framework: Vite)
@@ -139,10 +150,12 @@ ADMIN_NAME=Admin
 ---
 
 ### Step 5️⃣ Connect & Test (5 min)
+
 **What**: Make sure frontend and backend can talk
 **Where**: Both dashboards
 
 **Steps**:
+
 1. Update Render: `CORS_ORIGIN=https://ssgmce-website.vercel.app`
 2. Test frontend in browser
 3. Check for no CORS errors
@@ -153,10 +166,12 @@ ADMIN_NAME=Admin
 ---
 
 ### Step 6️⃣ GitHub Auto-Deploy (5 min)
+
 **What**: Auto-deploy when code changes
 **Where**: GitHub + Render
 
 **Steps**:
+
 1. Get Render webhook
 2. Add as GitHub secret: `RENDER_DEPLOY_HOOK`
 3. Test: push code → auto-deploy happens
@@ -168,18 +183,22 @@ ADMIN_NAME=Admin
 ## 🎓 Learning Resources
 
 ### MongoDB Atlas
+
 - Docs: https://docs.mongodb.com/manual/
 - Tutorial: https://www.mongodb.com/docs/atlas/getting-started/
 
 ### Render
+
 - Docs: https://render.com/docs
 - Support: https://render.com/support
 
 ### Vercel
+
 - Docs: https://vercel.com/docs
 - Support: https://vercel.com/support
 
 ### Your Project
+
 - Backend: `server/` folder
 - Frontend: `client/` folder
 - Routes: `server/routes/`
@@ -190,6 +209,7 @@ ADMIN_NAME=Admin
 ## ✅ Before You Start
 
 Make sure you have:
+
 - [ ] GitHub account with `Saggy2323210/website` repo
 - [ ] Browser (Chrome, Firefox, Safari, etc.)
 - [ ] 60 minutes of free time
@@ -221,13 +241,13 @@ A: Will work after deployment. Default admin created automatically.
 
 ## 📖 Which File To Read?
 
-| Goal | Read This |
-|------|-----------|
-| **Live deployment now** | `FULL_DEPLOYMENT.md` |
-| **Step-by-step checklist** | `DEPLOYMENT_CHECKLIST_INTERACTIVE.md` |
-| **Troubleshooting** | `FULL_DEPLOYMENT.md` → Troubleshooting |
-| **Tech details** | `DEPLOYMENT_GUIDE.md` |
-| **Quick overview** | This file (you're reading it!) |
+| Goal                       | Read This                              |
+| -------------------------- | -------------------------------------- |
+| **Live deployment now**    | `FULL_DEPLOYMENT.md`                   |
+| **Step-by-step checklist** | `DEPLOYMENT_CHECKLIST_INTERACTIVE.md`  |
+| **Troubleshooting**        | `FULL_DEPLOYMENT.md` → Troubleshooting |
+| **Tech details**           | `DEPLOYMENT_GUIDE.md`                  |
+| **Quick overview**         | This file (you're reading it!)         |
 
 ---
 
@@ -289,6 +309,7 @@ After deployment, you should see:
 ## 🎉 You're Going to Do This!
 
 This is a straightforward process. You've got:
+
 - ✅ Working code
 - ✅ Security fixed
 - ✅ Complete guides

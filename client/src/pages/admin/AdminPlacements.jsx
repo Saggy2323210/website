@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import PlacementMarkdownEditor from "../../components/admin/PlacementMarkdownEditor";
 import {
@@ -71,7 +71,7 @@ const AdminPlacements = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/placements/stats");
+      const res = await apiClient.get("/api/placements/stats");
       setStats(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch {
       setError("Failed to load placement statistics.");
@@ -97,10 +97,10 @@ const AdminPlacements = () => {
           .map((d) => ({ department: d.department, placedCount: Number(d.placedCount) })),
       };
       if (editingId) {
-        await axios.put(`/api/placements/stats/${editingId}`, payload, authHeader());
+        await apiClient.put(`/api/placements/stats/${editingId}`, payload, authHeader());
         setSuccess("Statistics updated successfully.");
       } else {
-        await axios.post("/api/placements/stats", payload, authHeader());
+        await apiClient.post("/api/placements/stats", payload, authHeader());
         setSuccess("Statistics added successfully.");
       }
       fetchStats();
@@ -131,7 +131,7 @@ const AdminPlacements = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/placements/stats/${id}`, authHeader());
+      await apiClient.delete(`/api/placements/stats/${id}`, authHeader());
       setSuccess("Record deleted.");
       setDeleteConfirm(null);
       fetchStats();
@@ -192,7 +192,7 @@ const AdminPlacements = () => {
     setPageLoading(true);
     setEditingPage(pageId);
     try {
-      const res = await axios.get(`/api/pages/${pageId}`);
+      const res = await apiClient.get(`/api/pages/${pageId}`);
       if (res.data.success) {
         const data = res.data.data;
         setPageData(data);
@@ -226,7 +226,7 @@ const AdminPlacements = () => {
         },
       ];
 
-      await axios.put(
+      await apiClient.put(
         `/api/pages/${editingPage}`,
         { sections: updatedSections },
         authHeader()

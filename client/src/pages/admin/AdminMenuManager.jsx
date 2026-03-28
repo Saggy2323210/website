@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { isAcademicsWebsiteRoute } from "../../constants/academicsPages";
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
@@ -57,8 +57,8 @@ const AdminMenuManager = () => {
   const fetchData = async () => {
     try {
       const [pagesRes, menuRes] = await Promise.all([
-        axios.get("/api/pages"),
-        axios.get("/api/pages/menu-structure"),
+        apiClient.get("/api/pages"),
+        apiClient.get("/api/pages/menu-structure"),
       ]);
 
       if (pagesRes.data.success) {
@@ -95,7 +95,7 @@ const AdminMenuManager = () => {
 
     setSaving(true);
     try {
-      const response = await axios.put(`/api/pages/${selectedPage.pageId}`, {
+      const response = await apiClient.put(`/api/pages/${selectedPage.pageId}`, {
         ...selectedPage,
         ...editForm,
       });
@@ -117,7 +117,7 @@ const AdminMenuManager = () => {
     const newOrder = direction === "up" ? page.menuOrder - 1 : page.menuOrder + 1;
     
     try {
-      await axios.put(`/api/pages/${page.pageId}`, {
+      await apiClient.put(`/api/pages/${page.pageId}`, {
         ...page,
         menuOrder: newOrder,
       });

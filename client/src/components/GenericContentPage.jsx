@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState, useMemo, useRef } from "react";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import GenericPage from "./GenericPage";
 import PlacementSidebar from "./PlacementSidebar";
 import AcademicsSidebar from "./AcademicsSidebar";
@@ -178,7 +178,7 @@ const fetchPageById = async (pageId) => {
     return pageRequestCache.get(normalizedPageId);
   }
 
-  const request = axios
+  const request = apiClient
     .get(`/api/pages/${normalizedPageId}`)
     .then((res) => {
       if (!res?.data?.success) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAuth } from "../../hooks/useAuth";
 import {
@@ -154,7 +154,7 @@ const AdminResearch = () => {
       else if (activeTab === "projects") url += "projects";
       else url += "areas";
 
-      const res = await axios.get(url, { params, ...authHeader() });
+      const res = await apiClient.get(url, { params, ...authHeader() });
 
       if (activeTab === "publications") setItems(res.data.publications || []);
       else if (activeTab === "patents") setItems(res.data.patents || []);
@@ -249,10 +249,10 @@ const AdminResearch = () => {
       else url += "areas";
 
       if (editingId) {
-        await axios.put(`${url}/${editingId}`, payload, authHeader());
+        await apiClient.put(`${url}/${editingId}`, payload, authHeader());
         setSuccess("Updated successfully");
       } else {
-        await axios.post(url, payload, authHeader());
+        await apiClient.post(url, payload, authHeader());
         setSuccess("Created successfully");
       }
       fetchItems();
@@ -309,7 +309,7 @@ const AdminResearch = () => {
       else if (activeTab === "patents") url += "patents";
       else if (activeTab === "projects") url += "projects";
       else url += "areas";
-      await axios.delete(`${url}/${id}`, authHeader());
+      await apiClient.delete(`${url}/${id}`, authHeader());
       setSuccess("Deleted successfully");
       fetchItems();
     } catch (err) {

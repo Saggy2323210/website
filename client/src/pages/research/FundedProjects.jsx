@@ -10,7 +10,7 @@ import {
   FaCalendarAlt,
   FaBuilding,
 } from "react-icons/fa";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
 
 // Skeleton Loader
@@ -47,7 +47,7 @@ const FundedProjects = () => {
       if (filter.agency) params.append("agency", filter.agency);
       params.append("limit", "50");
 
-      const res = await axios.get(`/api/research/projects?${params}`);
+      const res = await apiClient.get(`/api/research/projects?${params}`);
       setProjects(res.data.projects);
       setError("");
 

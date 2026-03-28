@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   FaQuoteLeft,
@@ -47,7 +47,7 @@ const AdminTestimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("/api/placements/testimonials");
+      const res = await apiClient.get("/api/placements/testimonials");
       setTestimonials(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch {
       setError("Failed to load testimonials.");
@@ -63,7 +63,7 @@ const AdminTestimonials = () => {
     try {
       setUploading(true);
       setError("");
-      const res = await axios.post("/api/upload/image", fd, {
+      const res = await apiClient.post("/api/upload/image", fd, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
           "Content-Type": "multipart/form-data",
@@ -83,10 +83,10 @@ const AdminTestimonials = () => {
     setSuccess("");
     try {
       if (editingId) {
-        await axios.put(`/api/placements/testimonials/${editingId}`, formData, authHeader());
+        await apiClient.put(`/api/placements/testimonials/${editingId}`, formData, authHeader());
         setSuccess("Testimonial updated successfully.");
       } else {
-        await axios.post("/api/placements/testimonials", formData, authHeader());
+        await apiClient.post("/api/placements/testimonials", formData, authHeader());
         setSuccess("Testimonial added successfully.");
       }
       fetchTestimonials();
@@ -114,7 +114,7 @@ const AdminTestimonials = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/placements/testimonials/${id}`, authHeader());
+      await apiClient.delete(`/api/placements/testimonials/${id}`, authHeader());
       setSuccess("Testimonial deleted.");
       setDeleteConfirm(null);
       fetchTestimonials();

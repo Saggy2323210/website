@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import PageHeader from "../../components/PageHeader";
 import PlacementSidebar from "../../components/PlacementSidebar";
 import { FaDownload, FaBuilding, FaGlobe, FaExternalLinkAlt } from "react-icons/fa";

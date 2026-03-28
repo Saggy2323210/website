@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   ACADEMICS_PAGE_LABEL_BY_ROUTE,
@@ -383,7 +383,7 @@ const AdminPages = () => {
 
   const fetchPages = async () => {
     try {
-      const res = await axios.get("/api/pages");
+      const res = await apiClient.get("/api/pages");
       if (res.data.success) {
         setPages(res.data.data || []);
         setError("");

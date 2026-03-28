@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
 import { useAuth } from "../../hooks/useAuth";
 import {
@@ -45,7 +45,7 @@ const AdminCoordinators = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("/api/auth/coordinators", authHeader());
+      const res = await apiClient.get("/api/auth/coordinators", authHeader());
       if (res.data.success) setUsers(res.data.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load users");
@@ -63,7 +63,7 @@ const AdminCoordinators = () => {
       if (editingId) {
         const payload = { ...formData };
         if (!payload.password) delete payload.password; // don't send empty password
-        await axios.put(
+        await apiClient.put(
           `/api/auth/coordinators/${editingId}`,
           payload,
           authHeader()
@@ -74,7 +74,7 @@ const AdminCoordinators = () => {
           setError("Password must be at least 6 characters");
           return;
         }
-        await axios.post("/api/auth/coordinators", formData, authHeader());
+        await apiClient.post("/api/auth/coordinators", formData, authHeader());
         setSuccess("Coordinator created successfully");
       }
       fetchUsers();
@@ -102,7 +102,7 @@ const AdminCoordinators = () => {
     if (!confirm("Are you sure you want to delete this user?")) return;
     setError("");
     try {
-      await axios.delete(`/api/auth/coordinators/${id}`, authHeader());
+      await apiClient.delete(`/api/auth/coordinators/${id}`, authHeader());
       setSuccess("User deleted");
       fetchUsers();
     } catch (err) {
@@ -112,7 +112,7 @@ const AdminCoordinators = () => {
 
   const toggleActive = async (u) => {
     try {
-      await axios.put(
+      await apiClient.put(
         `/api/auth/coordinators/${u._id}`,
         { isActive: !u.isActive },
         authHeader()

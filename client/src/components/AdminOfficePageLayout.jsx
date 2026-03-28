@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FaDownload, FaEdit, FaFilePdf } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -82,7 +82,7 @@ const AdminOfficePageLayout = ({
       }
       setIsLoading(true);
       try {
-        const response = await axios.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/api/pages/${pageId}`);
         if (isMounted && response?.data?.success) {
           setDbPage(response.data.data || null);
         }

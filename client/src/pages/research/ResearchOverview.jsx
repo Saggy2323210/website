@@ -46,8 +46,8 @@ const ResearchOverview = () => {
   const fetchData = async () => {
     try {
       const [statsRes, areasRes] = await Promise.all([
-        axios.get('/api/research/stats'),
-        axios.get('/api/research/areas')
+        apiClient.get('/api/research/stats'),
+        apiClient.get('/api/research/areas')
       ]);
       setStats(statsRes.data);
       setAreas(areasRes.data);

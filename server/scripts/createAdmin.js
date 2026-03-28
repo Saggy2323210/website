@@ -11,7 +11,9 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 const createAdminUser = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/ssgmce");
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ssgmce",
+    );
     console.log("✓ Connected to MongoDB");
 
     // Check if admin user already exists

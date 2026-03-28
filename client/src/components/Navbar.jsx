@@ -77,7 +77,7 @@ const Navbar = () => {
     {
       name: 'Admissions',
       path: '/admissions',
-      megaMenuImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop',
+      megaMenuImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=800&h=600&fit=crop',
       megaMenuTitle: 'Join SSGMCE',
       dropdown: [
         { name: 'Institute Brochure', path: '/admissions/brochure' },
@@ -166,7 +166,7 @@ const Navbar = () => {
     {
       name: 'NIRF Ranking',
       path: '/nirf',
-      megaMenuImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop',
+      megaMenuImage: 'https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=800&h=600&fit=crop',
       megaMenuTitle: 'NIRF Rankings',
       dropdown: [
         { name: 'NIRF 2025-26', path: '/nirf?year=2025-26' },

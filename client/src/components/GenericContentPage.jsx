@@ -111,7 +111,8 @@ const PREFETCH_GROUPS = {
   ],
 };
 
-const getStorageCacheKey = (pageId) => `ssgmce-page-cache:${String(pageId || "").toLowerCase()}`;
+const getStorageCacheKey = (pageId) =>
+  `ssgmce-page-cache:${String(pageId || "").toLowerCase()}`;
 
 const getCachedPageData = (pageId) => {
   const normalizedPageId = String(pageId || "").toLowerCase();
@@ -139,7 +140,10 @@ const setCachedPageData = (pageId, data) => {
   pageDataCache.set(normalizedPageId, entry);
 
   try {
-    sessionStorage.setItem(getStorageCacheKey(normalizedPageId), JSON.stringify(entry));
+    sessionStorage.setItem(
+      getStorageCacheKey(normalizedPageId),
+      JSON.stringify(entry),
+    );
   } catch {
     // Ignore storage quota/unavailable errors to avoid breaking page rendering.
   }
@@ -472,7 +476,8 @@ const GenericContentPage = ({ pageId }) => {
         if (
           prevPage &&
           prevPage.pageId === cachedPage.pageId &&
-          String(prevPage.updatedAt || "") === String(cachedPage.updatedAt || "")
+          String(prevPage.updatedAt || "") ===
+            String(cachedPage.updatedAt || "")
         ) {
           return prevPage;
         }
@@ -495,7 +500,8 @@ const GenericContentPage = ({ pageId }) => {
           if (
             prevPage &&
             prevPage.pageId === fetchedPage.pageId &&
-            String(prevPage.updatedAt || "") === String(fetchedPage.updatedAt || "")
+            String(prevPage.updatedAt || "") ===
+              String(fetchedPage.updatedAt || "")
           ) {
             return prevPage;
           }
@@ -507,7 +513,9 @@ const GenericContentPage = ({ pageId }) => {
         if (!isActive) return;
         logUnexpectedError("[GenericContentPage] Error:", err);
         if (!cachedPage) {
-          setError(isNotFoundError(err) ? "Page not found" : getErrorMessage(err));
+          setError(
+            isNotFoundError(err) ? "Page not found" : getErrorMessage(err),
+          );
         }
       } finally {
         if (!backgroundRefresh && isActive) {
@@ -571,7 +579,9 @@ const GenericContentPage = ({ pageId }) => {
     // Keep section heading visible below sticky navbar.
     const headerOffset = 100;
     const targetTop =
-      firstSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+      firstSection.getBoundingClientRect().top +
+      window.pageYOffset -
+      headerOffset;
 
     window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
     lastAutoScrolledPageRef.current = pageId;
@@ -618,15 +628,12 @@ const GenericContentPage = ({ pageId }) => {
 
   const parseInspirationCaption = (caption = "", alt = "") => {
     const source = String(caption || alt || "").trim();
-    const name = source
-      .split("(")[0]
-      .split("—")[0]
-      .split("-")[0]
-      .trim() || "Late Shri. Shivshankarbhau Patil";
+    const name =
+      source.split("(")[0].split("—")[0].split("-")[0].trim() ||
+      "Late Shri. Shivshankarbhau Patil";
 
     const knownAsMatch = source.match(/\(([^)]+)\)/);
-    const knownAs =
-      knownAsMatch?.[1]?.trim() || "Popularly known as Bhausaheb";
+    const knownAs = knownAsMatch?.[1]?.trim() || "Popularly known as Bhausaheb";
 
     const roleMatch = source.match(/—\s*([^]+)$/);
     const role = roleMatch?.[1]?.trim() || "Founder & Visionary";
@@ -646,7 +653,8 @@ const GenericContentPage = ({ pageId }) => {
 
     return (
       sortedSectionsWithIndex.find(
-        ({ section }) => String(section?.type || "").toLowerCase() === fallbackType,
+        ({ section }) =>
+          String(section?.type || "").toLowerCase() === fallbackType,
       ) || null
     );
   };
@@ -688,7 +696,10 @@ const GenericContentPage = ({ pageId }) => {
     ) {
       return "Principal Speaks";
     }
-    return normalized || (id === "about-inspiration" ? "Our Inspiration" : "Principal Speaks");
+    return (
+      normalized ||
+      (id === "about-inspiration" ? "Our Inspiration" : "Principal Speaks")
+    );
   };
 
   const parseFounderIdentityFromText = (text = "") => {
@@ -824,8 +835,12 @@ Constituted By **All India Council for Technical Education, New Delhi**
   const toQuickFactsMarkdownTable = (items = []) => {
     const normalizedItems = (Array.isArray(items) ? items : [])
       .map((item) => ({
-        label: String(item?.label || "").replace(/\|/g, "\\|").trim(),
-        value: String(item?.value || "").replace(/\|/g, "\\|").trim(),
+        label: String(item?.label || "")
+          .replace(/\|/g, "\\|")
+          .trim(),
+        value: String(item?.value || "")
+          .replace(/\|/g, "\\|")
+          .trim(),
       }))
       .filter((item) => item.label && item.value);
 
@@ -874,7 +889,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const renderAboutGlancePage = () => {
-    const glanceHeading = String(displayPage.pageTitle || "SSGMCE At A Glance").trim();
+    const glanceHeading = String(
+      displayPage.pageTitle || "SSGMCE At A Glance",
+    ).trim();
     const fallbackGlanceImage = campusViewImage;
     const usedSectionIndexes = new Set();
 
@@ -882,7 +899,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
       const normalizedIds = ids.map((id) => String(id || "").toLowerCase());
       return (
         sortedSectionsWithIndex.find(({ section }) =>
-          normalizedIds.includes(String(section?.sectionId || "").toLowerCase()),
+          normalizedIds.includes(
+            String(section?.sectionId || "").toLowerCase(),
+          ),
         ) || null
       );
     };
@@ -1010,11 +1029,16 @@ Constituted By **All India Council for Technical Education, New Delhi**
       }
 
       if (section.type === "list") {
-        const items = Array.isArray(section.content?.items) ? section.content.items : [];
+        const items = Array.isArray(section.content?.items)
+          ? section.content.items
+          : [];
         return (
           <ul className="space-y-2">
             {items.map((item, itemIdx) => (
-              <li key={`${item}-${itemIdx}`} className="flex items-start gap-2 text-gray-700">
+              <li
+                key={`${item}-${itemIdx}`}
+                className="flex items-start gap-2 text-gray-700"
+              >
                 <span className="mt-2 inline-block h-2 w-2 rounded-full bg-ssgmce-orange flex-shrink-0" />
                 <EditableText
                   value={item}
@@ -1037,7 +1061,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
               >
                 <h4 className="font-semibold text-gray-900">{card?.title}</h4>
                 {card?.description && (
-                  <p className="text-sm text-gray-600 mt-1">{card.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {card.description}
+                  </p>
                 )}
               </div>
             ))}
@@ -1045,17 +1071,27 @@ Constituted By **All India Council for Technical Education, New Delhi**
         );
       }
 
-      if (section.type === "timeline" && Array.isArray(section.content?.events)) {
+      if (
+        section.type === "timeline" &&
+        Array.isArray(section.content?.events)
+      ) {
         return (
           <div className="relative border-l border-gray-300 ml-3 space-y-4">
             {section.content.events.map((event, eventIdx) => (
-              <div key={`${event?.year || "event"}-${eventIdx}`} className="relative pl-6">
+              <div
+                key={`${event?.year || "event"}-${eventIdx}`}
+                className="relative pl-6"
+              >
                 <span className="absolute -left-[6px] top-2 h-2.5 w-2.5 rounded-full bg-ssgmce-orange border border-white" />
                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                  <p className="text-sm font-semibold text-ssgmce-blue">{event?.year}</p>
+                  <p className="text-sm font-semibold text-ssgmce-blue">
+                    {event?.year}
+                  </p>
                   <p className="font-medium text-gray-800">{event?.title}</p>
                   {event?.description && (
-                    <p className="text-sm text-gray-600 mt-1">{event.description}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {event.description}
+                    </p>
                   )}
                 </div>
               </div>
@@ -1104,7 +1140,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
       );
     };
 
-    const campusImageUrl = String(campusImageMeta?.section?.content?.url || "").trim();
+    const campusImageUrl = String(
+      campusImageMeta?.section?.content?.url || "",
+    ).trim();
     const campusImageAlt =
       campusImageMeta?.section?.content?.alt || "SSGMCE Campus";
     const campusCaption = campusImageMeta?.section?.content?.caption || "";
@@ -1141,7 +1179,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
           <div className={sidebar ? "lg:w-3/4" : "w-full"}>
             <div className="mb-6 border-l-4 border-ssgmce-orange pl-4">
-              <h2 className="text-3xl font-bold text-ssgmce-blue">{glanceHeading}</h2>
+              <h2 className="text-3xl font-bold text-ssgmce-blue">
+                {glanceHeading}
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-6 items-stretch">
@@ -1187,92 +1227,92 @@ Constituted By **All India Council for Technical Education, New Delhi**
                 )}
               </div>
 
-            <div className="xl:col-span-5">
-              {campusImageMeta ? (
-                <EditableSection
-                  index={campusImageMeta.originalIndex}
-                  title={campusImageMeta.section.type}
-                  sectionContent={campusImageMeta.section.content}
-                  contentPath={`sections[${campusImageMeta.originalIndex}].content`}
-                >
-	                  <section className="h-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-	                    <h3 className="text-xl font-bold text-ssgmce-blue mb-4 pb-2 border-b border-gray-100">
-	                      {campusImageMeta.section.title || "Campus Image"}
-	                    </h3>
-	                    {isEditing ? (
-	                      <EditableImage
-	                        src={resolvedCampusImageUrl}
-	                        onSave={(newUrl) =>
-	                          updateData(
-	                            `sections[${campusImageMeta.originalIndex}].content.url`,
-	                            newUrl,
-	                          )
-	                        }
-	                        className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
-	                        alt={campusImageAlt}
-	                      />
-	                    ) : campusImageUrl || resolvedCampusImageUrl ? (
-	                      <ImageWithFallback
-	                        src={resolvedCampusImageUrl}
-	                        fallbackSrc={fallbackGlanceImage}
-	                        alt={campusImageAlt}
-	                        className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
-	                      />
-	                    ) : (
-	                      <div className="w-full aspect-[16/10] rounded-lg border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-sm text-gray-500">
-	                        Campus image not available
-	                      </div>
-	                    )}
-	                    {isEditing ? (
-	                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-	                        <div>
-	                          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-	                            Alt Text
-	                          </label>
-	                          <EditableText
-	                            value={campusImageAlt}
-	                            path={`sections[${campusImageMeta.originalIndex}].content.alt`}
-	                            className="mt-1 text-sm text-gray-700"
-	                            element="p"
-	                          />
-	                        </div>
-	                        <div>
-	                          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-	                            Caption
-	                          </label>
-	                          <EditableText
-	                            value={campusCaption}
-	                            path={`sections[${campusImageMeta.originalIndex}].content.caption`}
-	                            className="mt-1 text-sm text-gray-700 italic"
-	                            element="p"
-	                          />
-	                        </div>
-	                      </div>
-	                    ) : campusCaption ? (
-	                      <p className="text-sm text-gray-500 italic text-center mt-3">
-	                        <EditableText
-	                          value={campusCaption}
-	                          path={`sections[${campusImageMeta.originalIndex}].content.caption`}
-	                          element="span"
-	                        />
-	                      </p>
-	                    ) : null}
-	                  </section>
-	                </EditableSection>
-	              ) : (
-                <section className="h-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-                  <h3 className="text-xl font-bold text-ssgmce-blue mb-4 pb-2 border-b border-gray-100">
-                    Campus Image
-                  </h3>
-                  <ImageWithFallback
-                    src={fallbackGlanceImage}
-                    fallbackSrc={fallbackGlanceImage}
-                    alt="SSGMCE Campus"
-                    className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
-                  />
-                </section>
-              )}
-            </div>
+              <div className="xl:col-span-5">
+                {campusImageMeta ? (
+                  <EditableSection
+                    index={campusImageMeta.originalIndex}
+                    title={campusImageMeta.section.type}
+                    sectionContent={campusImageMeta.section.content}
+                    contentPath={`sections[${campusImageMeta.originalIndex}].content`}
+                  >
+                    <section className="h-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                      <h3 className="text-xl font-bold text-ssgmce-blue mb-4 pb-2 border-b border-gray-100">
+                        {campusImageMeta.section.title || "Campus Image"}
+                      </h3>
+                      {isEditing ? (
+                        <EditableImage
+                          src={resolvedCampusImageUrl}
+                          onSave={(newUrl) =>
+                            updateData(
+                              `sections[${campusImageMeta.originalIndex}].content.url`,
+                              newUrl,
+                            )
+                          }
+                          className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
+                          alt={campusImageAlt}
+                        />
+                      ) : campusImageUrl || resolvedCampusImageUrl ? (
+                        <ImageWithFallback
+                          src={resolvedCampusImageUrl}
+                          fallbackSrc={fallbackGlanceImage}
+                          alt={campusImageAlt}
+                          className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
+                        />
+                      ) : (
+                        <div className="w-full aspect-[16/10] rounded-lg border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-sm text-gray-500">
+                          Campus image not available
+                        </div>
+                      )}
+                      {isEditing ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                          <div>
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Alt Text
+                            </label>
+                            <EditableText
+                              value={campusImageAlt}
+                              path={`sections[${campusImageMeta.originalIndex}].content.alt`}
+                              className="mt-1 text-sm text-gray-700"
+                              element="p"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Caption
+                            </label>
+                            <EditableText
+                              value={campusCaption}
+                              path={`sections[${campusImageMeta.originalIndex}].content.caption`}
+                              className="mt-1 text-sm text-gray-700 italic"
+                              element="p"
+                            />
+                          </div>
+                        </div>
+                      ) : campusCaption ? (
+                        <p className="text-sm text-gray-500 italic text-center mt-3">
+                          <EditableText
+                            value={campusCaption}
+                            path={`sections[${campusImageMeta.originalIndex}].content.caption`}
+                            element="span"
+                          />
+                        </p>
+                      ) : null}
+                    </section>
+                  </EditableSection>
+                ) : (
+                  <section className="h-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <h3 className="text-xl font-bold text-ssgmce-blue mb-4 pb-2 border-b border-gray-100">
+                      Campus Image
+                    </h3>
+                    <ImageWithFallback
+                      src={fallbackGlanceImage}
+                      fallbackSrc={fallbackGlanceImage}
+                      alt="SSGMCE Campus"
+                      className="w-full aspect-[16/10] rounded-lg object-cover border border-gray-100"
+                    />
+                  </section>
+                )}
+              </div>
             </div>
 
             {quickStatsMeta && (
@@ -1301,7 +1341,10 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
               {renderInfoBlock(infrastructureMeta, "Infrastructure Highlights")}
-              {renderInfoBlock(recognitionsMeta, "Recognitions & Accreditations")}
+              {renderInfoBlock(
+                recognitionsMeta,
+                "Recognitions & Accreditations",
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-6">
@@ -1335,7 +1378,8 @@ Constituted By **All India Council for Technical Education, New Delhi**
                         ) : (
                           renderSectionContent({ section, originalIndex }) || (
                             <p className="text-sm text-gray-500">
-                              This section type is not rendered in this layout yet.
+                              This section type is not rendered in this layout
+                              yet.
                             </p>
                           )
                         )}
@@ -1487,7 +1531,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
             id={section.sectionId}
             className={`rounded-xl border border-gray-200 bg-white p-6 shadow-sm ${sectionClassName}`}
           >
-            <h3 className={`${headerClassName} mb-4 pb-2 border-b border-gray-100`}>
+            <h3
+              className={`${headerClassName} mb-4 pb-2 border-b border-gray-100`}
+            >
               {section.title || fallbackTitle}
             </h3>
             <div className="text-gray-700">
@@ -1575,15 +1621,20 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const renderAboutGoverningPage = () => {
-    const governingHeading = String(displayPage.pageTitle || "Governing Body").trim();
+    const governingHeading = String(
+      displayPage.pageTitle || "Governing Body",
+    ).trim();
     const governingMeta =
-      getBestTextSection(["governing-intro", "governing-body", "intro"]) || null;
+      getBestTextSection(["governing-intro", "governing-body", "intro"]) ||
+      null;
     const governingText = String(governingMeta?.section?.content?.text || "");
     const parsedTableFromContent = parseFirstMarkdownTable(governingText);
     const parsedTable =
       parsedTableFromContent ||
       parseFirstMarkdownTable(GOVERNING_TABLE_FALLBACK_MARKDOWN);
-    const headingLines = extractGoverningHeaderLines(parsedTable?.preTable || "");
+    const headingLines = extractGoverningHeaderLines(
+      parsedTable?.preTable || "",
+    );
     const trailingParagraphs = String(parsedTableFromContent?.postTable || "")
       .split(/\n{2,}/)
       .map((paragraph) => stripMarkdownInline(paragraph))
@@ -1604,7 +1655,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
           <div className={sidebar ? "lg:w-3/4" : "w-full"}>
             <div className="mb-5 border-l-4 border-ssgmce-orange pl-4">
-              <h3 className="text-3xl font-bold text-ssgmce-blue">{governingHeading}</h3>
+              <h3 className="text-3xl font-bold text-ssgmce-blue">
+                {governingHeading}
+              </h3>
             </div>
 
             {governingMeta && (
@@ -1626,7 +1679,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
                       <p className="text-lg md:text-xl font-bold uppercase tracking-wide text-ssgmce-blue">
                         {headingLines[0]}
                       </p>
-                      <p className="text-xl font-semibold text-gray-700">{headingLines[1]}</p>
+                      <p className="text-xl font-semibold text-gray-700">
+                        {headingLines[1]}
+                      </p>
                       <p className="text-lg md:text-xl font-bold uppercase tracking-wide text-ssgmce-blue">
                         {headingLines[2]}
                       </p>
@@ -1659,7 +1714,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                 <td
                                   key={`governing-cell-${rowIndex}-${cellIndex}`}
                                   className={`border border-[#ff7d7d] px-4 py-3 text-[15px] leading-relaxed text-[#2f57d6] whitespace-normal break-words ${
-                                    cellIndex === 0 ? "text-center font-medium" : ""
+                                    cellIndex === 0
+                                      ? "text-center font-medium"
+                                      : ""
                                   }`}
                                 >
                                   {cell}
@@ -1674,7 +1731,10 @@ Constituted By **All India Council for Technical Education, New Delhi**
                     {trailingParagraphs.length > 0 && (
                       <div className="space-y-2">
                         {trailingParagraphs.map((paragraph, index) => (
-                          <p key={`governing-tail-${index}`} className="text-gray-700 leading-relaxed">
+                          <p
+                            key={`governing-tail-${index}`}
+                            className="text-gray-700 leading-relaxed"
+                          >
                             {paragraph}
                           </p>
                         ))}
@@ -1697,7 +1757,8 @@ Constituted By **All India Council for Technical Education, New Delhi**
     );
 
     const principalImageMeta =
-      getSectionByPriority(["principal-photo", "principal-image"], "image") || null;
+      getSectionByPriority(["principal-photo", "principal-image"], "image") ||
+      null;
 
     const principalMessageMeta =
       getBestTextSection(["principal-message", "message"]) || null;
@@ -1733,7 +1794,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter((line) => /^([-*]\s+|\d+\.\s+)/.test(line))
-      .map((line) => stripMarkdownInline(line.replace(/^([-*]\s+|\d+\.\s+)/, "")))
+      .map((line) =>
+        stripMarkdownInline(line.replace(/^([-*]\s+|\d+\.\s+)/, "")),
+      )
       .filter(Boolean);
     const focusListItems = Array.isArray(focusMeta?.section?.content?.items)
       ? focusMeta.section.content.items
@@ -1808,7 +1871,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
                   <p className="text-ssgmce-orange font-semibold mt-1">
                     {principalCaption.role}
                   </p>
-                  <p className="text-gray-500 text-sm mt-2">{principalCaption.org}</p>
+                  <p className="text-gray-500 text-sm mt-2">
+                    {principalCaption.org}
+                  </p>
                 </div>
 
                 {focusMeta ? (
@@ -1885,7 +1950,8 @@ Constituted By **All India Council for Technical Education, New Delhi**
                   >
                     <div
                       className={`prose max-w-none text-gray-700 leading-relaxed relative ${
-                        shouldShowPrincipalReadMore && !isPrincipalMessageExpanded
+                        shouldShowPrincipalReadMore &&
+                        !isPrincipalMessageExpanded
                           ? "max-h-[420px] overflow-hidden"
                           : ""
                       }`}
@@ -1904,9 +1970,10 @@ Constituted By **All India Council for Technical Education, New Delhi**
                           multiline={true}
                         />
                       )}
-                      {shouldShowPrincipalReadMore && !isPrincipalMessageExpanded && (
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-white via-white/95 to-transparent" />
-                      )}
+                      {shouldShowPrincipalReadMore &&
+                        !isPrincipalMessageExpanded && (
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-white via-white/95 to-transparent" />
+                        )}
                     </div>
                   </EditableSection>
                 )}
@@ -2026,7 +2093,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
                   <p className="text-ssgmce-orange font-semibold mt-2">
                     {resolvedFounder.knownAs}
                   </p>
-                  <p className="text-gray-500 text-xl mt-1">{resolvedFounder.role}</p>
+                  <p className="text-gray-500 text-xl mt-1">
+                    {resolvedFounder.role}
+                  </p>
                 </div>
               </div>
 
@@ -2133,7 +2202,11 @@ Constituted By **All India Council for Technical Education, New Delhi**
         {/* Sidebar */}
         {sidebar && (
           <div
-            className={isAboutThemePage ? "lg:w-[300px] flex-shrink-0" : "lg:w-1/4 flex-shrink-0"}
+            className={
+              isAboutThemePage
+                ? "lg:w-[300px] flex-shrink-0"
+                : "lg:w-1/4 flex-shrink-0"
+            }
           >
             <div className="sticky top-24">{sidebar}</div>
           </div>
@@ -2159,7 +2232,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
           <div
             className={
-              isAdmissionsThemePage || isAboutThemePage ? "space-y-6" : "space-y-8"
+              isAdmissionsThemePage || isAboutThemePage
+                ? "space-y-6"
+                : "space-y-8"
             }
           >
             {sections
@@ -2218,8 +2293,8 @@ Constituted By **All India Council for Technical Education, New Delhi**
                     )}
 
                     {/* RichText Section - uses markdown editor for facilities pages, WYSIWYG elsewhere */}
-                    {section.type === "richtext" && (
-                      pageId?.startsWith("facilities-") ? (
+                    {section.type === "richtext" &&
+                      (pageId?.startsWith("facilities-") ? (
                         <MarkdownEditor
                           value={section.content.text}
                           path={`sections[${index}].content.text`}
@@ -2244,8 +2319,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                             multiline={true}
                           />
                         </div>
-                      )
-                    )}
+                      ))}
 
                     {/* Markdown Section - clean textarea editor with preview */}
                     {section.type === "markdown" && (
@@ -2313,7 +2387,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                   ? "-left-[6px] h-2.5 w-2.5 bg-ssgmce-blue border border-white"
                                   : isAboutThemePage
                                     ? "-left-[6px] h-2.5 w-2.5 bg-slate-500 border border-white"
-                                  : "-left-[9px] w-4 h-4 bg-ssgmce-orange border-2 border-white shadow"
+                                    : "-left-[9px] w-4 h-4 bg-ssgmce-orange border-2 border-white shadow"
                               }`}
                             ></div>
                             <div
@@ -2322,7 +2396,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                   ? "rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
                                   : isAboutThemePage
                                     ? "rounded-lg border border-slate-200 bg-slate-50 p-4 shadow-sm"
-                                  : "bg-gray-50 rounded-lg p-4 shadow-sm"
+                                    : "bg-gray-50 rounded-lg p-4 shadow-sm"
                               }
                             >
                               <span
@@ -2331,7 +2405,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                     ? "text-gray-500 uppercase tracking-wide"
                                     : isAboutThemePage
                                       ? "text-slate-500 uppercase tracking-wide"
-                                    : "text-ssgmce-blue"
+                                      : "text-ssgmce-blue"
                                 }`}
                               >
                                 {event.year}
@@ -2342,7 +2416,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                     ? "font-semibold mt-1"
                                     : isAboutThemePage
                                       ? "font-semibold mt-1"
-                                    : "font-semibold"
+                                      : "font-semibold"
                                 }`}
                               >
                                 {event.title}
@@ -2369,7 +2443,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                 ? "bg-white border border-gray-200 shadow-sm"
                                 : isAboutThemePage
                                   ? "bg-white border border-slate-200 shadow-sm"
-                                : `bg-white rounded-lg shadow p-5 border-l-4 ${card.color === "orange" ? "border-ssgmce-orange" : "border-ssgmce-blue"}`
+                                  : `bg-white rounded-lg shadow p-5 border-l-4 ${card.color === "orange" ? "border-ssgmce-orange" : "border-ssgmce-blue"}`
                             }`}
                           >
                             <h4 className="font-bold text-gray-900 mb-1">
@@ -2447,7 +2521,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                 ? "bg-white border-gray-200 shadow-sm"
                                 : isAboutThemePage
                                   ? "bg-white border-slate-200 shadow-sm"
-                                : "bg-white border rounded-lg shadow-sm"
+                                  : "bg-white border rounded-lg shadow-sm"
                             }`}
                           >
                             <summary className="px-4 py-3 cursor-pointer font-medium text-gray-900 hover:bg-gray-50 list-none flex justify-between items-center">
@@ -2507,7 +2581,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
                             {isAdmissionsThemePage || isAboutThemePage ? (
                               <span
                                 className={`mt-2 inline-block h-2 w-2 rounded-full flex-shrink-0 ${
-                                  isAboutThemePage ? "bg-slate-500" : "bg-ssgmce-blue"
+                                  isAboutThemePage
+                                    ? "bg-slate-500"
+                                    : "bg-ssgmce-blue"
                                 }`}
                               ></span>
                             ) : null}
@@ -2553,7 +2629,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                               ? "inline-flex items-center rounded-md bg-blue-50 text-ssgmce-blue px-3 py-2 hover:bg-blue-100 font-medium transition"
                               : isAboutThemePage
                                 ? "inline-flex items-center rounded-md bg-slate-100 text-slate-800 px-3 py-2 hover:bg-slate-200 font-medium transition"
-                              : "text-blue-600 hover:text-blue-800 underline font-medium block"
+                                : "text-blue-600 hover:text-blue-800 underline font-medium block"
                           }
                         />
                       </div>
@@ -2855,8 +2931,17 @@ Constituted By **All India Council for Technical Education, New Delhi**
                   }}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-dashed border-blue-300 text-blue-600 hover:bg-blue-50 hover:border-blue-400 transition-colors text-sm font-medium"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Add Markdown Section
                 </button>

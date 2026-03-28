@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 # Test Frontend
 echo "📱 Testing Frontend..."
-FRONTEND_URL="https://ssgmce-website.vercel.app"
+FRONTEND_URL="https://website-one-sigma-90.vercel.app"
 if curl -s -o /dev/null -w "%{http_code}" "$FRONTEND_URL" | grep -q "200"; then
     echo -e "${GREEN}✓ Frontend is live: $FRONTEND_URL${NC}"
 else
@@ -24,7 +24,7 @@ echo ""
 
 # Test Backend API
 echo "🔌 Testing Backend API..."
-BACKEND_URL="https://ssgmce-backend.onrender.com"
+BACKEND_URL="https://website-d8i3.onrender.com"
 if curl -s "$BACKEND_URL" | grep -q "SSGMCE API Server Running"; then
     echo -e "${GREEN}✓ Backend is running: $BACKEND_URL${NC}"
 else

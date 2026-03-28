@@ -45,7 +45,7 @@ export const PageDataProvider = ({ children, pageId }) => {
 
       try {
         setLoading(true);
-        const response = await apiClient.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/pages/${pageId}`);
 
         if (response.data.success) {
           setData(response.data.data || {});

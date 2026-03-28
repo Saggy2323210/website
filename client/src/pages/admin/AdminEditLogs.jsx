@@ -61,7 +61,7 @@ const AdminEditLogs = () => {
     setSuccess("");
     try {
       const res = await apiClient.post(
-        `/api/pages/reset/${logId}`,
+        `/pages/reset/${logId}`,
         {},
         authHeader()
       );

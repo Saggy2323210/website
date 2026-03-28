@@ -82,7 +82,7 @@ const AdminOfficePageLayout = ({
       }
       setIsLoading(true);
       try {
-        const response = await apiClient.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/pages/${pageId}`);
         if (isMounted && response?.data?.success) {
           setDbPage(response.data.data || null);
         }

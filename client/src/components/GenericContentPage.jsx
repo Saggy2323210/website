@@ -183,7 +183,7 @@ const fetchPageById = async (pageId) => {
   }
 
   const request = apiClient
-    .get(`/api/pages/${normalizedPageId}`)
+    .get(`/pages/${normalizedPageId}`)
     .then((res) => {
       if (!res?.data?.success) {
         throw new Error(res?.data?.message || "Page not found");

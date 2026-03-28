@@ -194,7 +194,7 @@ const NIRFRanking = () => {
       const existingId = nirfEntryIds[key];
       if (existingId) {
         await apiClient.put(
-          `/api/nirf/admin/${existingId}`,
+          `/nirf/admin/${existingId}`,
           { reportUrl: fileUrl },
           authHdr,
         );

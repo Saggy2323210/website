@@ -95,7 +95,7 @@ const AdminMenuManager = () => {
 
     setSaving(true);
     try {
-      const response = await apiClient.put(`/api/pages/${selectedPage.pageId}`, {
+      const response = await apiClient.put(`/pages/${selectedPage.pageId}`, {
         ...selectedPage,
         ...editForm,
       });
@@ -117,7 +117,7 @@ const AdminMenuManager = () => {
     const newOrder = direction === "up" ? page.menuOrder - 1 : page.menuOrder + 1;
     
     try {
-      await apiClient.put(`/api/pages/${page.pageId}`, {
+      await apiClient.put(`/pages/${page.pageId}`, {
         ...page,
         menuOrder: newOrder,
       });

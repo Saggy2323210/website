@@ -121,7 +121,7 @@ const AdminNIRF = () => {
         isActive: formData.isActive,
       };
       if (editingId) {
-        await apiClient.put(`/api/nirf/admin/${editingId}`, payload, authHeader());
+        await apiClient.put(`/nirf/admin/${editingId}`, payload, authHeader());
         setSuccess("Entry updated successfully.");
       } else {
         await apiClient.post("/nirf/admin/create", payload, authHeader());
@@ -154,7 +154,7 @@ const AdminNIRF = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiClient.delete(`/api/nirf/admin/${id}`, authHeader());
+      await apiClient.delete(`/nirf/admin/${id}`, authHeader());
       setSuccess("Entry deleted.");
       setDeleteConfirm(null);
       fetchEntries();

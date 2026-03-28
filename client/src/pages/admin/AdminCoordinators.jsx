@@ -64,7 +64,7 @@ const AdminCoordinators = () => {
         const payload = { ...formData };
         if (!payload.password) delete payload.password; // don't send empty password
         await apiClient.put(
-          `/api/auth/coordinators/${editingId}`,
+          `/auth/coordinators/${editingId}`,
           payload,
           authHeader()
         );
@@ -102,7 +102,7 @@ const AdminCoordinators = () => {
     if (!confirm("Are you sure you want to delete this user?")) return;
     setError("");
     try {
-      await apiClient.delete(`/api/auth/coordinators/${id}`, authHeader());
+      await apiClient.delete(`/auth/coordinators/${id}`, authHeader());
       setSuccess("User deleted");
       fetchUsers();
     } catch (err) {
@@ -113,7 +113,7 @@ const AdminCoordinators = () => {
   const toggleActive = async (u) => {
     try {
       await apiClient.put(
-        `/api/auth/coordinators/${u._id}`,
+        `/auth/coordinators/${u._id}`,
         { isActive: !u.isActive },
         authHeader()
       );

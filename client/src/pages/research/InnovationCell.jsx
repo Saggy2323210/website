@@ -43,7 +43,7 @@ const InnovationCell = () => {
       if (filter.status) params.append("status", filter.status);
       params.append("limit", "50");
 
-      const res = await apiClient.get(`/api/research/innovations?${params}`);
+      const res = await apiClient.get(`/research/innovations?${params}`);
       setInnovations(res.data.innovations);
       setError("");
     } catch (error) {

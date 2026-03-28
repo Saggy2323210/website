@@ -114,7 +114,7 @@ export const EditProvider = ({ children, pageId, initialData = {} }) => {
       }
 
       const response = await apiClient.put(
-        `/api/pages/${pageId}`,
+        `/pages/${pageId}`,
         data, // send the full data object directly so the server can merge top-level fields
         {
           headers: {

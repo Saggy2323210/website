@@ -82,7 +82,7 @@ const AdminPopupBanner = () => {
     try {
       if (editingId) {
         // Update existing banner
-        const response = await apiClient.put(`/api/popup-banners/${editingId}`, formData);
+        const response = await apiClient.put(`/popup-banners/${editingId}`, formData);
         if (response.data.success) {
           alert("Banner updated successfully!");
         }
@@ -123,7 +123,7 @@ const AdminPopupBanner = () => {
     if (!confirm("Are you sure you want to delete this banner?")) return;
 
     try {
-      const response = await apiClient.delete(`/api/popup-banners/${id}`);
+      const response = await apiClient.delete(`/popup-banners/${id}`);
       if (response.data.success) {
         alert("Banner deleted successfully!");
         fetchBanners();
@@ -136,7 +136,7 @@ const AdminPopupBanner = () => {
 
   const toggleActive = async (id) => {
     try {
-      const response = await apiClient.patch(`/api/popup-banners/${id}/toggle`);
+      const response = await apiClient.patch(`/popup-banners/${id}/toggle`);
       if (response.data.success) {
         fetchBanners();
       }

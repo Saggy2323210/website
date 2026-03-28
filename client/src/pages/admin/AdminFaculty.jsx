@@ -83,7 +83,7 @@ const AdminFaculty = () => {
       }
 
       if (editingId) {
-        await apiClient.put(`/api/faculty/${editingId}`, payload, authHeader());
+        await apiClient.put(`/faculty/${editingId}`, payload, authHeader());
         setSuccess("Faculty updated successfully");
       } else {
         await apiClient.post("/faculty", payload, authHeader());
@@ -119,7 +119,7 @@ const AdminFaculty = () => {
     if (!confirm("Are you sure you want to delete this faculty member?")) return;
     setError("");
     try {
-      await apiClient.delete(`/api/faculty/${id}`, authHeader());
+      await apiClient.delete(`/faculty/${id}`, authHeader());
       setSuccess("Faculty deleted");
       fetchFaculty();
     } catch (err) {

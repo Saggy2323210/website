@@ -49,7 +49,7 @@ const AdminNews = () => {
     try {
       const token = localStorage.getItem("adminToken");
       if (editingId) {
-        await apiClient.put(`/api/news/${editingId}`, formData, {
+        await apiClient.put(`/news/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
@@ -86,7 +86,7 @@ const AdminNews = () => {
     if (!confirm("Are you sure you want to delete this news item?")) return;
     try {
       const token = localStorage.getItem("adminToken");
-      await apiClient.delete(`/api/news/${id}`, {
+      await apiClient.delete(`/news/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchNews();

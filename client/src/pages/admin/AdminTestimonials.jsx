@@ -83,7 +83,7 @@ const AdminTestimonials = () => {
     setSuccess("");
     try {
       if (editingId) {
-        await apiClient.put(`/api/placements/testimonials/${editingId}`, formData, authHeader());
+        await apiClient.put(`/placements/testimonials/${editingId}`, formData, authHeader());
         setSuccess("Testimonial updated successfully.");
       } else {
         await apiClient.post("/placements/testimonials", formData, authHeader());
@@ -114,7 +114,7 @@ const AdminTestimonials = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiClient.delete(`/api/placements/testimonials/${id}`, authHeader());
+      await apiClient.delete(`/placements/testimonials/${id}`, authHeader());
       setSuccess("Testimonial deleted.");
       setDeleteConfirm(null);
       fetchTestimonials();

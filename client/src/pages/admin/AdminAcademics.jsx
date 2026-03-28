@@ -48,7 +48,7 @@ const AdminAcademics = () => {
   const fetchPageData = async (pageId) => {
     setLoading(true);
     try {
-      const res = await apiClient.get(`/api/pages/${pageId}`);
+      const res = await apiClient.get(`/pages/${pageId}`);
       if (res.data.success) {
         setPageData(res.data.data);
         return;

@@ -21,7 +21,7 @@ const DocumentGrid = ({ category, title, description }) => {
     const fetchDocuments = async () => {
       try {
         setLoading(true);
-        const res = await apiClient.get(`/api/documents/category/${category}`);
+        const res = await apiClient.get(`/documents/category/${category}`);
         if (res.data.success) {
           setDocuments(res.data.data);
           setAvailableYears(res.data.years || []);

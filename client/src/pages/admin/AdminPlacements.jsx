@@ -97,7 +97,7 @@ const AdminPlacements = () => {
           .map((d) => ({ department: d.department, placedCount: Number(d.placedCount) })),
       };
       if (editingId) {
-        await apiClient.put(`/api/placements/stats/${editingId}`, payload, authHeader());
+        await apiClient.put(`/placements/stats/${editingId}`, payload, authHeader());
         setSuccess("Statistics updated successfully.");
       } else {
         await apiClient.post("/placements/stats", payload, authHeader());
@@ -131,7 +131,7 @@ const AdminPlacements = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiClient.delete(`/api/placements/stats/${id}`, authHeader());
+      await apiClient.delete(`/placements/stats/${id}`, authHeader());
       setSuccess("Record deleted.");
       setDeleteConfirm(null);
       fetchStats();
@@ -192,7 +192,7 @@ const AdminPlacements = () => {
     setPageLoading(true);
     setEditingPage(pageId);
     try {
-      const res = await apiClient.get(`/api/pages/${pageId}`);
+      const res = await apiClient.get(`/pages/${pageId}`);
       if (res.data.success) {
         const data = res.data.data;
         setPageData(data);
@@ -227,7 +227,7 @@ const AdminPlacements = () => {
       ];
 
       await apiClient.put(
-        `/api/pages/${editingPage}`,
+        `/pages/${editingPage}`,
         { sections: updatedSections },
         authHeader()
       );

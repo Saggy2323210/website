@@ -97,7 +97,7 @@ const AdminRecruiters = () => {
     try {
       const payload = { ...formData, order: Number(formData.order) };
       if (editingId) {
-        await apiClient.put(`/api/placements/recruiters/${editingId}`, payload, authHeader());
+        await apiClient.put(`/placements/recruiters/${editingId}`, payload, authHeader());
         setSuccess("Recruiter updated successfully.");
       } else {
         await apiClient.post("/placements/recruiters", payload, authHeader());
@@ -126,7 +126,7 @@ const AdminRecruiters = () => {
 
   const handleDelete = async (id) => {
     try {
-      await apiClient.delete(`/api/placements/recruiters/${id}`, authHeader());
+      await apiClient.delete(`/placements/recruiters/${id}`, authHeader());
       setSuccess("Recruiter deleted.");
       setDeleteConfirm(null);
       fetchRecruiters();

@@ -85,7 +85,7 @@ const DocumentCard = ({ document }) => {
     if (!safeFileUrl) return;
 
     try {
-      await apiClient.post(`/api/documents/${_id}/download`);
+      await apiClient.post(`/documents/${_id}/download`);
       openFile();
     } catch (error) {
       logUnexpectedError("Error tracking download:", error);

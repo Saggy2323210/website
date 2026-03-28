@@ -25,7 +25,7 @@ export const useDepartmentData = (pageId) => {
       }
 
       try {
-        const response = await apiClient.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/pages/${pageId}`);
         if (response.data.success) {
           setPageData(response.data.data);
         }

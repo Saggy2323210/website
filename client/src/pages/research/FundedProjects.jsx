@@ -47,7 +47,7 @@ const FundedProjects = () => {
       if (filter.agency) params.append("agency", filter.agency);
       params.append("limit", "50");
 
-      const res = await apiClient.get(`/api/research/projects?${params}`);
+      const res = await apiClient.get(`/research/projects?${params}`);
       setProjects(res.data.projects);
       setError("");
 

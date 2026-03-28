@@ -106,7 +106,7 @@ const VisualPageEditor = () => {
       setPageNotFound(false);
       setError(null);
       try {
-        const res = await apiClient.get(`/api/pages/${pageId}`);
+        const res = await apiClient.get(`/pages/${pageId}`);
         if (res.data.success) {
           setInitialData(res.data.data);
         } else {

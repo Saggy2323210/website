@@ -1,8 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import apiClient from "../utils/apiClient";
 
-const API_URL = "http://localhost:5000/api";
-
 // Create Auth Context
 const AuthContext = createContext(null);
 
@@ -30,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
 
-      const response = await apiClient.post(`${API_URL}/auth/login`, {
+      const response = await apiClient.post(`/auth/login`, {
         email,
         password,
       });
@@ -63,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       setLoading(true);
 
-      const response = await apiClient.post(`${API_URL}/auth/register`, {
+      const response = await apiClient.post(`/auth/register`, {
         name,
         email,
         password,

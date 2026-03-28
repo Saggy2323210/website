@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../utils/apiClient";
 import { useEdit } from "../contexts/EditContext";
 import { logUnexpectedError } from "../utils/apiErrors";
 
@@ -25,7 +25,7 @@ export const useDepartmentData = (pageId) => {
       }
 
       try {
-        const response = await axios.get(`/api/pages/${pageId}`);
+        const response = await apiClient.get(`/api/pages/${pageId}`);
         if (response.data.success) {
           setPageData(response.data.data);
         }

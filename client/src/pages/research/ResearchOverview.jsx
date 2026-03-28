@@ -18,7 +18,7 @@ import {
   FaChartLine,
   FaUsers
 } from 'react-icons/fa';
-import axios from 'axios';
+import apiClient from '../../utils/apiClient';
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
 
 // Skeleton Loader Component

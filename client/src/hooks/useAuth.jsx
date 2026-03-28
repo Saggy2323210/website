@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import axios from 'axios';
+import apiClient from '../utils/apiClient';
 
 const API_URL = 'http://localhost:5000/api';
 

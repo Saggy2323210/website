@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../utils/apiClient';
 import PageHeader from '../components/PageHeader';
 import { FaTrophy, FaBriefcase, FaChartLine, FaHandshake, FaQuoteLeft, FaUserCircle } from 'react-icons/fa';
 

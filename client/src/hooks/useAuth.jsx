@@ -1,7 +1,7 @@
-import { useState, useEffect, createContext, useContext } from 'react';
-import apiClient from '../utils/apiClient';
+import { useState, useEffect, createContext, useContext } from "react";
+import apiClient from "../utils/apiClient";
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = "http://localhost:5000/api";
 
 // Create Auth Context
 const AuthContext = createContext(null);
@@ -14,12 +14,12 @@ export const AuthProvider = ({ children }) => {
 
   // Initialize auth state from localStorage
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    const savedUser = localStorage.getItem('adminUser');
+    const token = localStorage.getItem("adminToken");
+    const savedUser = localStorage.getItem("adminUser");
 
     if (token && savedUser) {
       setUser(JSON.parse(savedUser));
-      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
     setLoading(false);
   }, []);
@@ -39,17 +39,17 @@ export const AuthProvider = ({ children }) => {
         const { token, ...userData } = response.data.data;
 
         // Save to localStorage
-        localStorage.setItem('adminToken', token);
-        localStorage.setItem('adminUser', JSON.stringify(userData));
+        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminUser", JSON.stringify(userData));
 
         // Set axios default header
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         setUser(userData);
         return { success: true };
       }
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed';
+      const message = err.response?.data?.message || "Login failed";
       setError(message);
       return { success: false, message };
     } finally {
@@ -66,21 +66,21 @@ export const AuthProvider = ({ children }) => {
       const response = await apiClient.post(`${API_URL}/auth/register`, {
         name,
         email,
-        password
+        password,
       });
 
       if (response.data.success) {
         const { token, ...userData } = response.data.data;
 
-        localStorage.setItem('adminToken', token);
-        localStorage.setItem('adminUser', JSON.stringify(userData));
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminUser", JSON.stringify(userData));
+        apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         setUser(userData);
         return { success: true };
       }
     } catch (err) {
-      const message = err.response?.data?.message || 'Registration failed';
+      const message = err.response?.data?.message || "Registration failed";
       setError(message);
       return { success: false, message };
     } finally {
@@ -90,38 +90,40 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminUser');
-    delete apiClient.defaults.headers.common['Authorization'];
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUser");
+    delete apiClient.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
   // Role helpers
-  const ADMIN_ROLES = ['admin', 'SuperAdmin'];
-  const ALL_ROLES = ['admin', 'SuperAdmin', 'Coordinator'];
+  const ADMIN_ROLES = ["admin", "SuperAdmin"];
+  const ALL_ROLES = ["admin", "SuperAdmin", "Coordinator"];
   const isSuperAdmin = ADMIN_ROLES.includes(user?.role);
-  const isCoordinator = user?.role === 'Coordinator';
+  const isCoordinator = user?.role === "Coordinator";
   const isAdmin = ALL_ROLES.includes(user?.role); // any authenticated admin-panel user
-  const userDepartment = user?.department || 'All';
+  const userDepartment = user?.department || "All";
 
   // Get auth token
-  const getToken = () => localStorage.getItem('adminToken');
+  const getToken = () => localStorage.getItem("adminToken");
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      loading,
-      error,
-      login,
-      register,
-      logout,
-      isAdmin,
-      isSuperAdmin,
-      isCoordinator,
-      userDepartment,
-      getToken,
-      isAuthenticated: !!user
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        isAdmin,
+        isSuperAdmin,
+        isCoordinator,
+        userDepartment,
+        getToken,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -131,7 +133,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

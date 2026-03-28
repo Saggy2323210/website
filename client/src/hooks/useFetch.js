@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import apiClient from '../utils/apiClient';
+import { useState, useEffect } from "react";
+import apiClient from "../utils/apiClient";
 
 const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-      useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -14,7 +14,7 @@ const useFetch = (url) => {
         setData(response.data);
         setError(null);
       } catch (err) {
-        setError(err.message || 'An error occurred');
+        setError(err.message || "An error occurred");
         setData(null);
       } finally {
         setLoading(false);

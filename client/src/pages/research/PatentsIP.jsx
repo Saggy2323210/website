@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import PageHeader from '../../components/PageHeader';
-import ResearchSidebar from '../../components/ResearchSidebar';
+import React, { useEffect, useState } from "react";
+import PageHeader from "../../components/PageHeader";
+import ResearchSidebar from "../../components/ResearchSidebar";
 import {
   FaCertificate,
   FaCheckCircle,
@@ -9,9 +9,9 @@ import {
   FaUsers,
   FaCalendarAlt,
   FaCopyright,
-  FaLightbulb
-} from 'react-icons/fa';
-import apiClient from '../../utils/apiClient';
+  FaLightbulb,
+} from "react-icons/fa";
+import apiClient from "../../utils/apiClient";
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
 
 // Skeleton Loader
@@ -34,13 +34,13 @@ const PatentSkeleton = () => (
 const PatentsIP = () => {
   const [patents, setPatents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState({ status: '', type: '' });
+  const [filter, setFilter] = useState({ status: "", type: "" });
   const [stats, setStats] = useState({ total: 0, granted: 0, filed: 0 });
   const [error, setError] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Patents & IP | Research - SSGMCE';
+    document.title = "Patents & IP | Research - SSGMCE";
     fetchPatents();
   }, [filter]);
 
@@ -48,9 +48,9 @@ const PatentsIP = () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (filter.status) params.append('status', filter.status);
-      if (filter.type) params.append('type', filter.type);
-      params.append('limit', '50');
+      if (filter.status) params.append("status", filter.status);
+      if (filter.type) params.append("type", filter.type);
+      params.append("limit", "50");
 
       const res = await apiClient.get(`/api/research/patents?${params}`);
       setPatents(res.data.patents);
@@ -60,11 +60,13 @@ const PatentsIP = () => {
       const all = res.data.patents;
       setStats({
         total: all.length,
-        granted: all.filter(p => p.status === 'granted').length,
-        filed: all.filter(p => p.status === 'filed' || p.status === 'published').length
+        granted: all.filter((p) => p.status === "granted").length,
+        filed: all.filter(
+          (p) => p.status === "filed" || p.status === "published",
+        ).length,
       });
     } catch (error) {
-      logUnexpectedError('Error fetching patents:', error);
+      logUnexpectedError("Error fetching patents:", error);
       setError(getErrorMessage(error, "Failed to load patents"));
     } finally {
       setLoading(false);
@@ -73,18 +75,25 @@ const PatentsIP = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'granted': return 'bg-green-100 text-green-700 border-green-200';
-      case 'published': return 'bg-blue-100 text-blue-700 border-blue-200';
-      case 'filed': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case "granted":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "published":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+      case "filed":
+        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+      default:
+        return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'patent': return FaCertificate;
-      case 'copyright': return FaCopyright;
-      default: return FaLightbulb;
+      case "patent":
+        return FaCertificate;
+      case "copyright":
+        return FaCopyright;
+      default:
+        return FaLightbulb;
     }
   };
 
@@ -94,8 +103,8 @@ const PatentsIP = () => {
         title="Patents & Intellectual Property"
         subtitle="Protecting Innovation Through Intellectual Property Rights"
         breadcrumbs={[
-          { label: 'Research', link: '/research' },
-          { label: 'Patents & IP' }
+          { label: "Research", link: "/research" },
+          { label: "Patents & IP" },
         ]}
       />
 
@@ -126,17 +135,23 @@ const PatentsIP = () => {
               <div className="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-2xl shadow-xl text-center">
                 <FaClock className="text-4xl mx-auto mb-3 text-orange-200" />
                 <p className="text-4xl font-bold">{stats.filed}</p>
-                <p className="text-orange-100 text-sm mt-1">Filed / Published</p>
+                <p className="text-orange-100 text-sm mt-1">
+                  Filed / Published
+                </p>
               </div>
             </section>
 
             {/* Filters */}
             <section className="bg-white p-4 rounded-xl shadow-md border border-gray-100">
               <div className="flex flex-wrap gap-4 items-center">
-                <span className="text-sm font-medium text-gray-600">Filter by:</span>
+                <span className="text-sm font-medium text-gray-600">
+                  Filter by:
+                </span>
                 <select
                   value={filter.status}
-                  onChange={(e) => setFilter(prev => ({ ...prev, status: e.target.value }))}
+                  onChange={(e) =>
+                    setFilter((prev) => ({ ...prev, status: e.target.value }))
+                  }
                   className="px-4 py-2 border border-gray-200 rounded-lg text-sm"
                 >
                   <option value="">All Status</option>
@@ -146,7 +161,9 @@ const PatentsIP = () => {
                 </select>
                 <select
                   value={filter.type}
-                  onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value }))}
+                  onChange={(e) =>
+                    setFilter((prev) => ({ ...prev, type: e.target.value }))
+                  }
                   className="px-4 py-2 border border-gray-200 rounded-lg text-sm"
                 >
                   <option value="">All Types</option>
@@ -161,13 +178,21 @@ const PatentsIP = () => {
             <section>
               {loading ? (
                 <div className="grid md:grid-cols-2 gap-4">
-                  {Array(4).fill(0).map((_, i) => <PatentSkeleton key={i} />)}
+                  {Array(4)
+                    .fill(0)
+                    .map((_, i) => (
+                      <PatentSkeleton key={i} />
+                    ))}
                 </div>
               ) : patents.length === 0 ? (
                 <div className="bg-white p-12 rounded-2xl shadow-lg text-center">
                   <FaCertificate className="text-6xl text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">No Patents Found</h3>
-                  <p className="text-gray-500">Adjust filters to see more results</p>
+                  <h3 className="text-xl font-bold text-gray-700 mb-2">
+                    No Patents Found
+                  </h3>
+                  <p className="text-gray-500">
+                    Adjust filters to see more results
+                  </p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-4">
@@ -180,14 +205,20 @@ const PatentsIP = () => {
                       >
                         <div className="flex items-start gap-4">
                           {/* Icon */}
-                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${patent.status === 'granted'
-                            ? 'bg-green-100'
-                            : 'bg-blue-100'
-                            }`}>
-                            <TypeIcon className={`text-xl ${patent.status === 'granted'
-                              ? 'text-green-600'
-                              : 'text-blue-600'
-                              }`} />
+                          <div
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                              patent.status === "granted"
+                                ? "bg-green-100"
+                                : "bg-blue-100"
+                            }`}
+                          >
+                            <TypeIcon
+                              className={`text-xl ${
+                                patent.status === "granted"
+                                  ? "text-green-600"
+                                  : "text-blue-600"
+                              }`}
+                            />
                           </div>
 
                           <div className="flex-1 min-w-0">
@@ -199,16 +230,22 @@ const PatentsIP = () => {
                             {/* Inventors */}
                             <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                               <FaUsers className="text-blue-500 flex-shrink-0" />
-                              <p className="truncate">{patent.inventors?.join(', ')}</p>
+                              <p className="truncate">
+                                {patent.inventors?.join(", ")}
+                              </p>
                             </div>
 
                             {/* Tags */}
                             <div className="flex flex-wrap gap-2 mb-3">
-                              <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(patent.status)}`}>
-                                {patent.status?.charAt(0).toUpperCase() + patent.status?.slice(1)}
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(patent.status)}`}
+                              >
+                                {patent.status?.charAt(0).toUpperCase() +
+                                  patent.status?.slice(1)}
                               </span>
                               <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                                {patent.type?.charAt(0).toUpperCase() + patent.type?.slice(1)}
+                                {patent.type?.charAt(0).toUpperCase() +
+                                  patent.type?.slice(1)}
                               </span>
                               {patent.department && (
                                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
@@ -226,7 +263,8 @@ const PatentsIP = () => {
                               )}
                               {patent.filingDate && (
                                 <span className="flex items-center gap-1">
-                                  <FaCalendarAlt /> Filed: {new Date(patent.filingDate).getFullYear()}
+                                  <FaCalendarAlt /> Filed:{" "}
+                                  {new Date(patent.filingDate).getFullYear()}
                                 </span>
                               )}
                             </div>

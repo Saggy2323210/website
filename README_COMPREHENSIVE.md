@@ -38,6 +38,7 @@ This is a complete MERN (MongoDB, Express, React, Node.js) stack application for
 ## Tech Stack
 
 ### Frontend
+
 - **React 18** - UI library
 - **Vite 7** - Fast build tool
 - **React Router 6** - Client-side routing
@@ -50,6 +51,7 @@ This is a complete MERN (MongoDB, Express, React, Node.js) stack application for
 - **React Icons** - Icon library
 
 ### Backend
+
 - **Node.js** - Runtime
 - **Express 4** - Web framework
 - **Mongoose 7** - MongoDB ODM
@@ -60,6 +62,7 @@ This is a complete MERN (MongoDB, Express, React, Node.js) stack application for
 - **Dotenv** - Environment variable management
 
 ### Database & DevOps
+
 - **MongoDB** - NoSQL database (Atlas for cloud)
 - **GitHub Actions** - CI/CD pipeline
 - **Vercel** - Frontend hosting
@@ -186,16 +189,16 @@ client/src/
 
 ### Key Frontend Files Explained
 
-| File | Purpose |
-|------|---------|
-| **App.jsx** | Main routing component that defines all routes (public, admin, etc.) |
-| **components/GenericContentPage.jsx** | Renders CMS pages by fetching markdown content from API |
-| **components/Navbar.jsx** | Top navigation with mega menu (fixed width dropdown pattern) |
-| **components/admin/MarkdownEditor.jsx** | Visual markdown editor with live preview for admin |
-| **hooks/useAuth.jsx** | Authentication context hook for login/logout/role checks |
-| **utils/apiClient.js** | **CENTRALIZED axios instance** - all API calls use this |
-| **contexts/EditContext.jsx** | Global toggle for admin edit mode |
-| **pages/admin/AdminDashboard.jsx** | Admin main page showing stats and quick links |
+| File                                    | Purpose                                                              |
+| --------------------------------------- | -------------------------------------------------------------------- |
+| **App.jsx**                             | Main routing component that defines all routes (public, admin, etc.) |
+| **components/GenericContentPage.jsx**   | Renders CMS pages by fetching markdown content from API              |
+| **components/Navbar.jsx**               | Top navigation with mega menu (fixed width dropdown pattern)         |
+| **components/admin/MarkdownEditor.jsx** | Visual markdown editor with live preview for admin                   |
+| **hooks/useAuth.jsx**                   | Authentication context hook for login/logout/role checks             |
+| **utils/apiClient.js**                  | **CENTRALIZED axios instance** - all API calls use this              |
+| **contexts/EditContext.jsx**            | Global toggle for admin edit mode                                    |
+| **pages/admin/AdminDashboard.jsx**      | Admin main page showing stats and quick links                        |
 
 ---
 
@@ -292,21 +295,22 @@ server/
 
 ### Key Backend Files Explained
 
-| File | Purpose |
-|------|---------|
-| **server.js** | Entry point: sets up Express, middleware, routes, MongoDB connection |
-| **models/PageContent.js** | Stores CMS page sections with markdown content (pageId-based) |
-| **controllers/pageContentController.js** | Fetches/updates page content; handles markdown rendering |
-| **data/allNavPages.js** | **MASTER CONFIG** - defines all page IDs, titles, and default sections |
-| **utils/dbInit.js** | Runs on startup; seeds allNavPages.js into DB (idempotent) |
-| **middleware/authMiddleware.js** | JWT verification for protected `/api` routes |
-| **models/User.js** | Admin user schema with email, password (bcrypt), role |
+| File                                     | Purpose                                                                |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| **server.js**                            | Entry point: sets up Express, middleware, routes, MongoDB connection   |
+| **models/PageContent.js**                | Stores CMS page sections with markdown content (pageId-based)          |
+| **controllers/pageContentController.js** | Fetches/updates page content; handles markdown rendering               |
+| **data/allNavPages.js**                  | **MASTER CONFIG** - defines all page IDs, titles, and default sections |
+| **utils/dbInit.js**                      | Runs on startup; seeds allNavPages.js into DB (idempotent)             |
+| **middleware/authMiddleware.js**         | JWT verification for protected `/api` routes                           |
+| **models/User.js**                       | Admin user schema with email, password (bcrypt), role                  |
 
 ---
 
 ## Core Features
 
 ### 1. **Public Website**
+
 - Multi-section college website (About, Academics, Admissions, etc.)
 - Responsive design (mobile, tablet, desktop)
 - SEO-friendly structure
@@ -316,6 +320,7 @@ server/
 - Calendar and event management
 
 ### 2. **Admin CMS**
+
 - **Markdown-driven content editing** - All page content stored as markdown
 - **Visual editor** - MarkdownEditor component with live preview
 - **Role-based access** - Admin and Coordinator roles with different permissions
@@ -324,6 +329,7 @@ server/
 - **Edit audit trail** - EditLog tracks all changes with timestamps and user info
 
 ### 3. **Authentication**
+
 - JWT-based authentication with tokens stored in localStorage
 - Admin login/register functionality
 - Role-based access control (Admin, SuperAdmin, Coordinator)
@@ -331,12 +337,14 @@ server/
 - Token refresh mechanism
 
 ### 4. **File Management**
+
 - Image uploads for profiles, departments, news
 - PDF document uploads (MOUs, NIRF reports, etc.)
 - Automatic file organization into subdirectories
 - File size validation (max 10MB)
 
 ### 5. **Database Seeding**
+
 - Automatic initialization of default pages on first startup
 - Idempotent seeding (safe to run multiple times)
 - Support for re-seeding specific content (research, IQAC) via scripts
@@ -346,11 +354,13 @@ server/
 ## Local Development Setup
 
 ### Prerequisites
+
 - **Node.js 16+** and **npm 8+**
 - **MongoDB** (local or Atlas account)
 - **Git**
 
 ### Step 1: Clone Repository
+
 ```bash
 git clone https://github.com/Saggy2323210/website.git
 cd website
@@ -359,6 +369,7 @@ cd website
 ### Step 2: Install Dependencies
 
 **Backend:**
+
 ```bash
 cd server
 npm install
@@ -367,6 +378,7 @@ cp .env.example .env
 ```
 
 **Frontend:**
+
 ```bash
 cd ../client
 npm install
@@ -375,6 +387,7 @@ npm install
 ### Step 3: Configure Environment Variables
 
 **`server/.env`:**
+
 ```env
 PORT=5000
 NODE_ENV=development
@@ -386,12 +399,14 @@ ADMIN_AUTO_SEED=true
 ```
 
 ### Step 4: Start Backend
+
 ```bash
 cd server
 npm run dev    # Uses nodemon for auto-reload
 ```
 
 **Expected output:**
+
 ```
 [OK] MongoDB Connected Successfully
 [SERVER] Running on port 5000
@@ -399,6 +414,7 @@ npm run dev    # Uses nodemon for auto-reload
 ```
 
 ### Step 5: Start Frontend (in a new terminal)
+
 ```bash
 cd client
 npm run dev
@@ -407,11 +423,13 @@ npm run dev
 **Frontend runs at**: `http://localhost:3000`
 
 ### Step 6: Access Admin Panel
+
 ```
 http://localhost:3000/admin
 ```
 
 Credentials (if seeded):
+
 - Email: `admin@example.com`
 - Password: Check `.env` file
 
@@ -421,22 +439,22 @@ Credentials (if seeded):
 
 ### Backend (`server/.env`)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `5000` | Server port |
-| `NODE_ENV` | `development` | Environment (development/production) |
-| `MONGODB_URI` | `mongodb://localhost:27017/ssgmce` | MongoDB connection string |
-| `JWT_SECRET` | Required | JWT secret for public auth |
-| `ADMIN_JWT_SECRET` | Required | JWT secret for admin auth |
-| `CORS_ORIGIN` | `http://localhost:3000` | Allowed frontend URL |
-| `ADMIN_AUTO_SEED` | `true` | Auto-seed DB on startup |
-| `ADMIN_EMAIL` | `admin@example.com` | Initial admin email |
-| `ADMIN_PASSWORD` | Required | Initial admin password |
+| Variable           | Default                            | Description                          |
+| ------------------ | ---------------------------------- | ------------------------------------ |
+| `PORT`             | `5000`                             | Server port                          |
+| `NODE_ENV`         | `development`                      | Environment (development/production) |
+| `MONGODB_URI`      | `mongodb://localhost:27017/ssgmce` | MongoDB connection string            |
+| `JWT_SECRET`       | Required                           | JWT secret for public auth           |
+| `ADMIN_JWT_SECRET` | Required                           | JWT secret for admin auth            |
+| `CORS_ORIGIN`      | `http://localhost:3000`            | Allowed frontend URL                 |
+| `ADMIN_AUTO_SEED`  | `true`                             | Auto-seed DB on startup              |
+| `ADMIN_EMAIL`      | `admin@example.com`                | Initial admin email                  |
+| `ADMIN_PASSWORD`   | Required                           | Initial admin password               |
 
 ### Frontend (`client/.env` or Vercel)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
+| Variable           | Default                 | Description          |
+| ------------------ | ----------------------- | -------------------- |
 | `VITE_BACKEND_URL` | `http://localhost:5000` | Backend API base URL |
 
 ---
@@ -446,6 +464,7 @@ Credentials (if seeded):
 All APIs are prefixed with `/api`. The backend uses centralized error handling and JWT authentication.
 
 ### Authentication Routes (`/api/auth`)
+
 ```
 POST   /api/auth/login           → Login with email/password
 POST   /api/auth/register        → Register new admin user
@@ -453,6 +472,7 @@ POST   /api/auth/verify          → Verify JWT token
 ```
 
 ### Content Routes (Protected)
+
 ```
 GET    /api/pages/:pageId        → Fetch page content by ID
 PUT    /api/pages/:pageId        → Update page content (admin only)
@@ -499,13 +519,15 @@ GET    /uploads/:filename        → Serve uploaded files
 ### Example API Call
 
 **Fetch page content:**
+
 ```javascript
-const apiClient = require('./utils/apiClient');
+const apiClient = require("./utils/apiClient");
 
 // In frontend
-apiClient.get('/api/pages/research-overview')
-  .then(res => console.log(res.data))
-  .catch(err => console.error(err));
+apiClient
+  .get("/api/pages/research-overview")
+  .then((res) => console.log(res.data))
+  .catch((err) => console.error(err));
 ```
 
 ---
@@ -514,29 +536,30 @@ apiClient.get('/api/pages/research-overview')
 
 ### Key Collections
 
-| Model | Used For |
-|-------|----------|
-| **PageContent** | CMS-managed page sections (IQAC, Research, Placements, etc.) |
-| **Department** | Department info, faculty lists, contact info |
-| **Faculty** | Faculty profiles with images and departments |
-| **User** | Admin authentication (email, role, password hash) |
-| **News** | News articles with images |
-| **Event** | College events and activities |
-| **Notice** | Announcements and notices |
-| **PlacementStat** | Year-wise placement data and statistics |
-| **Recruiter** | List of recruiting companies |
-| **Research** | Research publications and projects |
-| **NIRF** | NIRF ranking data and parameters |
-| **IQACDocument** | IQAC committee documents |
-| **IQACMember** | IQAC committee members and roles |
-| **Document** | Uploaded policy documents, PDFs |
-| **EditLog** | Audit trail of all content changes |
+| Model             | Used For                                                     |
+| ----------------- | ------------------------------------------------------------ |
+| **PageContent**   | CMS-managed page sections (IQAC, Research, Placements, etc.) |
+| **Department**    | Department info, faculty lists, contact info                 |
+| **Faculty**       | Faculty profiles with images and departments                 |
+| **User**          | Admin authentication (email, role, password hash)            |
+| **News**          | News articles with images                                    |
+| **Event**         | College events and activities                                |
+| **Notice**        | Announcements and notices                                    |
+| **PlacementStat** | Year-wise placement data and statistics                      |
+| **Recruiter**     | List of recruiting companies                                 |
+| **Research**      | Research publications and projects                           |
+| **NIRF**          | NIRF ranking data and parameters                             |
+| **IQACDocument**  | IQAC committee documents                                     |
+| **IQACMember**    | IQAC committee members and roles                             |
+| **Document**      | Uploaded policy documents, PDFs                              |
+| **EditLog**       | Audit trail of all content changes                           |
 
 ---
 
 ## Deployment Guide
 
 ### Overview
+
 - **Frontend**: Vercel (free tier forever)
 - **Backend**: Render.com (free tier, limited uptime)
 - **Database**: MongoDB Atlas (free tier 512MB)
@@ -545,6 +568,7 @@ apiClient.get('/api/pages/research-overview')
 ### Phase 1: Prepare Project
 
 1. **Ensure Git is initialized:**
+
    ```bash
    git init
    git add .
@@ -616,6 +640,7 @@ git push -u origin main
 ### Phase 6: Update CORS
 
 Go back to Render dashboard, update:
+
 ```
 CORS_ORIGIN=https://ssgmce-website.vercel.app
 ```
@@ -623,6 +648,7 @@ CORS_ORIGIN=https://ssgmce-website.vercel.app
 ### Phase 7: GitHub Actions (Optional)
 
 Create `.github/workflows/deploy.yml`:
+
 ```yaml
 name: Deploy MERN Application
 
@@ -646,6 +672,7 @@ jobs:
 ## Useful Commands
 
 ### Development
+
 ```bash
 # Start both frontend and backend
 npm run dev
@@ -664,6 +691,7 @@ cd client && npm run preview
 ```
 
 ### Database
+
 ```bash
 # Re-seed pages from allNavPages.js
 cd server && node scripts/syncResearchMarkdownContent.js
@@ -671,6 +699,7 @@ cd server && node scripts/syncIqacMarkdownContent.js
 ```
 
 ### Deployment
+
 ```bash
 # Push to GitHub (triggers CI/CD)
 git add .
@@ -687,6 +716,7 @@ git push origin main
 **Error**: `ECONNREFUSED 127.0.0.1:5000`
 
 **Solution**:
+
 1. Ensure backend is running: `npm run dev` in `server/` directory
 2. Check backend is listening on port 5000
 3. Verify `CORS_ORIGIN` in `.env` matches frontend URL
@@ -697,6 +727,7 @@ git push origin main
 **Error**: `MongoDB connection error`
 
 **Solution**:
+
 1. Verify `MONGODB_URI` in `.env` is correct
 2. If MongoDB Atlas: ensure IP whitelist includes your IP (or `0.0.0.0/0`)
 3. Test connection string: Copy it to MongoDB Compass
@@ -707,6 +738,7 @@ git push origin main
 **Error**: 401 Unauthorized
 
 **Solution**:
+
 1. Check `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env`
 2. Verify database was seeded: Check `users` collection
 3. Create admin manually if needed:
@@ -720,6 +752,7 @@ git push origin main
 **Error**: `npm run build` fails
 
 **Solution**:
+
 1. Clear `node_modules`: `rm -rf node_modules && npm install`
 2. Clear cache: `npm cache clean --force`
 3. Check for TypeScript errors (if applicable)
@@ -730,6 +763,7 @@ git push origin main
 **Error**: Build fails on Vercel
 
 **Solution**:
+
 1. Check Vercel logs: Deployments → Production logs
 2. Ensure `VITE_BACKEND_URL` is set in Vercel environment (not `.env`)
 3. Check that `root directory` is set to `client/`
@@ -740,6 +774,7 @@ git push origin main
 **Error**: Build fails on Render
 
 **Solution**:
+
 1. Check Render logs: Web Service → Logs → Build
 2. Ensure `root directory` is set to `server/`
 3. Check all environment variables are set
@@ -786,8 +821,8 @@ Follow the MVC pattern:
 3. **Create Routes** in `server/routes/yourRoutes.js`
 4. **Import Routes** in `server/server.js`:
    ```javascript
-   const yourRoutes = require('./routes/yourRoutes');
-   app.use('/api/your', yourRoutes);
+   const yourRoutes = require("./routes/yourRoutes");
+   app.use("/api/your", yourRoutes);
    ```
 5. **Create Frontend Pages** in `client/src/pages/your/`
 6. **Add Routing** in `client/src/App.jsx`
@@ -804,15 +839,15 @@ Follow the MVC pattern:
 
 ## Quick Reference
 
-| Task | Command |
-|------|---------|
-| Install dependencies | `npm install` (in both server/ and client/) |
-| Start development | `npm run dev` (from root) |
-| Build frontend | `cd client && npm run build` |
-| Start production backend | `cd server && npm start` |
-| Deploy to GitHub | `git push origin main` |
-| Clear database | Delete collections in MongoDB Atlas |
-| Reset admin user | Run `node scripts/createAdmin.js` |
+| Task                     | Command                                     |
+| ------------------------ | ------------------------------------------- |
+| Install dependencies     | `npm install` (in both server/ and client/) |
+| Start development        | `npm run dev` (from root)                   |
+| Build frontend           | `cd client && npm run build`                |
+| Start production backend | `cd server && npm start`                    |
+| Deploy to GitHub         | `git push origin main`                      |
+| Clear database           | Delete collections in MongoDB Atlas         |
+| Reset admin user         | Run `node scripts/createAdmin.js`           |
 
 ---
 
@@ -837,6 +872,7 @@ MIT License - See LICENSE file
 ## Support
 
 For issues or questions:
+
 1. Check **Troubleshooting** section above
 2. Review error logs in browser console or server terminal
 3. Check GitHub Issues

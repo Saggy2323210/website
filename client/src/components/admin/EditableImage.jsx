@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { useEdit } from "../../contexts/EditContext";
 import { FaUpload, FaTrash, FaTimes } from "react-icons/fa";
 import apiClient from "../../utils/apiClient";
+import API_BASE_URL from "../../config/api";
 
 /**
  * EditableImage Component
@@ -30,6 +31,21 @@ const EditableImage = ({
   const [showUploadUI, setShowUploadUI] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
+  const backendBaseUrl = API_BASE_URL.replace(/\/api$/, "");
+
+  const resolveImageUrl = (url) => {
+    const normalizedUrl = String(url || "").trim();
+
+    if (!normalizedUrl) return "";
+    if (/^(https?:|data:|blob:|\/\/)/i.test(normalizedUrl)) {
+      return normalizedUrl;
+    }
+    if (normalizedUrl.startsWith("/")) {
+      return `${backendBaseUrl}${normalizedUrl}`;
+    }
+
+    return normalizedUrl;
+  };
 
   // Helper to safely get value from path
   const getValueFromPath = (obj, p) => {
@@ -43,6 +59,7 @@ const EditableImage = ({
   // Determine current image URL
   const imageUrl =
     src !== undefined ? src : path ? getValueFromPath(data, path) : "";
+  const resolvedImageUrl = resolveImageUrl(imageUrl);
 
   const handleFileSelect = async (file) => {
     if (!file) return;
@@ -140,8 +157,8 @@ const EditableImage = ({
 
   // View Mode (not editing)
   if (!isEditing) {
-    return imageUrl ? (
-      <img src={imageUrl} alt={alt} className={className} />
+    return resolvedImageUrl ? (
+      <img src={resolvedImageUrl} alt={alt} className={className} />
     ) : (
       <div
         className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 ${className}`}
@@ -219,7 +236,7 @@ const EditableImage = ({
     <div className="relative group">
       {imageUrl ? (
         <>
-          <img src={imageUrl} alt={alt} className={className} />
+          <img src={resolvedImageUrl} alt={alt} className={className} />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
             <button
               onClick={() => setShowUploadUI(true)}

@@ -5,6 +5,7 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -959,10 +960,12 @@ const getLocalCseActivityImageUrl = (imageUrl = "") => {
       .startsWith(CSE_ACTIVITY_REMOTE_IMAGE_PREFIX.toLowerCase())
   ) {
     const fileName = normalizedUrl.split("/").pop()?.split("?")[0] || "";
-    return fileName ? `/uploads/images/cse/activities/${fileName}` : normalizedUrl;
+    return fileName
+      ? resolveUploadedAssetUrl(`/uploads/images/cse/activities/${fileName}`)
+      : resolveUploadedAssetUrl(normalizedUrl);
   }
 
-  return normalizedUrl;
+  return resolveUploadedAssetUrl(normalizedUrl);
 };
 
 const normalizeCseActivity = (activity = {}) => ({

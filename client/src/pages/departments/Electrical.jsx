@@ -5,6 +5,7 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -9694,11 +9695,11 @@ const getLocalElectricalActivityImageUrl = (imageUrl = "") => {
   ) {
     const fileName = normalizedUrl.split("/").pop()?.split("?")[0] || "";
     return fileName
-      ? `/uploads/images/electrical/activities/${fileName}`
-      : normalizedUrl;
+      ? resolveUploadedAssetUrl(`/uploads/images/electrical/activities/${fileName}`)
+      : resolveUploadedAssetUrl(normalizedUrl);
   }
 
-  return normalizedUrl;
+  return resolveUploadedAssetUrl(normalizedUrl);
 };
 
 const normalizeElectricalActivity = (activity = {}) => ({

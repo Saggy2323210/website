@@ -115,12 +115,16 @@ const documentUpload = multer({
 const uploadSingleImage = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
     }
 
     const fileUrl = `/uploads/images/${req.file.filename}`;
     res.status(200).json({
+      success: true,
       message: "File uploaded successfully",
+      url: fileUrl,
       fileUrl: fileUrl,
       filename: req.file.filename,
     });
@@ -128,7 +132,7 @@ const uploadSingleImage = async (req, res) => {
     console.error("Upload error:", error);
     res
       .status(500)
-      .json({ message: "File upload failed", error: error.message });
+      .json({ success: false, message: "File upload failed", error: error.message });
   }
 };
 
@@ -160,12 +164,16 @@ const getUploadedFiles = async (req, res) => {
 const uploadSingleDocument = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
     }
 
     const fileUrl = `/uploads/documents/${req.file.filename}`;
     res.status(200).json({
+      success: true,
       message: "File uploaded successfully",
+      url: fileUrl,
       fileUrl: fileUrl,
       filename: req.file.filename,
       originalName: req.file.originalname,
@@ -232,11 +240,15 @@ const nirfUpload = multer({
 const uploadNirfPdf = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
     }
     const fileUrl = `/uploads/nirf/${req.file.filename}`;
     res.status(200).json({
+      success: true,
       message: "PDF uploaded successfully",
+      url: fileUrl,
       fileUrl,
       filename: req.file.filename,
     });

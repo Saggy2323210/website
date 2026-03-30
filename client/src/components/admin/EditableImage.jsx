@@ -66,14 +66,15 @@ const EditableImage = ({
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await apiClient.post("/upload", formData, {
+      const response = await apiClient.post("/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response.data.success) {
-        const newUrl = response.data.url;
+      const newUrl = response.data.fileUrl || response.data.url;
+
+      if (newUrl) {
 
         // Save the new URL
         if (onSave) {
@@ -84,7 +85,11 @@ const EditableImage = ({
 
         setShowUploadUI(false);
       } else {
-        setError(response.data.message || "Upload failed");
+        setError(
+          response.data.error ||
+            response.data.message ||
+            "Upload failed",
+        );
       }
     } catch (err) {
       console.error("Upload error:", err);

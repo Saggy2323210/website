@@ -2,6 +2,9 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+const IMAGE_MAX_SIZE_BYTES = 20 * 1024 * 1024;
+const DOCUMENT_MAX_SIZE_BYTES = 50 * 1024 * 1024;
+
 const resolveUploadPath = (relativePath = "") => {
   const sanitizedRelativePath = String(relativePath || "")
     .replace(/^\/+/, "")
@@ -57,7 +60,7 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 20 * 1024 * 1024, // 20MB limit (increased for PDFs)
+    fileSize: IMAGE_MAX_SIZE_BYTES,
   },
 });
 
@@ -107,7 +110,7 @@ const documentUpload = multer({
   storage: documentStorage,
   fileFilter: documentFilter,
   limits: {
-    fileSize: 20 * 1024 * 1024, // 20 MB limit
+    fileSize: DOCUMENT_MAX_SIZE_BYTES,
   },
 });
 
@@ -234,7 +237,7 @@ const nirfUpload = multer({
       cb(new Error("Only PDF files are allowed!"), false);
     }
   },
-  limits: { fileSize: 20 * 1024 * 1024 },
+  limits: { fileSize: DOCUMENT_MAX_SIZE_BYTES },
 });
 
 const uploadNirfPdf = async (req, res) => {

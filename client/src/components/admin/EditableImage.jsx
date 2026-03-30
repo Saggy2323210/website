@@ -4,6 +4,8 @@ import { FaUpload, FaTrash, FaTimes } from "react-icons/fa";
 import apiClient from "../../utils/apiClient";
 import API_BASE_URL from "../../config/api";
 
+const MAX_IMAGE_SIZE_BYTES = 20 * 1024 * 1024;
+
 /**
  * EditableImage Component
  * Supports two modes:
@@ -70,9 +72,9 @@ const EditableImage = ({
       return;
     }
 
-    // Validate file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
-      setError("File size must be less than 5MB");
+    // Validate file size (20MB limit)
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      setError("File size must be less than 20MB");
       return;
     }
 
@@ -209,7 +211,7 @@ const EditableImage = ({
                   or drag and drop an image here
                 </p>
               </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500">Maximum file size: 5MB</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Maximum file size: 20MB</p>
             </div>
           )}
 

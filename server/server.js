@@ -157,9 +157,13 @@ app.use((err, req, res, next) => {
 
   // Handle multer errors
   if (err.code === "LIMIT_FILE_SIZE") {
+    const isDocumentRoute =
+      req.path.includes("/upload/file") || req.path.includes("/upload/nirf-pdf");
     return res.status(400).json({
       success: false,
-      error: "File too large. Maximum size is 10MB.",
+      error: isDocumentRoute
+        ? "File too large. Maximum size is 50MB for documents."
+        : "File too large. Maximum size is 20MB for images.",
     });
   }
 

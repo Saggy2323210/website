@@ -97,8 +97,8 @@ const NIRFRanking = () => {
   // Fetch CMS sections from API (skip when inside visual editor — EditContext has them)
   useEffect(() => {
     if (isEditing) return;
-    axios
-      .get("/api/pages/nirf-ranking")
+    apiClient
+      .get("/pages/nirf-ranking")
       .then((res) => {
         if (res.data.success) {
           const sections = (res.data.data.sections || []).filter(
@@ -115,8 +115,8 @@ const NIRFRanking = () => {
 
   // Fetch PDF overrides from NIRF API
   useEffect(() => {
-    axios
-      .get("/api/nirf")
+    apiClient
+      .get("/nirf")
       .then((res) => {
         if (res.data.success && res.data.data.length > 0) {
           const map = {};
@@ -200,7 +200,7 @@ const NIRFRanking = () => {
         );
       } else {
         const createRes = await apiClient.post(
-          "/api/nirf/admin/create",
+          "/nirf/admin/create",
           {
             year,
             category: category.toLowerCase(),

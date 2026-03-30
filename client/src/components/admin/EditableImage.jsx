@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useEdit } from "../../contexts/EditContext";
 import { FaUpload, FaTrash, FaTimes } from "react-icons/fa";
 import apiClient from "../../utils/apiClient";
-import API_BASE_URL from "../../config/api";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 
 const MAX_IMAGE_SIZE_BYTES = 20 * 1024 * 1024;
 
@@ -33,21 +33,6 @@ const EditableImage = ({
   const [showUploadUI, setShowUploadUI] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
-  const backendBaseUrl = API_BASE_URL.replace(/\/api$/, "");
-
-  const resolveImageUrl = (url) => {
-    const normalizedUrl = String(url || "").trim();
-
-    if (!normalizedUrl) return "";
-    if (/^(https?:|data:|blob:|\/\/)/i.test(normalizedUrl)) {
-      return normalizedUrl;
-    }
-    if (normalizedUrl.startsWith("/")) {
-      return `${backendBaseUrl}${normalizedUrl}`;
-    }
-
-    return normalizedUrl;
-  };
 
   // Helper to safely get value from path
   const getValueFromPath = (obj, p) => {
@@ -61,7 +46,7 @@ const EditableImage = ({
   // Determine current image URL
   const imageUrl =
     src !== undefined ? src : path ? getValueFromPath(data, path) : "";
-  const resolvedImageUrl = resolveImageUrl(imageUrl);
+  const resolvedImageUrl = resolveUploadedAssetUrl(imageUrl);
 
   const handleFileSelect = async (file) => {
     if (!file) return;

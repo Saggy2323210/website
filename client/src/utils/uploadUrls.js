@@ -14,7 +14,7 @@ export const resolveUploadedAssetUrl = (url = "") => {
   if (/^(uploads|api)\//i.test(normalizedUrl)) {
     return `${BACKEND_BASE_URL}/${normalizedUrl}`;
   }
-  if (normalizedUrl.startsWith("/")) {
+  if (/^\/(uploads|api)\//i.test(normalizedUrl)) {
     return `${BACKEND_BASE_URL}${normalizedUrl}`;
   }
 

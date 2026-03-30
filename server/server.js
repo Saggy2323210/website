@@ -8,8 +8,36 @@ const path = require("path");
 dotenv.config();
 
 const app = express();
+const { protect, adminOnly } = require("./middleware/authMiddleware");
+
+const securityHeaders = (req, res, next) => {
+  const apiOrigin =
+    process.env.CORS_ORIGIN || process.env.CLIENT_URL || "http://localhost:3000";
+  const cspDirectives = [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'self'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data: https:",
+    "style-src 'self' 'unsafe-inline' https:",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    `connect-src 'self' ${apiOrigin} https: ws: wss:`,
+    "form-action 'self'",
+  ];
+
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Content-Security-Policy", cspDirectives.join("; "));
+
+  next();
+};
 
 // Middleware
+app.use(securityHeaders);
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:3000",
@@ -20,6 +48,21 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Reserve sensitive prefixes behind admin auth even when no route is mounted.
+app.use("/api/debug", protect, adminOnly, (_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found.",
+  });
+});
+
+app.use("/api/admin", protect, adminOnly, (_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found.",
+  });
+});
 
 // Serve static files from uploads folder
 app.use(

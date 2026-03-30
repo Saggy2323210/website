@@ -45,7 +45,7 @@
       "destination": "https://website-d8i3.onrender.com/uploads/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/|uploads/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]

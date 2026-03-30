@@ -11,11 +11,16 @@ const {
   updateCoordinator,
   deleteCoordinator,
 } = require("../controllers/authController");
-const { protect, superAdminOnly } = require("../middleware/authMiddleware");
+const {
+  protect,
+  superAdminOnly,
+  optionalProtect,
+} = require("../middleware/authMiddleware");
+const { loginRateLimit } = require("../middleware/authRateLimit");
 
 // Public routes
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", optionalProtect, register);
+router.post("/login", loginRateLimit, login);
 router.post("/verify-gate", verifyGate);
 
 // Protected routes

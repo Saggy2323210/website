@@ -10,9 +10,22 @@ dotenv.config();
 const app = express();
 const { protect, adminOnly } = require("./middleware/authMiddleware");
 
+const allowedOrigins = Array.from(
+  new Set(
+    [
+      process.env.CORS_ORIGIN,
+      process.env.CLIENT_URL,
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://website-one-sigma-90.vercel.app",
+    ]
+      .flatMap((value) => String(value || "").split(","))
+      .map((value) => value.trim())
+      .filter(Boolean),
+  ),
+);
+
 const securityHeaders = (req, res, next) => {
-  const apiOrigin =
-    process.env.CORS_ORIGIN || process.env.CLIENT_URL || "http://localhost:3000";
   const cspDirectives = [
     "default-src 'self'",
     "base-uri 'self'",
@@ -22,7 +35,7 @@ const securityHeaders = (req, res, next) => {
     "font-src 'self' data: https:",
     "style-src 'self' 'unsafe-inline' https:",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    `connect-src 'self' ${apiOrigin} https: ws: wss:`,
+    `connect-src 'self' ${allowedOrigins.join(" ")} https: ws: wss:`,
     "form-action 'self'",
   ];
 
@@ -40,7 +53,12 @@ const securityHeaders = (req, res, next) => {
 app.use(securityHeaders);
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Origin not allowed by CORS"));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -114,6 +132,13 @@ app.use("/api/iqac", iqacRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/nirf", nirfRoutes);
 app.use("/api/convert", convertRoutes);
+
+app.use("/api", (_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "API endpoint not found.",
+  });
+});
 
 // Health Check
 app.get("/", (req, res) => {

@@ -8,6 +8,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react-quill-new'],
   },
+  build: {
+    sourcemap: false,
+  },
   server: {
     port: 3000,
     proxy: {

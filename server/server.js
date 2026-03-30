@@ -9,6 +9,7 @@ dotenv.config();
 
 const app = express();
 const { protect, adminOnly } = require("./middleware/authMiddleware");
+app.set("trust proxy", 1);
 
 const allowedOrigins = Array.from(
   new Set(

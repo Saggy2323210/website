@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const EditLog = require("../models/EditLog");
 const { generateToken } = require("../middleware/authMiddleware");
+const {
+  registerLoginFailure,
+  clearLoginFailures,
+} = require("../middleware/authRateLimit");
 
 const isGateValid = (accessKey) => {
   const gateToken = String(process.env.ADMIN_GATE_TOKEN || "").trim();
@@ -106,6 +110,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = String(email || "").trim().toLowerCase();
 
     // Validate input
     if (!email || !password) {
@@ -116,9 +121,10 @@ const login = async (req, res) => {
     }
 
     // Find user and include password
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email: normalizedEmail }).select("+password");
 
     if (!user) {
+      await registerLoginFailure(req, normalizedEmail);
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
@@ -127,6 +133,7 @@ const login = async (req, res) => {
 
     // Check if account is active
     if (!user.isActive) {
+      await registerLoginFailure(req, normalizedEmail);
       return res.status(401).json({
         success: false,
         message: "Account is deactivated. Contact administrator.",
@@ -136,6 +143,7 @@ const login = async (req, res) => {
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
+      await registerLoginFailure(req, normalizedEmail);
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
@@ -145,6 +153,7 @@ const login = async (req, res) => {
     // Update last login
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
+    await clearLoginFailures(req, normalizedEmail);
 
     // Log the login event (non-blocking)
     try {

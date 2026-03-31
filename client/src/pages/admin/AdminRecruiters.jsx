@@ -82,7 +82,11 @@ const AdminRecruiters = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setFormData((f) => ({ ...f, logoUrl: res.data.fileUrl }));
+      const uploadedUrl = res.data?.fileUrl || res.data?.url || "";
+      if (!uploadedUrl) {
+        throw new Error("Upload response did not include a file URL.");
+      }
+      setFormData((f) => ({ ...f, logoUrl: uploadedUrl }));
     } catch {
       setError("Logo upload failed. Ensure the file is an image under 20MB.");
     } finally {
@@ -153,6 +157,9 @@ const AdminRecruiters = () => {
     setEditingId(null);
     setShowForm(false);
     setUploading(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const filtered = filterCategory === "All"
@@ -348,7 +355,12 @@ const AdminRecruiters = () => {
                   <div className="flex-1 space-y-2">
                     <button
                       type="button"
-                      onClick={() => fileInputRef.current?.click()}
+                      onClick={() => {
+                        if (fileInputRef.current) {
+                          fileInputRef.current.value = "";
+                          fileInputRef.current.click();
+                        }
+                      }}
                       disabled={uploading}
                       className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
                     >
@@ -364,7 +376,11 @@ const AdminRecruiters = () => {
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={(e) => handleLogoUpload(e.target.files[0])}
+                      onChange={(e) => {
+                        const selectedFile = e.target.files?.[0];
+                        handleLogoUpload(selectedFile);
+                        e.target.value = "";
+                      }}
                     />
                     <p className="text-xs text-gray-400 dark:text-gray-500">
                       Or paste a URL below (JPG, PNG, SVG - max 20MB)

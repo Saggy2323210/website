@@ -386,8 +386,9 @@ const AdminRecruiters = () => {
                       Or paste a URL below (JPG, PNG, SVG - max 20MB)
                     </p>
                     <input
-                      type="url"
-                      placeholder="https://..."
+                      type="text"
+                      inputMode="url"
+                      placeholder="https://... or /uploads/images/..."
                       value={formData.logoUrl}
                       onChange={(e) => setFormData((f) => ({ ...f, logoUrl: e.target.value }))}
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"

@@ -6,6 +6,13 @@ const {
   clearLoginFailures,
 } = require("../middleware/authRateLimit");
 
+const isNonEmptyString = (value) => typeof value === "string" && value.trim().length > 0;
+
+const normalizeEmail = (value) => {
+  if (!isNonEmptyString(value)) return "";
+  return value.trim().toLowerCase();
+};
+
 const isGateValid = (accessKey) => {
   const gateToken = String(process.env.ADMIN_GATE_TOKEN || "").trim();
   if (!gateToken) return true;
@@ -19,6 +26,14 @@ const verifyGate = async (req, res) => {
   try {
     const { accessKey } = req.body || {};
     const gateEnabled = Boolean(String(process.env.ADMIN_GATE_TOKEN || "").trim());
+
+    if (accessKey !== undefined && typeof accessKey !== "string") {
+      return res.status(400).json({
+        success: false,
+        gateEnabled,
+        message: "Access key must be a string",
+      });
+    }
 
     if (isGateValid(accessKey)) {
       return res.json({
@@ -47,9 +62,17 @@ const verifyGate = async (req, res) => {
 const register = async (req, res) => {
   try {
     const { name, email, password, role, department } = req.body;
+    const normalizedEmail = normalizeEmail(email);
+
+    if (!isNonEmptyString(name) || !normalizedEmail || !isNonEmptyString(password)) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email and password are required",
+      });
+    }
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({
         success: false,
@@ -75,7 +98,7 @@ const register = async (req, res) => {
     // Create user
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password,
       role: userRole,
       department: userDept,
@@ -110,10 +133,10 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const normalizedEmail = normalizeEmail(email);
 
     // Validate input
-    if (!email || !password) {
+    if (!normalizedEmail || !isNonEmptyString(password)) {
       return res.status(400).json({
         success: false,
         message: "Please provide email and password",
@@ -228,6 +251,13 @@ const updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
+    if (!isNonEmptyString(currentPassword) || !isNonEmptyString(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password and new password are required",
+      });
+    }
+
     const user = await User.findById(req.user._id).select("+password");
 
     // Check current password
@@ -275,15 +305,16 @@ const getCoordinators = async (req, res) => {
 const createCoordinator = async (req, res) => {
   try {
     const { name, email, password, department } = req.body;
+    const normalizedEmail = normalizeEmail(email);
 
-    if (!name || !email || !password || !department) {
+    if (!isNonEmptyString(name) || !normalizedEmail || !isNonEmptyString(password) || !isNonEmptyString(department)) {
       return res.status(400).json({
         success: false,
         message: "Name, email, password and department are required",
       });
     }
 
-    const exists = await User.findOne({ email });
+    const exists = await User.findOne({ email: normalizedEmail });
     if (exists) {
       return res.status(400).json({
         success: false,
@@ -293,7 +324,7 @@ const createCoordinator = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password,
       role: "Coordinator",
       department,
@@ -324,9 +355,25 @@ const updateCoordinator = async (req, res) => {
   try {
     const { name, email, department, isActive, password } = req.body;
     const update = {};
-    if (name) update.name = name;
-    if (email) update.email = email;
-    if (department) update.department = department;
+    if (name !== undefined) {
+      if (!isNonEmptyString(name)) {
+        return res.status(400).json({ success: false, message: "Name must be a non-empty string" });
+      }
+      update.name = name.trim();
+    }
+    if (email !== undefined) {
+      const normalizedEmail = normalizeEmail(email);
+      if (!normalizedEmail) {
+        return res.status(400).json({ success: false, message: "Email must be a non-empty string" });
+      }
+      update.email = normalizedEmail;
+    }
+    if (department !== undefined) {
+      if (!isNonEmptyString(department)) {
+        return res.status(400).json({ success: false, message: "Department must be a non-empty string" });
+      }
+      update.department = department.trim();
+    }
     if (typeof isActive === "boolean") update.isActive = isActive;
 
     const user = await User.findById(req.params.id);
@@ -345,7 +392,10 @@ const updateCoordinator = async (req, res) => {
     Object.assign(user, update);
 
     // If password provided, update it (triggers pre-save hook for hashing)
-    if (password && password.length >= 6) {
+    if (password !== undefined) {
+      if (!isNonEmptyString(password) || password.length < 6) {
+        return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+      }
       user.password = password;
     }
 

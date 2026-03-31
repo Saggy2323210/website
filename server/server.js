@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
+const { noSqlInjectionGuard } = require("./middleware/nosqlGuard");
 
 // Load environment variables
 dotenv.config();
@@ -10,6 +11,7 @@ dotenv.config();
 const app = express();
 const { protect, adminOnly } = require("./middleware/authMiddleware");
 app.set("trust proxy", 1);
+app.set("query parser", "simple");
 
 const allowedOrigins = Array.from(
   new Set(
@@ -67,6 +69,7 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(noSqlInjectionGuard);
 
 // Reserve sensitive prefixes behind admin auth even when no route is mounted.
 app.use("/api/debug", protect, adminOnly, (_req, res) => {

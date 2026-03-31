@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import apiClient from "../utils/apiClient";
 import PageHeader from "../components/PageHeader";
+import { resolveUploadedAssetUrl } from "../utils/uploadUrls";
 import {
   FaTrophy,
   FaBriefcase,
@@ -199,7 +200,7 @@ const Placements = () => {
                   >
                     {r.logoUrl ? (
                       <img
-                        src={r.logoUrl}
+                        src={resolveUploadedAssetUrl(r.logoUrl)}
                         alt={r.name}
                         className="w-12 h-12 object-contain"
                         onError={(e) => {

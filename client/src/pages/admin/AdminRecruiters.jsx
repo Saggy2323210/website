@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import {
   FaUsers,
   FaPlus,
@@ -30,6 +31,7 @@ const emptyForm = () => ({
   category: "MNC",
   website: "",
   order: 0,
+  showOnHome: true,
 });
 
 const AdminRecruiters = () => {
@@ -67,8 +69,10 @@ const AdminRecruiters = () => {
 
   const handleLogoUpload = async (file) => {
     if (!file) return;
+
     const fd = new FormData();
     fd.append("image", file);
+
     try {
       setUploading(true);
       setError("");
@@ -80,7 +84,7 @@ const AdminRecruiters = () => {
       });
       setFormData((f) => ({ ...f, logoUrl: res.data.fileUrl }));
     } catch {
-      setError("Logo upload failed. Ensure the file is an image under 5MB.");
+      setError("Logo upload failed. Ensure the file is an image under 20MB.");
     } finally {
       setUploading(false);
     }
@@ -90,12 +94,18 @@ const AdminRecruiters = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
     if (!formData.logoUrl) {
       setError("Please upload or enter a logo URL.");
       return;
     }
+
     try {
-      const payload = { ...formData, order: Number(formData.order) };
+      const payload = {
+        ...formData,
+        order: Number(formData.order),
+      };
+
       if (editingId) {
         await apiClient.put(`/placements/recruiters/${editingId}`, payload, authHeader());
         setSuccess("Recruiter updated successfully.");
@@ -103,22 +113,24 @@ const AdminRecruiters = () => {
         await apiClient.post("/placements/recruiters", payload, authHeader());
         setSuccess("Recruiter added successfully.");
       }
+
       fetchRecruiters();
       resetForm();
     } catch (err) {
-      setError(err.response?.data?.error || "Operation failed.");
+      setError(err.response?.data?.error || err.response?.data?.message || "Operation failed.");
     }
   };
 
-  const handleEdit = (r) => {
+  const handleEdit = (recruiter) => {
     setFormData({
-      name: r.name || "",
-      logoUrl: r.logoUrl || "",
-      category: r.category || "MNC",
-      website: r.website || "",
-      order: r.order ?? 0,
+      name: recruiter.name || "",
+      logoUrl: recruiter.logoUrl || "",
+      category: recruiter.category || "MNC",
+      website: recruiter.website || "",
+      order: recruiter.order ?? 0,
+      showOnHome: recruiter.showOnHome !== false,
     });
-    setEditingId(r._id);
+    setEditingId(recruiter._id);
     setShowForm(true);
     setError("");
     setSuccess("");
@@ -131,7 +143,7 @@ const AdminRecruiters = () => {
       setDeleteConfirm(null);
       fetchRecruiters();
     } catch (err) {
-      setError(err.response?.data?.error || "Delete failed.");
+      setError(err.response?.data?.error || err.response?.data?.message || "Delete failed.");
       setDeleteConfirm(null);
     }
   };
@@ -145,60 +157,70 @@ const AdminRecruiters = () => {
 
   const filtered = filterCategory === "All"
     ? recruiters
-    : recruiters.filter((r) => r.category === filterCategory);
+    : recruiters.filter((recruiter) => recruiter.category === filterCategory);
 
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Recruiters</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Manage recruiting companies and their logos</p>
+            <p className="mt-1 text-gray-500 dark:text-gray-400">
+              Manage recruiting companies, their logos, and homepage slider visibility.
+            </p>
           </div>
           <button
-            onClick={() => { resetForm(); setShowForm(true); }}
-            className="flex items-center gap-2 px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors shadow-lg font-medium"
+            onClick={() => {
+              resetForm();
+              setShowForm(true);
+            }}
+            className="flex items-center gap-2 rounded-lg bg-cyan-600 px-5 py-2.5 font-medium text-white shadow-lg transition-colors hover:bg-cyan-700"
           >
             <FaPlus /> Add Recruiter
           </button>
         </div>
 
-        {error && <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">{error}</div>}
-        {success && <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg text-sm">{success}</div>}
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-300">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-300">
+            {success}
+          </div>
+        )}
 
-        {/* Category Filter */}
         <div className="flex flex-wrap gap-2">
-          {["All", ...CATEGORIES].map((cat) => (
+          {["All", ...CATEGORIES].map((category) => (
             <button
-              key={cat}
-              onClick={() => setFilterCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                filterCategory === cat
+              key={category}
+              onClick={() => setFilterCategory(category)}
+              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                filterCategory === category
                   ? "bg-cyan-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400"
               }`}
             >
-              {cat}
-              {cat !== "All" && (
+              {category}
+              {category !== "All" && (
                 <span className="ml-1 opacity-70">
-                  ({recruiters.filter((r) => r.category === cat).length})
+                  ({recruiters.filter((recruiter) => recruiter.category === category).length})
                 </span>
               )}
             </button>
           ))}
         </div>
 
-        {/* Card Grid */}
         {loading ? (
-          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-cyan-500 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-gray-400">Loading recruiters…</p>
+          <div className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-[#1a1a2e]">
+            <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-b-2 border-t-2 border-cyan-500" />
+            <p className="text-gray-500 dark:text-gray-400">Loading recruiters...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 text-center">
-            <FaBuilding className="text-6xl text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+          <div className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-[#1a1a2e]">
+            <FaBuilding className="mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
+            <h3 className="mb-2 text-xl font-bold text-gray-800 dark:text-gray-200">
               {recruiters.length === 0 ? "No Recruiters Yet" : `No ${filterCategory} Recruiters`}
             </h3>
             <p className="text-gray-500 dark:text-gray-400">
@@ -208,55 +230,71 @@ const AdminRecruiters = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {filtered
               .slice()
               .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
-              .map((r) => (
+              .map((recruiter) => (
                 <div
-                  key={r._id}
-                  className="bg-white dark:bg-[#1a1a2e] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 flex flex-col items-center gap-3 hover:shadow-md transition-shadow group"
+                  key={recruiter._id}
+                  className="group flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-[#1a1a2e]"
                 >
-                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center border border-gray-100 dark:border-gray-800">
-                    {r.logoUrl ? (
+                  <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border border-gray-100 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50">
+                    {recruiter.logoUrl ? (
                       <img
-                        src={r.logoUrl}
-                        alt={r.name}
-                        className="w-full h-full object-contain"
-                        onError={(e) => { e.target.style.display = "none"; }}
+                        src={resolveUploadedAssetUrl(recruiter.logoUrl)}
+                        alt={recruiter.name}
+                        className="h-full w-full object-contain"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
                       />
                     ) : (
                       <FaBuilding className="text-2xl text-gray-300 dark:text-gray-600" />
                     )}
                   </div>
+
                   <div className="text-center">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-tight">{r.name}</p>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium mt-1 inline-block ${CATEGORY_COLORS[r.category] || "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}>
-                      {r.category}
+                    <p className="text-sm font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                      {recruiter.name}
+                    </p>
+                    <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${CATEGORY_COLORS[recruiter.category] || "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"}`}>
+                      {recruiter.category}
+                    </span>
+                    <span
+                      className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        recruiter.showOnHome !== false
+                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                          : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                      }`}
+                    >
+                      {recruiter.showOnHome !== false ? "Homepage" : "Placements Only"}
                     </span>
                   </div>
-                  {r.website && (
+
+                  {recruiter.website && (
                     <a
-                      href={r.website}
+                      href={recruiter.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
+                      className="flex items-center gap-1 text-xs text-cyan-600 hover:underline dark:text-cyan-400"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <FaExternalLinkAlt className="text-xs" /> Visit
                     </a>
                   )}
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                  <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
-                      onClick={() => handleEdit(r)}
-                      className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                      onClick={() => handleEdit(recruiter)}
+                      className="rounded-lg p-1.5 text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30"
                       title="Edit"
                     >
                       <FaEdit size={12} />
                     </button>
                     <button
-                      onClick={() => setDeleteConfirm(r._id)}
-                      className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      onClick={() => setDeleteConfirm(recruiter._id)}
+                      className="rounded-lg p-1.5 text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
                       title="Delete"
                     >
                       <FaTrash size={12} />
@@ -268,46 +306,58 @@ const AdminRecruiters = () => {
         )}
       </div>
 
-      {/* Add / Edit Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 overflow-y-auto">
-          <div className="bg-white dark:bg-[#1a1a2e] rounded-2xl shadow-2xl w-full max-w-lg my-8">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4">
+          <div className="my-8 w-full max-w-lg rounded-2xl bg-white shadow-2xl dark:bg-[#1a1a2e]">
+            <div className="flex items-center justify-between border-b border-gray-200 p-6 dark:border-gray-700">
               <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                 {editingId ? "Edit Recruiter" : "Add Recruiter"}
               </h2>
-              <button onClick={resetForm} className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+              <button
+                onClick={resetForm}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800"
+              >
                 <FaTimes />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-5">
-              {error && <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-3 py-2 rounded-lg text-sm">{error}</div>}
+            <form onSubmit={handleSubmit} className="space-y-5 p-6">
+              {error && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/30 dark:text-red-300">
+                  {error}
+                </div>
+              )}
 
-              {/* Logo Upload */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Company Logo *</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Company Logo *
+                </label>
                 <div className="flex items-start gap-4">
-                  <div className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center bg-gray-50 dark:bg-gray-800/50 overflow-hidden shrink-0">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-800/50">
                     {formData.logoUrl ? (
-                      <img src={formData.logoUrl} alt="Logo preview" className="w-full h-full object-contain" />
+                      <img
+                        src={resolveUploadedAssetUrl(formData.logoUrl)}
+                        alt="Logo preview"
+                        className="h-full w-full object-contain"
+                      />
                     ) : (
                       <FaBuilding className="text-2xl text-gray-300 dark:text-gray-600" />
                     )}
                   </div>
+
                   <div className="flex-1 space-y-2">
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploading}
-                      className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
                     >
                       {uploading ? (
-                        <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-cyan-500" />
+                        <span className="h-4 w-4 animate-spin rounded-full border-b-2 border-t-2 border-cyan-500" />
                       ) : (
                         <FaUpload />
                       )}
-                      {uploading ? "Uploading…" : "Upload Logo"}
+                      {uploading ? "Uploading..." : "Upload Logo"}
                     </button>
                     <input
                       ref={fileInputRef}
@@ -316,70 +366,110 @@ const AdminRecruiters = () => {
                       className="hidden"
                       onChange={(e) => handleLogoUpload(e.target.files[0])}
                     />
-                    <p className="text-xs text-gray-400 dark:text-gray-500">Or paste a URL below (JPG, PNG, SVG — max 5MB)</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                      Or paste a URL below (JPG, PNG, SVG - max 20MB)
+                    </p>
                     <input
                       type="url"
                       placeholder="https://..."
                       value={formData.logoUrl}
                       onChange={(e) => setFormData((f) => ({ ...f, logoUrl: e.target.value }))}
-                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none"
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"
                     />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Company Name *</label>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Company Name *
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Tata Consultancy Services"
                   value={formData.name}
                   onChange={(e) => setFormData((f) => ({ ...f, name: e.target.value }))}
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"
                   required
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Category *</label>
+                  <label className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Category *
+                  </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData((f) => ({ ...f, category: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"
                   >
-                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {CATEGORIES.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
                   </select>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Display Order</label>
+                  <label className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    Display Order
+                  </label>
                   <input
                     type="number"
                     min="0"
                     placeholder="0"
                     value={formData.order}
                     onChange={(e) => setFormData((f) => ({ ...f, order: e.target.value }))}
-                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Website URL</label>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  Website URL
+                </label>
                 <input
                   type="url"
                   placeholder="https://company.com"
                   value={formData.website}
                   onChange={(e) => setFormData((f) => ({ ...f, website: e.target.value }))}
-                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-transparent focus:ring-2 focus:ring-cyan-500 dark:border-gray-600"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-800">
-                <button type="button" onClick={resetForm} className="px-5 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">
+              <label className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/40">
+                <input
+                  type="checkbox"
+                  checked={formData.showOnHome}
+                  onChange={(e) => setFormData((f) => ({ ...f, showOnHome: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
+                />
+                <div>
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                    Show in homepage recruiter slider
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Turn this off if you want the recruiter listed only on the placements page.
+                  </p>
+                </div>
+              </label>
+
+              <div className="flex justify-end gap-3 border-t border-gray-100 pt-2 dark:border-gray-800">
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="rounded-lg border border-gray-300 px-5 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
+                >
                   Cancel
                 </button>
-                <button type="submit" disabled={uploading} className="flex items-center gap-2 px-5 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium text-sm disabled:opacity-50">
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="flex items-center gap-2 rounded-lg bg-cyan-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-700 disabled:opacity-50"
+                >
                   <FaSave /> {editingId ? "Save Changes" : "Add Recruiter"}
                 </button>
               </div>
@@ -388,15 +478,26 @@ const AdminRecruiters = () => {
         </div>
       )}
 
-      {/* Delete Confirm */}
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1a1a2e] rounded-2xl shadow-2xl w-full max-w-sm p-6">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">Remove this recruiter?</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">This will permanently delete the recruiter and their logo reference. This cannot be undone.</p>
-            <div className="flex gap-3 justify-end">
-              <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-sm">Delete</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#1a1a2e]">
+            <h3 className="mb-2 text-lg font-bold text-gray-800 dark:text-gray-200">Remove this recruiter?</h3>
+            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+              This will permanently delete the recruiter and their logo reference. This cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(deleteConfirm)}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

@@ -27,6 +27,10 @@ const RecruiterSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    showOnHome: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true },
 );

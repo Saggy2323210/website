@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaGraduationCap, FaUsers, FaTrophy, FaBuilding, FaArrowRight, FaClock, FaMapMarkerAlt, FaMicroscope, FaHandshake, FaCheckCircle, FaPlus, FaMinus, FaQuoteLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import StatCard from '../components/StatCard';
 import NewsCard from '../components/NewsCard';
 import NewsTicker from '../components/NewsTicker';
 import useFetch from '../hooks/useFetch';
+import apiClient from '../utils/apiClient';
+import { resolveUploadedAssetUrl } from '../utils/uploadUrls';
 import { HOME_LEADERSHIP } from '../data/homeLeadership';
 import droneVideo from '../assets/images/home/drone shot.mp4';
 import mainGateImg from '../assets/images/home/Main-Gate.avif';
@@ -21,6 +23,7 @@ const Home = () => {
   const { data: newsData } = useFetch('/api/news');
   const [activeCorner, setActiveCorner] = useState('co-curricular');
   const [alumniIndex, setAlumniIndex] = useState(0);
+  const [recruiters, setRecruiters] = useState([]);
 
   // Fallback data from official SSGMCE website
   const staticNews = [
@@ -104,6 +107,34 @@ const Home = () => {
   const activeStudentCorner =
     studentCornerItems.find((item) => item.id === activeCorner) || studentCornerItems[0];
   const activeAlumni = alumniHighlights[alumniIndex];
+  const fallbackRecruiters = [
+    { id: 'tcs', name: 'TCS' },
+    { id: 'infosys', name: 'Infosys' },
+    { id: 'wipro', name: 'Wipro' },
+    { id: 'tech-mahindra', name: 'Tech Mahindra' },
+    { id: 'cognizant', name: 'Cognizant' },
+    { id: 'capgemini', name: 'Capgemini' },
+  ];
+  const homepageRecruiters = recruiters.length > 0 ? recruiters : fallbackRecruiters;
+  const marqueeRecruiters = homepageRecruiters.length > 0
+    ? [...homepageRecruiters, ...homepageRecruiters]
+    : [];
+
+  useEffect(() => {
+    apiClient
+      .get("/placements/recruiters")
+      .then((response) => {
+        const data = Array.isArray(response.data) ? response.data : response.data.data || [];
+        setRecruiters(
+          data
+            .filter((recruiter) => recruiter.showOnHome !== false)
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name)),
+        );
+      })
+      .catch(() => {
+        setRecruiters([]);
+      });
+  }, []);
 
   const goToPrevAlumni = () => {
     setAlumniIndex((prev) =>
@@ -533,19 +564,76 @@ const Home = () => {
       </section>
 
       {/* Recruiters Section */}
-      <section className="py-14 bg-gradient-to-r from-ssgmce-blue/[0.03] via-ssgmce-surface to-ssgmce-orange/[0.03] border-t border-gray-100">
-         <div className="container mx-auto px-4 text-center max-w-5xl">
-            <p className="text-xs font-semibold text-ssgmce-muted uppercase tracking-[0.2em] mb-3">Our Esteemed Recruiters</p>
-            <p className="text-[10px] text-ssgmce-muted mb-8">TCS Top Priority College &middot; 35+ Companies</p>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14">
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">TCS</div>
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">Infosys</div>
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">Wipro</div>
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">Tech Mahindra</div>
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">Cognizant</div>
-               <div className="text-xl font-bold text-gray-300 hover:text-ssgmce-blue transition-colors duration-300">Capgemini</div>
+      <section className="overflow-hidden border-t border-gray-100 bg-[linear-gradient(180deg,#fbfcff_0%,#f6f8fb_100%)] py-14">
+        <style>{`
+          @keyframes recruiterMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+        <div className="container mx-auto max-w-6xl px-4 text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.26em] text-ssgmce-muted">
+            Our Esteemed Recruiters
+          </p>
+          <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">
+            Trusted by leading recruiters across technology, consulting and core sectors
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-ssgmce-muted">
+            TCS Top Priority College with 35+ companies visiting the campus. Manage the complete logo list directly from the admin recruiter section.
+          </p>
+
+          <div className="relative mt-10">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#fbfcff] via-[#fbfcff]/92 to-transparent md:w-24" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#f6f8fb] via-[#f6f8fb]/92 to-transparent md:w-24" />
+
+            <div className="overflow-hidden rounded-[30px] border border-slate-200/80 bg-white/90 px-3 py-5 shadow-[0_22px_60px_-38px_rgba(15,23,42,0.28)] backdrop-blur-sm md:px-5">
+              <div
+                className="flex w-max items-center gap-4 md:gap-6"
+                style={{ animation: "recruiterMarquee 28s linear infinite" }}
+              >
+                {marqueeRecruiters.map((recruiter, index) => {
+                  const logoUrl = resolveUploadedAssetUrl(recruiter.logoUrl);
+                  const itemKey = recruiter._id || recruiter.id || `${recruiter.name}-${index}`;
+                  const cardContent = (
+                    <div className="group flex h-[88px] w-[170px] shrink-0 items-center justify-center rounded-2xl border border-slate-200/80 bg-white px-5 py-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-ssgmce-blue/30 hover:shadow-md md:h-[96px] md:w-[196px]">
+                      {logoUrl ? (
+                        <img
+                          src={logoUrl}
+                          alt={recruiter.name}
+                          className="max-h-11 w-full object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100 md:max-h-12"
+                        />
+                      ) : (
+                        <span className="text-center text-base font-bold text-slate-400 transition-colors duration-300 group-hover:text-ssgmce-blue">
+                          {recruiter.name}
+                        </span>
+                      )}
+                    </div>
+                  );
+
+                  if (recruiter.website) {
+                    return (
+                      <a
+                        key={itemKey}
+                        href={recruiter.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={recruiter.name}
+                      >
+                        {cardContent}
+                      </a>
+                    );
+                  }
+
+                  return (
+                    <div key={itemKey} aria-label={recruiter.name}>
+                      {cardContent}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-         </div>
+          </div>
+        </div>
       </section>
 
     </div>

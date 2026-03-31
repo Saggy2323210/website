@@ -89,7 +89,7 @@ const updateRecruiter = async (req, res) => {
     const recruiter = await Recruiter.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true },
+      { new: true, runValidators: true },
     );
     res.json({ success: true, data: recruiter });
   } catch (error) {

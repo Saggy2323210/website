@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGraduationCap, FaUsers, FaTrophy, FaBuilding, FaArrowRight, FaClock, FaMapMarkerAlt, FaMicroscope, FaHandshake, FaCheckCircle, FaPlus, FaMinus, FaQuoteLeft, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaGraduationCap, FaUsers, FaTrophy, FaBuilding, FaArrowRight, FaClock, FaMapMarkerAlt, FaMicroscope, FaHandshake, FaCheckCircle, FaPlus, FaMinus, FaQuoteLeft, FaExternalLinkAlt } from 'react-icons/fa';
 import StatCard from '../components/StatCard';
 import NewsCard from '../components/NewsCard';
 import NewsTicker from '../components/NewsTicker';
@@ -22,8 +22,8 @@ import alumniDeuskarImg from '../assets/images/home/Alumni/Ashutosh_Deuskar.jpg'
 const Home = () => {
   const { data: newsData } = useFetch('/api/news');
   const [activeCorner, setActiveCorner] = useState('co-curricular');
-  const [alumniIndex, setAlumniIndex] = useState(0);
   const [recruiters, setRecruiters] = useState([]);
+  const [alumniHighlights, setAlumniHighlights] = useState([]);
 
   // Fallback data from official SSGMCE website
   const staticNews = [
@@ -73,40 +73,51 @@ const Home = () => {
     },
   ];
 
-  const alumniHighlights = [
+  const fallbackAlumni = [
     {
       id: 'wagh',
-      org: 'DTE, Mumbai',
+      organization: 'DTE, Mumbai',
       name: 'Mr. Abhay Wagh',
       role: 'Director',
       image: alumniWaghImg,
+      department: 'Computer Science and Engineering',
+      profileUrl: '',
+      quote: '',
     },
     {
       id: 'kaul',
-      org: 'IBM',
+      organization: 'IBM',
       name: 'Mr. Umesh Kaul',
       role: 'Executive Architect / Consultant',
       image: alumniKaulImg,
+      department: 'Computer Science and Engineering',
+      profileUrl: '',
+      quote: '',
     },
     {
       id: 'wankhede',
-      org: 'Value Momentum, Hyderabad',
+      organization: 'Value Momentum, Hyderabad',
       name: 'Mr. Nitin Wankhede',
       role: 'Vice President - Client Services',
       image: alumniWankhedeImg,
+      department: 'Information Technology',
+      profileUrl: '',
+      quote: '',
     },
     {
       id: 'deuskar',
-      org: 'VDA Infosolutions',
+      organization: 'VDA Infosolutions',
       name: 'Mr. Ashutosh Deuskar',
       role: 'Director',
       image: alumniDeuskarImg,
+      department: 'Computer Science and Engineering',
+      profileUrl: '',
+      quote: '',
     },
   ];
 
   const activeStudentCorner =
     studentCornerItems.find((item) => item.id === activeCorner) || studentCornerItems[0];
-  const activeAlumni = alumniHighlights[alumniIndex];
   const fallbackRecruiters = [
     { id: 'tcs', name: 'TCS' },
     { id: 'infosys', name: 'Infosys' },
@@ -118,6 +129,10 @@ const Home = () => {
   const homepageRecruiters = recruiters.length > 0 ? recruiters : fallbackRecruiters;
   const marqueeRecruiters = homepageRecruiters.length > 0
     ? [...homepageRecruiters, ...homepageRecruiters]
+    : [];
+  const homepageAlumni = alumniHighlights.length > 0 ? alumniHighlights : fallbackAlumni;
+  const marqueeAlumni = homepageAlumni.length > 0
+    ? [...homepageAlumni, ...homepageAlumni]
     : [];
 
   useEffect(() => {
@@ -134,17 +149,21 @@ const Home = () => {
       .catch(() => {
         setRecruiters([]);
       });
+
+    apiClient
+      .get("/placements/alumni")
+      .then((response) => {
+        const data = Array.isArray(response.data) ? response.data : response.data.data || [];
+        setAlumniHighlights(
+          data
+            .filter((alumni) => alumni.showOnHome !== false)
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name)),
+        );
+      })
+      .catch(() => {
+        setAlumniHighlights([]);
+      });
   }, []);
-
-  const goToPrevAlumni = () => {
-    setAlumniIndex((prev) =>
-      prev === 0 ? alumniHighlights.length - 1 : prev - 1,
-    );
-  };
-
-  const goToNextAlumni = () => {
-    setAlumniIndex((prev) => (prev + 1) % alumniHighlights.length);
-  };
 
   return (
     <div className="animation-fade-in font-sans bg-white">
@@ -497,63 +516,72 @@ const Home = () => {
                 <div className="mt-2 h-1 w-12 rounded-full bg-amber-300" />
               </div>
 
-              <div className="flex flex-1 flex-col rounded-2xl border border-slate-200/80 bg-white/90 p-3 shadow-[0_18px_44px_-34px_rgba(15,23,42,0.22)] backdrop-blur-sm">
+              <div className="relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 p-3 shadow-[0_18px_44px_-34px_rgba(15,23,42,0.22)] backdrop-blur-sm">
+                <div className="pointer-events-none absolute inset-y-3 left-3 z-10 w-12 rounded-l-[20px] bg-gradient-to-r from-white via-white/92 to-transparent md:w-16" />
+                <div className="pointer-events-none absolute inset-y-3 right-3 z-10 w-12 rounded-r-[20px] bg-gradient-to-l from-[#f7f9fc] via-[#f7f9fc]/92 to-transparent md:w-16" />
+
                 <div className="flex h-full flex-col rounded-[20px] border border-slate-100 bg-gradient-to-b from-[#fdfefe] to-[#f7f9fc] px-4 py-5 md:px-5">
-                  <div className="flex items-center justify-between">
+                  <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      {String(alumniIndex + 1).padStart(2, '0')} / {String(alumniHighlights.length).padStart(2, '0')}
+                      {String(homepageAlumni.length).padStart(2, '0')} featured
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={goToPrevAlumni}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-700"
-                        aria-label="Previous alumni"
-                      >
-                        <FaChevronLeft className="text-sm" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={goToNextAlumni}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-700"
-                        aria-label="Next alumni"
-                      >
-                        <FaChevronRight className="text-sm" />
-                      </button>
-                    </div>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                      Managed from admin alumni section
+                    </p>
                   </div>
 
-                  <div className="flex flex-1 flex-col justify-center text-center">
-                    <FaQuoteLeft className="mx-auto mb-3 text-[2rem] text-slate-300" />
+                  <div className="overflow-hidden">
+                    <div
+                      className="flex w-max items-stretch gap-4"
+                      style={{ animation: "recruiterMarquee 32s linear infinite" }}
+                    >
+                      {marqueeAlumni.map((alumni, index) => {
+                        const imageUrl = resolveUploadedAssetUrl(alumni.imageUrl || alumni.image);
+                        const itemKey = alumni._id || alumni.id || `${alumni.name}-${index}`;
 
-                    <div className="mx-auto flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-white bg-white shadow-[0_10px_24px_-18px_rgba(15,23,42,0.4)] md:h-32 md:w-32">
-                      <img
-                        src={activeAlumni.image}
-                        alt={activeAlumni.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.22em] text-slate-500 md:text-xs">
-                      {activeAlumni.org}
-                    </p>
-                    <h4 className="mt-2.5 text-[1.45rem] font-bold leading-tight text-slate-900 md:text-[1.65rem]">
-                      {activeAlumni.name}
-                    </h4>
-                    <p className="mt-1.5 text-base font-semibold text-amber-500">{activeAlumni.role}</p>
-
-                    <div className="mt-4 flex justify-center gap-1.5">
-                      {alumniHighlights.map((alumni, index) => (
-                        <button
-                          key={alumni.id}
-                          type="button"
-                          onClick={() => setAlumniIndex(index)}
-                          className={`h-2.5 rounded-full transition-all ${
-                            index === alumniIndex ? 'w-6 bg-[#2f5f8d]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'
-                          }`}
-                          aria-label={`Show alumni ${index + 1}`}
-                        />
-                      ))}
+                        return (
+                          <article
+                            key={itemKey}
+                            className="flex w-[260px] shrink-0 flex-col rounded-[24px] border border-slate-200/80 bg-white px-5 py-6 text-center shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-md md:w-[300px]"
+                          >
+                            <FaQuoteLeft className="mx-auto mb-4 text-[1.8rem] text-slate-200" />
+                            <div className="mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-white bg-white shadow-[0_10px_24px_-18px_rgba(15,23,42,0.4)] md:h-28 md:w-28">
+                              <img
+                                src={imageUrl}
+                                alt={alumni.name}
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                              {alumni.organization}
+                            </p>
+                            <h4 className="mt-3 text-[1.3rem] font-bold leading-tight text-slate-900">
+                              {alumni.name}
+                            </h4>
+                            <p className="mt-1.5 text-sm font-semibold text-amber-500">{alumni.role}</p>
+                            {(alumni.department || alumni.batch) && (
+                              <p className="mt-2 text-sm text-slate-500">
+                                {[alumni.department, alumni.batch].filter(Boolean).join(" | ")}
+                              </p>
+                            )}
+                            {alumni.quote && (
+                              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-500">
+                                {alumni.quote}
+                              </p>
+                            )}
+                            {alumni.profileUrl && (
+                              <a
+                                href={alumni.profileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-4 inline-flex items-center justify-center gap-2 text-sm font-semibold text-ssgmce-blue transition-colors hover:text-ssgmce-orange"
+                              >
+                                View Profile <FaExternalLinkAlt className="text-xs" />
+                              </a>
+                            )}
+                          </article>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

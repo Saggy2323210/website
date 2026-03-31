@@ -11,6 +11,10 @@ const {
   createRecruiter,
   updateRecruiter,
   deleteRecruiter,
+  getAlumni,
+  createAlumni,
+  updateAlumni,
+  deleteAlumni,
   getTestimonials,
   createTestimonial,
   updateTestimonial,
@@ -32,6 +36,12 @@ router.get("/recruiters", getRecruiters);
 router.post("/recruiters", protect, adminOnly, createRecruiter);
 router.put("/recruiters/:id", protect, adminOnly, updateRecruiter);
 router.delete("/recruiters/:id", protect, adminOnly, deleteRecruiter);
+
+// Alumni
+router.get("/alumni", getAlumni);
+router.post("/alumni", protect, adminOnly, createAlumni);
+router.put("/alumni/:id", protect, adminOnly, updateAlumni);
+router.delete("/alumni/:id", protect, adminOnly, deleteAlumni);
 
 // Testimonials
 router.get("/testimonials", getTestimonials);

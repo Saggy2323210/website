@@ -1,6 +1,7 @@
 const PlacementStat = require("../models/PlacementStat");
 const Recruiter = require("../models/Recruiter");
 const Testimonial = require("../models/Testimonial");
+const AlumniHighlight = require("../models/AlumniHighlight");
 
 // @desc    Get all placement data (public)
 // @route   GET /api/placements/public
@@ -10,6 +11,7 @@ const getPlacementData = async (req, res) => {
     const stats = await PlacementStat.find({}).sort({ academicYear: -1 });
     const recruiters = await Recruiter.find({}).sort({ order: 1 });
     const testimonials = await Testimonial.find({}).sort({ createdAt: -1 });
+    const alumni = await AlumniHighlight.find({}).sort({ order: 1, createdAt: -1 });
 
     res.json({
       success: true,
@@ -17,6 +19,7 @@ const getPlacementData = async (req, res) => {
         stats,
         recruiters,
         testimonials,
+        alumni,
       },
     });
   } catch (error) {
@@ -106,6 +109,47 @@ const deleteRecruiter = async (req, res) => {
   }
 };
 
+// --- Alumni CRUD ---
+const getAlumni = async (req, res) => {
+  try {
+    const alumni = await AlumniHighlight.find({}).sort({ order: 1, createdAt: -1 });
+    res.json({ success: true, data: alumni });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const createAlumni = async (req, res) => {
+  try {
+    const alumni = await AlumniHighlight.create(req.body);
+    res.status(201).json({ success: true, data: alumni });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const updateAlumni = async (req, res) => {
+  try {
+    const alumni = await AlumniHighlight.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true },
+    );
+    res.json({ success: true, data: alumni });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const deleteAlumni = async (req, res) => {
+  try {
+    await AlumniHighlight.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: "Alumni deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // --- Testimonials CRUD ---
 const getTestimonials = async (req, res) => {
   try {
@@ -154,6 +198,7 @@ const seedPlacementData = async (req, res) => {
     await PlacementStat.deleteMany({});
     await Recruiter.deleteMany({});
     await Testimonial.deleteMany({});
+    await AlumniHighlight.deleteMany({});
 
     // Seed Stats
     const stats = [
@@ -275,6 +320,10 @@ module.exports = {
   createRecruiter,
   updateRecruiter,
   deleteRecruiter,
+  getAlumni,
+  createAlumni,
+  updateAlumni,
+  deleteAlumni,
   getTestimonials,
   createTestimonial,
   updateTestimonial,

@@ -49,6 +49,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
     { title: "Students", superAdminOnly: true, items: [
       { name: "Placements", path: "/admin/placements", icon: FaBriefcase },
       { name: "Recruiters", path: "/admin/recruiters", icon: FaUsers },
+      { name: "Alumni", path: "/admin/alumni", icon: FaUserGraduate },
       { name: "Testimonials", path: "/admin/testimonials", icon: FaComments },
     ]},
     { title: "Resources", superAdminOnly: true, items: [

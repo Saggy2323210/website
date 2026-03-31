@@ -476,6 +476,7 @@ const AdminIQAC = lazy(() => import("./pages/admin/AdminIQAC"));
 const AdminPlacements = lazy(() => import("./pages/admin/AdminPlacements"));
 const AdminAcademics = lazy(() => import("./pages/admin/AdminAcademics"));
 const AdminRecruiters = lazy(() => import("./pages/admin/AdminRecruiters"));
+const AdminAlumni = lazy(() => import("./pages/admin/AdminAlumni"));
 const AdminTestimonials = lazy(() => import("./pages/admin/AdminTestimonials"));
 const AdminNIRF = lazy(() => import("./pages/admin/AdminNIRF"));
 
@@ -666,6 +667,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AdminRecruiters />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/alumni"
+                element={
+                  <ProtectedRoute>
+                    <AdminAlumni />
                   </ProtectedRoute>
                 }
               />

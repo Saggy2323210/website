@@ -8895,17 +8895,6 @@ const getLocalMechanicalActivityImageUrl = (imageUrl = "") => {
   const normalizedUrl = String(imageUrl || "").trim();
   if (!normalizedUrl) return "";
 
-  if (
-    normalizedUrl
-      .toLowerCase()
-      .startsWith(MECHANICAL_ACTIVITY_REMOTE_IMAGE_PREFIX.toLowerCase())
-  ) {
-    const fileName = normalizedUrl.split("/").pop()?.split("?")[0] || "";
-    return fileName
-      ? resolveUploadedAssetUrl(`/uploads/images/mechanical/activities/${fileName}`)
-      : resolveUploadedAssetUrl(normalizedUrl);
-  }
-
   return resolveUploadedAssetUrl(normalizedUrl);
 };
 

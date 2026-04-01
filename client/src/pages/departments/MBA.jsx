@@ -6979,7 +6979,7 @@ After successfully completing the course, students will be able to:
                   </div>
                   <div className="p-4 flex items-center justify-center bg-gray-50 max-h-[75vh] overflow-auto">
                     <img
-                      src={certificateLightbox.image}
+                      src={resolveUploadedAssetUrl(certificateLightbox.image)}
                       alt={certificateLightbox.achievement}
                       crossOrigin="anonymous"
                       referrerPolicy="no-referrer"

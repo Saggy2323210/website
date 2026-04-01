@@ -8,7 +8,20 @@ export const resolveUploadedAssetUrl = (url = "") => {
     .replace(/\\/g, "/");
 
   if (!normalizedUrl) return "";
-  if (/^(https?:|data:|blob:|\/\/)/i.test(normalizedUrl)) {
+  if (/^(https?:|\/\/)/i.test(normalizedUrl)) {
+    try {
+      const parsedUrl = new URL(
+        normalizedUrl.startsWith("//") ? `https:${normalizedUrl}` : normalizedUrl,
+      );
+      if (/^\/(uploads|api)\//i.test(parsedUrl.pathname)) {
+        return `${BACKEND_BASE_URL}${parsedUrl.pathname}${parsedUrl.search || ""}`;
+      }
+    } catch {
+      // Fall back to the original absolute URL if parsing fails.
+    }
+    return normalizedUrl;
+  }
+  if (/^(data:|blob:)/i.test(normalizedUrl)) {
     return normalizedUrl;
   }
   if (/^(uploads|api)\//i.test(normalizedUrl)) {

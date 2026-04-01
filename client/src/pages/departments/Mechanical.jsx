@@ -5462,7 +5462,7 @@ After successfully completing the course, students will be able to:
                   </div>
                   <div className="p-4 flex items-center justify-center bg-gray-50 max-h-[75vh] overflow-auto">
                     <img
-                      src={certificateLightbox.image}
+                      src={resolveUploadedAssetUrl(certificateLightbox.image)}
                       alt={certificateLightbox.achievement}
                       crossOrigin="anonymous"
                       referrerPolicy="no-referrer"
@@ -7244,7 +7244,7 @@ After successfully completing the course, students will be able to:
                     >
                       <div className="aspect-[4/3] overflow-hidden bg-gray-100">
                         <img
-                          src={photo.image}
+                          src={resolveUploadedAssetUrl(photo.image)}
                           alt={photo.caption}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
@@ -7308,7 +7308,7 @@ After successfully completing the course, students will be able to:
                             <div className="aspect-[4/3] overflow-hidden rounded-lg bg-white border border-gray-200">
                               {photo.image ? (
                                 <img
-                                  src={photo.image}
+                                  src={resolveUploadedAssetUrl(photo.image)}
                                   alt={photo.caption || `Visit photo ${idx + 1}`}
                                   className="h-full w-full object-cover"
                                 />
@@ -7457,7 +7457,7 @@ After successfully completing the course, students will be able to:
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
-                    src={industrialVisitPhotos[ivLightbox].image}
+                    src={resolveUploadedAssetUrl(industrialVisitPhotos[ivLightbox].image)}
                     alt={industrialVisitPhotos[ivLightbox].caption}
                     className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
                   />

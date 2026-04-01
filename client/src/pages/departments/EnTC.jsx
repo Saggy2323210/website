@@ -5443,7 +5443,7 @@ On completion of the course, the students will be able to:
                   </div>
                   <div className="p-4 flex items-center justify-center bg-gray-50 max-h-[75vh] overflow-auto">
                     <img
-                      src={certificateLightbox.image}
+                      src={resolveUploadedAssetUrl(certificateLightbox.image)}
                       alt={certificateLightbox.achievement}
                       crossOrigin="anonymous"
                       referrerPolicy="no-referrer"
@@ -7406,7 +7406,7 @@ On completion of the course, the students will be able to:
                   <div className="w-40 sm:w-48 flex-shrink-0 bg-gray-50 border-l border-gray-100 flex items-center justify-center">
                     {item.image ? (
                       <EditableImage
-                        src={item.image}
+                        src={resolveUploadedAssetUrl(item.image)}
                         onSave={(url) => {
                           const updated = [
                             ...t("servicesExtended", defaultServicesExtended),

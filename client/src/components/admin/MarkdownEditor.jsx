@@ -6,6 +6,7 @@ import MarkdownIt from "markdown-it";
 import markdownItAttrs from "markdown-it-attrs";
 import apiClient from "../../utils/apiClient";
 import { useEdit } from "../../contexts/EditContext";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import {
   FaCheck,
   FaTimes,
@@ -541,13 +542,13 @@ const FacilityGridLayout = ({ markdownText }) => {
                 ) : null}
 
                 <a
-                  href={facility.imageUrl}
+                  href={resolveUploadedAssetUrl(facility.imageUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full max-w-[200px]"
                 >
                   <img
-                    src={facility.imageUrl}
+                    src={resolveUploadedAssetUrl(facility.imageUrl)}
                     alt={`${facility.title} reference`}
                     loading="lazy"
                     className="w-full h-28 object-cover rounded-lg border border-gray-200 shadow-sm"

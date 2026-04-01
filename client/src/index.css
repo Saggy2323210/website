@@ -114,6 +114,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Shared CMS/Rich Text tables */
+.page-section .prose table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.page-section .prose th,
+.page-section .prose td {
+  text-align: left;
+  vertical-align: top;
+}
+
 /* Custom utilities */
 @layer utilities {
   .text-shadow {

@@ -804,6 +804,22 @@ Constituted By **All India Council for Technical Education, New Delhi**
     };
   };
 
+  const isLikelyNameColumnHeader = (header = "") => {
+    const normalizedHeader = String(header || "").toLowerCase().trim();
+    return (
+      normalizedHeader.includes("name") ||
+      normalizedHeader.includes("authorit") ||
+      normalizedHeader.includes("designation") ||
+      normalizedHeader.includes("student") ||
+      normalizedHeader.includes("faculty") ||
+      normalizedHeader.includes("member") ||
+      normalizedHeader.includes("author") ||
+      normalizedHeader.includes("inventor") ||
+      normalizedHeader.includes("company") ||
+      normalizedHeader.includes("organization")
+    );
+  };
+
   const parseQuickFactItemsFromMarkdown = (text = "") => {
     const parsedTable = parseFirstMarkdownTable(text);
     if (parsedTable?.rows?.length) {
@@ -2492,7 +2508,13 @@ Constituted By **All India Council for Technical Education, New Delhi**
                                   {row.map((cell, cIdx) => (
                                     <td
                                       key={cIdx}
-                                      className="px-4 py-3 text-sm text-gray-700 align-top"
+                                      className={`px-4 py-3 text-sm text-gray-700 align-top ${
+                                        isLikelyNameColumnHeader(
+                                          section.content.headers?.[cIdx],
+                                        )
+                                          ? "text-left"
+                                          : ""
+                                      }`}
                                     >
                                       {cell}
                                     </td>

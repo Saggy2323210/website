@@ -124,6 +124,7 @@ const EditableImage = ({
 
   const handleFileInput = (e) => {
     const file = e.target.files[0];
+    e.target.value = "";
     if (file) {
       handleFileSelect(file);
     }
@@ -211,6 +212,7 @@ const EditableImage = ({
               <FaUpload className="mx-auto text-4xl text-gray-400 dark:text-gray-500" />
               <div>
                 <button
+                  type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                 >
@@ -232,6 +234,7 @@ const EditableImage = ({
         </div>
 
         <button
+          type="button"
           onClick={() => setShowUploadUI(false)}
           className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 shadow-lg"
           title="Cancel"
@@ -255,6 +258,7 @@ const EditableImage = ({
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
             <button
+              type="button"
               onClick={() => setShowUploadUI(true)}
               className="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 shadow-lg transform scale-90 hover:scale-100 transition-transform"
               title="Change Image"
@@ -262,6 +266,7 @@ const EditableImage = ({
               <FaUpload />
             </button>
             <button
+              type="button"
               onClick={handleRemoveImage}
               className="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 shadow-lg transform scale-90 hover:scale-100 transition-transform"
               title="Remove Image"

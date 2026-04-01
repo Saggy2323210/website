@@ -4004,6 +4004,7 @@ const EnTC = () => {
               <div className="md:col-span-5 bg-gray-50 p-6 border-r border-gray-100">
                 <EditableImage
                   src={lab.image || ""}
+                  fallbackSrc={defaultLabs[index]?.image || ""}
                   onSave={(url) => {
                     const updated = [...t("laboratories", defaultLabs)];
                     updated[index].image = url;

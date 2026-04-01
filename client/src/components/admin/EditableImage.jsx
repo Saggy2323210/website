@@ -2,7 +2,10 @@ import React, { useState, useRef } from "react";
 import { useEdit } from "../../contexts/EditContext";
 import { FaUpload, FaTrash, FaTimes } from "react-icons/fa";
 import apiClient from "../../utils/apiClient";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 
 const MAX_IMAGE_SIZE_BYTES = 20 * 1024 * 1024;
 
@@ -49,7 +52,9 @@ const EditableImage = ({
     src !== undefined ? src : path ? getValueFromPath(data, path) : "";
   const resolvedImageUrl = resolveUploadedAssetUrl(imageUrl);
   const resolvedFallbackUrl = resolveUploadedAssetUrl(fallbackSrc);
-  const displayImageUrl = resolvedImageUrl || resolvedFallbackUrl;
+  const displayImageUrl = isGeneratedUploadImagePath(imageUrl)
+    ? resolvedFallbackUrl || ""
+    : resolvedImageUrl || resolvedFallbackUrl;
 
   const applyFallbackImage = (event) => {
     if (

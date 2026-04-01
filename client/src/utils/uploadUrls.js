@@ -2,6 +2,13 @@ import API_BASE_URL from "../config/api";
 
 const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api$/, "");
 
+export const isGeneratedUploadImagePath = (url = "") => {
+  const normalizedUrl = String(url || "").trim();
+  return /^(https?:\/\/[^/]+)?\/uploads\/images\/image-\d+-/i.test(
+    normalizedUrl,
+  );
+};
+
 export const resolveUploadedAssetUrl = (url = "") => {
   const normalizedUrl = String(url || "")
     .trim()

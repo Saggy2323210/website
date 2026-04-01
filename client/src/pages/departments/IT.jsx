@@ -6,7 +6,10 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -5068,6 +5071,7 @@ After successful completion of the course, students will be able to:
                   {isEditing ? (
                     <EditableImage
                       src={activity.image}
+                      fallbackSrc={defaultActivities[idx]?.image || ""}
                       onSave={(url) => updateActivity(idx, "image", url)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
@@ -5075,7 +5079,7 @@ After successful completion of the course, students will be able to:
                     />
                   ) : activity.image ? (
                     <img
-                      src={getLocalItActivityImageUrl(activity.image)}
+                      src={getRenderedItActivityImage(activity, idx)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
                       loading="lazy"
@@ -5229,8 +5233,9 @@ After successful completion of the course, students will be able to:
                 </button>
 
                 <img
-                  src={getLocalItActivityImageUrl(
-                    activitiesData[lightboxActivity]?.image,
+                  src={getRenderedItActivityImage(
+                    activitiesData[lightboxActivity],
+                    lightboxActivity,
                   )}
                   alt={activitiesData[lightboxActivity]?.title}
                   className="w-full max-h-[80vh] object-contain rounded-lg"
@@ -8703,10 +8708,21 @@ const normalizeItActivity = (activity = {}) => ({
   participants: String(activity.participants || "").trim(),
   organizer: String(activity.organizer || "").trim(),
   resource: String(activity.resource || "").trim(),
-  image: getLocalItActivityImageUrl(activity.image),
+  image: String(activity.image || "").trim(),
 });
 
 const defaultItActivityCards = defaultActivities.map(normalizeItActivity);
+
+const getRenderedItActivityImage = (activity = {}, index = -1) => {
+  const currentImage = String(activity?.image || "").trim();
+  const fallbackImage = String(defaultActivities[index]?.image || "").trim();
+
+  if (isGeneratedUploadImagePath(currentImage) && fallbackImage) {
+    return getLocalItActivityImageUrl(fallbackImage);
+  }
+
+  return getLocalItActivityImageUrl(currentImage);
+};
 
 const formatItActivityMarkdownField = (label, value, includeEmpty = false) => {
   const lines = String(value || "")

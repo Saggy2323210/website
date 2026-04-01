@@ -5,7 +5,10 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -5184,6 +5187,7 @@ On completion of the course, the students will be able to:
                   {isEditing ? (
                     <EditableImage
                       src={activity.image}
+                      fallbackSrc={defaultActivities[idx]?.image || ""}
                       onSave={(url) => updateActivity(idx, "image", url)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
@@ -5191,7 +5195,7 @@ On completion of the course, the students will be able to:
                     />
                   ) : activity.image ? (
                     <img
-                      src={getLocalEntcActivityImageUrl(activity.image)}
+                      src={getRenderedEntcActivityImage(activity, idx)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
                       loading="lazy"
@@ -5343,11 +5347,10 @@ On completion of the course, the students will be able to:
                 </button>
 
                 <img
-                  src={
-                    getLocalEntcActivityImageUrl(
-                      activitiesData[lightboxActivity]?.image,
-                    )
-                  }
+                  src={getRenderedEntcActivityImage(
+                    activitiesData[lightboxActivity],
+                    lightboxActivity,
+                  )}
                   alt={activitiesData[lightboxActivity]?.title}
                   className="w-full max-h-[80vh] object-contain rounded-lg"
                 />
@@ -9215,10 +9218,21 @@ const normalizeEntcActivity = (activity = {}) => ({
   participants: String(activity.participants || "").trim(),
   organizer: String(activity.organizer || "").trim(),
   resource: String(activity.resource || "").trim(),
-  image: getLocalEntcActivityImageUrl(activity.image),
+  image: String(activity.image || "").trim(),
 });
 
 const defaultEntcActivityCards = defaultActivities.map(normalizeEntcActivity);
+
+const getRenderedEntcActivityImage = (activity = {}, index = -1) => {
+  const currentImage = String(activity?.image || "").trim();
+  const fallbackImage = String(defaultActivities[index]?.image || "").trim();
+
+  if (isGeneratedUploadImagePath(currentImage) && fallbackImage) {
+    return getLocalEntcActivityImageUrl(fallbackImage);
+  }
+
+  return getLocalEntcActivityImageUrl(currentImage);
+};
 
 const formatEntcActivityMarkdownField = (
   label,

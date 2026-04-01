@@ -5,7 +5,10 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -2707,7 +2710,7 @@ const Electrical = () => {
   const defaultLaboratories = [
     {
       name: "Electrical Machines Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_MachineLab.jpg",
       resources:
         "DC Motors & Generators, Induction motors, Synchronous motor, Alternators, Transformers, Special machines, MG Sets",
       facilities:
@@ -2715,83 +2718,83 @@ const Electrical = () => {
     },
     {
       name: "Switchgear and Protection Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_SGP_lab.jpg",
       resources:
         "Protection setup based on Over Current Relay, Earth fault Relay, Differential relay, Static Relay, Demonstration panel, MCB & RCCB Testing set, Microprocessor based Relay for induction motor Protection",
       facilities: "Relay Testing kit",
     },
     {
       name: "High Voltage Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_HV_Lab.jpg",
       resources:
         "100 kV AC Testing set, 100 kV DC Testing set,60 kV Automatic oil Testing Kit, vertical-horizontal sphere Gap, Insulator Testing Set",
       facilities: "Impulse Tester",
     },
     {
       name: "Control System Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_CS_Lab.jpg",
       resources:
         "D.C.M-G set, Synchro-Transmitter & Receiver, Single Phase transformer for scott connection, DSO",
       facilities: "Stepper Motor, Regulated D.C. Power Supply",
     },
     {
       name: "Electrical Measurement Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_EM_Lab.jpg",
       resources: "Three Phase Induction motor, Regulated D.C. Power Supply",
       facilities:
         "Various types of bridge for measurement of inductance & capacitance",
     },
     {
       name: "Basic Electrical Engineering Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_DEE_Lab.jpg",
       resources:
         "Single Phase transformer, Three Phase Auto Transformer, Regulated D.C. Power Supply",
       facilities: "R-L-C kit, Resistive Load Bank",
     },
     {
       name: "Computer Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_Computer_Lab.jpg",
       resources:
         "20 Desktop Computers, MATLAB, PSCAD, ETAP software's, d-SPACE Hardware kit",
       facilities: "",
     },
     {
       name: "Microprocessor and Microcontroller Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_MM_lab.jpg",
       resources: "Microprocessor & Microcontroller Kit with power supply",
       facilities: "",
     },
     {
       name: "PLC & Factory Automation Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_PLCFA_Lab.jpg",
       resources: "Basic Fabrication Facility, Desktop Computers",
       facilities:
         "MATLAB, PSCAD, ETAP software, Transformer with various toppings, Induction Motor",
     },
     {
       name: "Power Quality Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_PQ_lab.jpg",
       resources: "Power Quality Analyzer, Data Acquisition System, DSO, etc.",
       facilities:
         "MATLAB, PSCAD, Transformer with various toppings, Induction Motor",
     },
     {
       name: "Electrical Power Research Lab",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/EPR_lab.jpg",
       resources:
         "Lab VIEW, Data Acquisition system (NI & AD Link), CT/PT's., Compact-Rio, PCB Design facilities, Desktop Computers",
       facilities: "",
     },
     {
       name: "Centre of Excellence in Electric Vehicle",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/EVehicle_lab.jpg",
       resources:
         "Trainer Kits for BLDC Drive, Simulators, Battery Management Systems, Solar based Charging Station, Conference room, WiFi connectivity",
       facilities: "",
     },
     {
       name: "Center of Excellence in Renewable Energy",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/elect_faculty/solar_research_center.jpg",
       resources:
         "Solar Research Lab, Sun Simulators, Battery Assembly setup, Solar panel Production facility, Solar Product Display gallery, Solar Radiation measurement facility, etc.",
       facilities: "",
@@ -5726,6 +5729,11 @@ Upon successful completion of this course, students will be able to:
               <div className="md:col-span-5 bg-gray-50 p-6 border-r border-gray-100">
                 <EditableImage
                   src={lab.image || ""}
+                  fallbackSrc={
+                    isGeneratedUploadImagePath(lab.image)
+                      ? defaultLaboratories[index]?.image || ""
+                      : ""
+                  }
                   onSave={(url) => {
                     const updated = [...t("laboratories", defaultLaboratories)];
                     updated[index].image = url;
@@ -6756,6 +6764,7 @@ Upon successful completion of this course, students will be able to:
                   {isEditing ? (
                     <EditableImage
                       src={activity.image}
+                      fallbackSrc={defaultActivities[idx]?.image || ""}
                       onSave={(url) => updateActivity(idx, "image", url)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
@@ -6763,7 +6772,7 @@ Upon successful completion of this course, students will be able to:
                     />
                   ) : activity.image ? (
                     <img
-                      src={getLocalElectricalActivityImageUrl(activity.image)}
+                      src={getRenderedElectricalActivityImage(activity, idx)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
                       loading="lazy"
@@ -6919,11 +6928,10 @@ Upon successful completion of this course, students will be able to:
                 </button>
 
                 <img
-                  src={
-                    getLocalElectricalActivityImageUrl(
-                      activitiesData[lightboxActivity]?.image,
-                    )
-                  }
+                  src={getRenderedElectricalActivityImage(
+                    activitiesData[lightboxActivity],
+                    lightboxActivity,
+                  )}
                   alt={activitiesData[lightboxActivity]?.title}
                   className="w-full max-h-[80vh] object-contain rounded-lg"
                 />
@@ -9697,11 +9705,22 @@ const normalizeElectricalActivity = (activity = {}) => ({
   participants: String(activity.participants || "").trim(),
   organizer: String(activity.organizer || "").trim(),
   resource: String(activity.resource || "").trim(),
-  image: getLocalElectricalActivityImageUrl(activity.image),
+  image: String(activity.image || "").trim(),
 });
 
 const defaultElectricalActivityCards =
   defaultActivities.map(normalizeElectricalActivity);
+
+const getRenderedElectricalActivityImage = (activity = {}, index = -1) => {
+  const currentImage = String(activity?.image || "").trim();
+  const fallbackImage = String(defaultActivities[index]?.image || "").trim();
+
+  if (isGeneratedUploadImagePath(currentImage) && fallbackImage) {
+    return getLocalElectricalActivityImageUrl(fallbackImage);
+  }
+
+  return getLocalElectricalActivityImageUrl(currentImage);
+};
 
 const formatElectricalActivityMarkdownField = (
   label,

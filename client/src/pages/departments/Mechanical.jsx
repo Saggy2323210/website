@@ -6,7 +6,10 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -5157,6 +5160,7 @@ After successfully completing the course, students will be able to:
                   {isEditing ? (
                     <EditableImage
                       src={activity.image}
+                      fallbackSrc={defaultActivities[idx]?.image || ""}
                       onSave={(url) => updateActivity(idx, "image", url)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
@@ -5164,7 +5168,7 @@ After successfully completing the course, students will be able to:
                     />
                   ) : activity.image ? (
                     <img
-                      src={getLocalMechanicalActivityImageUrl(activity.image)}
+                      src={getRenderedMechanicalActivityImage(activity, idx)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
                       loading="lazy"
@@ -5318,8 +5322,9 @@ After successfully completing the course, students will be able to:
                 </button>
 
                 <img
-                  src={getLocalMechanicalActivityImageUrl(
-                    activitiesData[lightboxActivity]?.image,
+                  src={getRenderedMechanicalActivityImage(
+                    activitiesData[lightboxActivity],
+                    lightboxActivity,
                   )}
                   alt={activitiesData[lightboxActivity]?.title}
                   className="w-full max-h-[80vh] object-contain rounded-lg"
@@ -8904,11 +8909,22 @@ const normalizeMechanicalActivity = (activity = {}) => ({
   participants: String(activity.participants || "").trim(),
   organizer: String(activity.organizer || "").trim(),
   resource: String(activity.resource || "").trim(),
-  image: getLocalMechanicalActivityImageUrl(activity.image),
+  image: String(activity.image || "").trim(),
 });
 
 const defaultMechanicalActivityCards =
   defaultActivities.map(normalizeMechanicalActivity);
+
+const getRenderedMechanicalActivityImage = (activity = {}, index = -1) => {
+  const currentImage = String(activity?.image || "").trim();
+  const fallbackImage = String(defaultActivities[index]?.image || "").trim();
+
+  if (isGeneratedUploadImagePath(currentImage) && fallbackImage) {
+    return getLocalMechanicalActivityImageUrl(fallbackImage);
+  }
+
+  return getLocalMechanicalActivityImageUrl(currentImage);
+};
 
 const formatMechanicalActivityMarkdownField = (
   label,

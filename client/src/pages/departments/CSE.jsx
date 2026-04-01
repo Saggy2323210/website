@@ -5,7 +5,10 @@ import GenericPage from "../../components/GenericPage";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
-import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import {
+  isGeneratedUploadImagePath,
+  resolveUploadedAssetUrl,
+} from "../../utils/uploadUrls";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -963,10 +966,21 @@ const normalizeCseActivity = (activity = {}) => ({
   participants: String(activity.participants || "").trim(),
   organizer: String(activity.organizer || "").trim(),
   resource: String(activity.resource || "").trim(),
-  image: getLocalCseActivityImageUrl(activity.image),
+  image: String(activity.image || "").trim(),
 });
 
 const defaultActivityCards = defaultActivities.map(normalizeCseActivity);
+
+const getRenderedCseActivityImage = (activity = {}, index = -1) => {
+  const currentImage = String(activity?.image || "").trim();
+  const fallbackImage = String(defaultActivities[index]?.image || "").trim();
+
+  if (isGeneratedUploadImagePath(currentImage) && fallbackImage) {
+    return getLocalCseActivityImageUrl(fallbackImage);
+  }
+
+  return getLocalCseActivityImageUrl(currentImage);
+};
 
 const formatActivityMarkdownField = (label, value, includeEmpty = false) => {
   const lines = String(value || "")
@@ -4873,6 +4887,7 @@ const CSE = () => {
                   {isEditing ? (
                     <EditableImage
                       src={activity.image}
+                      fallbackSrc={defaultActivities[idx]?.image || ""}
                       onSave={(url) => updateActivity(idx, "image", url)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
@@ -4880,7 +4895,7 @@ const CSE = () => {
                     />
                   ) : activity.image ? (
                     <img
-                      src={getLocalCseActivityImageUrl(activity.image)}
+                      src={getRenderedCseActivityImage(activity, idx)}
                       alt={activity.title}
                       className="w-full h-48 sm:h-full object-contain bg-gray-50"
                       loading="lazy"
@@ -5067,7 +5082,10 @@ const CSE = () => {
                     {activity.image ? (
                       <div className="bg-gray-100">
                         <img
-                          src={getLocalCseActivityImageUrl(activity.image)}
+                          src={getRenderedCseActivityImage(
+                            activity,
+                            lightboxActivity,
+                          )}
                           alt={activity.title}
                           className="w-full max-h-[50vh] object-contain mx-auto"
                         />

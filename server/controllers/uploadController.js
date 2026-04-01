@@ -1,6 +1,14 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const {
+  normalizeCategory,
+  uploadBufferToGridFS,
+  findLatestFileByName,
+  listFilesByCategory,
+  deleteFilesByName,
+  getBucket,
+} = require("../utils/gridfsStorage");
 
 const IMAGE_MAX_SIZE_BYTES = 20 * 1024 * 1024;
 const DOCUMENT_MAX_SIZE_BYTES = 50 * 1024 * 1024;
@@ -24,24 +32,10 @@ const resolveUploadPath = (relativePath = "") => {
   return resolvedPath;
 };
 
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = "./uploads/images";
-    // Ensure directory exists
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname),
-    );
-  },
-});
+const createStoredFilename = (fieldname, originalname) => {
+  const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+  return `${fieldname}-${uniqueSuffix}${path.extname(originalname || "")}`;
+};
 
 // File filter - accepts images and PDFs
 const fileFilter = (req, file, cb) => {
@@ -57,7 +51,7 @@ const fileFilter = (req, file, cb) => {
 
 // Multer upload instance (images + PDFs)
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   fileFilter: fileFilter,
   limits: {
     fileSize: IMAGE_MAX_SIZE_BYTES,
@@ -65,23 +59,6 @@ const upload = multer({
 });
 
 // --- Document / file upload ---
-const documentStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = "./uploads/documents";
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname),
-    );
-  },
-});
-
 const documentFilter = (req, file, cb) => {
   const allowed = [
     "application/pdf",
@@ -107,7 +84,7 @@ const documentFilter = (req, file, cb) => {
 };
 
 const documentUpload = multer({
-  storage: documentStorage,
+  storage: multer.memoryStorage(),
   fileFilter: documentFilter,
   limits: {
     fileSize: DOCUMENT_MAX_SIZE_BYTES,
@@ -123,13 +100,22 @@ const uploadSingleImage = async (req, res) => {
         .json({ success: false, message: "No file uploaded" });
     }
 
-    const fileUrl = `/uploads/images/${req.file.filename}`;
+    const filename = createStoredFilename(req.file.fieldname, req.file.originalname);
+    await uploadBufferToGridFS({
+      buffer: req.file.buffer,
+      filename,
+      contentType: req.file.mimetype,
+      category: "images",
+      originalName: req.file.originalname,
+    });
+
+    const fileUrl = `/uploads/images/${filename}`;
     res.status(200).json({
       success: true,
       message: "File uploaded successfully",
       url: fileUrl,
       fileUrl: fileUrl,
-      filename: req.file.filename,
+      filename,
     });
   } catch (error) {
     console.error("Upload error:", error);
@@ -142,17 +128,25 @@ const uploadSingleImage = async (req, res) => {
 // Get uploaded files
 const getUploadedFiles = async (req, res) => {
   try {
-    const uploadDir = "./uploads/images";
+    const diskFiles = fs.existsSync("./uploads/images")
+      ? fs.readdirSync("./uploads/images").map((file) => ({
+          filename: file,
+          url: `/uploads/images/${file}`,
+          uploadedAt: fs.statSync(path.join("./uploads/images", file)).mtime,
+        }))
+      : [];
 
-    if (!fs.existsSync(uploadDir)) {
-      return res.json({ files: [] });
-    }
-
-    const files = fs.readdirSync(uploadDir).map((file) => ({
-      filename: file,
-      url: `/uploads/images/${file}`,
-      uploadedAt: fs.statSync(path.join(uploadDir, file)).mtime,
+    const gridFsFiles = (await listFilesByCategory("images")).map((file) => ({
+      filename: file.filename,
+      url: `/uploads/images/${file.filename}`,
+      uploadedAt: file.uploadDate,
     }));
+
+    const files = Array.from(
+      new Map(
+        [...gridFsFiles, ...diskFiles].map((file) => [file.filename, file]),
+      ).values(),
+    ).sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
 
     res.json({ files });
   } catch (error) {
@@ -172,13 +166,22 @@ const uploadSingleDocument = async (req, res) => {
         .json({ success: false, message: "No file uploaded" });
     }
 
-    const fileUrl = `/uploads/documents/${req.file.filename}`;
+    const filename = createStoredFilename(req.file.fieldname, req.file.originalname);
+    await uploadBufferToGridFS({
+      buffer: req.file.buffer,
+      filename,
+      contentType: req.file.mimetype,
+      category: "documents",
+      originalName: req.file.originalname,
+    });
+
+    const fileUrl = `/uploads/documents/${filename}`;
     res.status(200).json({
       success: true,
       message: "File uploaded successfully",
       url: fileUrl,
       fileUrl: fileUrl,
-      filename: req.file.filename,
+      filename,
       originalName: req.file.originalname,
     });
   } catch (error) {
@@ -194,16 +197,26 @@ const deleteFile = async (req, res) => {
   try {
     const requestedPath = req.query.path || path.join("uploads/images", req.params.filename || "");
     const filePath = resolveUploadPath(requestedPath);
+    const normalizedRequest = String(requestedPath || "").replace(/\\/g, "/").replace(/^\/+/, "");
+    const pathParts = normalizedRequest.split("/");
+    const category = normalizeCategory(pathParts[1]);
+    const filename = pathParts.slice(2).join("/");
 
-    if (!filePath) {
-      return res.status(400).json({ message: "Invalid file path" });
+    let deletedCount = 0;
+
+    if (filePath && fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      deletedCount += 1;
     }
 
-    if (!fs.existsSync(filePath)) {
+    if (category && filename) {
+      deletedCount += await deleteFilesByName(filename, category);
+    }
+
+    if (deletedCount === 0) {
       return res.status(404).json({ message: "File not found" });
     }
 
-    fs.unlinkSync(filePath);
     res.json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Error deleting file:", error);
@@ -213,23 +226,8 @@ const deleteFile = async (req, res) => {
   }
 };
 
-// NIRF PDF upload
-const nirfStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = "./uploads/nirf";
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, "nirf-" + uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
 const nirfUpload = multer({
-  storage: nirfStorage,
+  storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
     if (file.mimetype === "application/pdf") {
       cb(null, true);
@@ -247,19 +245,71 @@ const uploadNirfPdf = async (req, res) => {
         .status(400)
         .json({ success: false, message: "No file uploaded" });
     }
-    const fileUrl = `/uploads/nirf/${req.file.filename}`;
+    const filename = `nirf-${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(req.file.originalname)}`;
+    await uploadBufferToGridFS({
+      buffer: req.file.buffer,
+      filename,
+      contentType: req.file.mimetype,
+      category: "nirf",
+      originalName: req.file.originalname,
+    });
+    const fileUrl = `/uploads/nirf/${filename}`;
     res.status(200).json({
       success: true,
       message: "PDF uploaded successfully",
       url: fileUrl,
       fileUrl,
-      filename: req.file.filename,
+      filename,
     });
   } catch (error) {
     console.error("NIRF PDF upload error:", error);
     res
       .status(500)
       .json({ message: "File upload failed", error: error.message });
+  }
+};
+
+const streamUploadedFile = async (req, res, next) => {
+  try {
+    const category = normalizeCategory(req.params.category);
+    const filename = req.params.filename;
+
+    if (!category || !filename) {
+      return next();
+    }
+
+    const localFilePath = resolveUploadPath(path.join("uploads", category, filename));
+    if (localFilePath && fs.existsSync(localFilePath)) {
+      if (path.extname(localFilePath).toLowerCase() === ".pdf") {
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline");
+      }
+      res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+      return res.sendFile(localFilePath);
+    }
+
+    const fileDoc = await findLatestFileByName(filename, category);
+    if (!fileDoc) {
+      return next();
+    }
+
+    res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+    if (fileDoc.contentType) {
+      res.setHeader("Content-Type", fileDoc.contentType);
+    }
+    if (fileDoc.metadata?.originalName) {
+      const disposition = category === "images" ? "inline" : "inline";
+      res.setHeader(
+        "Content-Disposition",
+        `${disposition}; filename="${encodeURIComponent(fileDoc.metadata.originalName)}"`,
+      );
+    }
+
+    const downloadStream = getBucket().openDownloadStream(fileDoc._id);
+    downloadStream.on("error", next);
+    downloadStream.pipe(res);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -272,4 +322,5 @@ module.exports = {
   deleteFile,
   nirfUpload,
   uploadNirfPdf,
+  streamUploadedFile,
 };

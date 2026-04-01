@@ -4,7 +4,7 @@
 export const defaultLabs = [
   {
     name: "Object Oriented Programming Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_OOPS.png",
     resources:
       'COMPUTER SYSTEMS: Lenovo i5 12th Generation Processor 12400/6 Core 2.4 GHz / Model Lenovo Think Centre Neo 50S Gen 3 / Intel UHD Graphics 730 / Intel B660 Chipset Mother Board / 8GB Single Module DDR4 3200 RAM / 1 TB SATA 7200 RPM HDD / 512 GB M2 SSD / Lenovo ThinkVision E20-30 19.5" LED Monitor / USB Optical Scroll Mouse / USB Keyboard, Quantity: 18',
     facilities:
@@ -12,14 +12,14 @@ export const defaultLabs = [
   },
   {
     name: "System Software Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_SS.png",
     resources:
       'COMPUTER SYSTEMS: Lenovo i5 12th Generation Processor 12400/6 Core 2.4 GHz / Model Lenovo Think Centre Neo 50S Gen 3 / Intel UHD Graphics 730 / Intel B660 Chipset Mother Board / 8GB Single Module DDR4 3200 RAM / 1 TB SATA 7200 RPM HDD / 512 GB M2 SSD / Lenovo ThinkVision E20-30 19.5" LED Monitor / USB Optical Scroll Mouse / USB Keyboard, Quantity: 18',
     facilities: "HP LaserJet 1020 Plus Printer",
   },
   {
     name: "DBMS Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_DBMS.png",
     resources:
       'COMPUTER SYSTEMS: Quantity: 20, System Configuration: 20 Lenovo Intel Core i3 Processor (3G) 3.36 GHz / Intel Mother Board / 4GB RAM 3.29 GHz / 500GB HDD 7200 RPM / PCI Tower (4x3), 18.5" TFT Monitor, USB Keyboard / Optical Scroll Mouse',
     facilities:
@@ -27,28 +27,28 @@ export const defaultLabs = [
   },
   {
     name: "Project Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_PROJECT.png",
     resources:
       'COMPUTER SYSTEMS: Quantity: 19\nSystem Configuration 1 (05 units): Lenovo Intel Core i3 Processor (3G) 3.36 GHz / Intel Mother Board / 4GB RAM 3.29 GHz / 500GB HDD 7200 RPM / PCI Tower (4x3), 18.5" TFT Monitor, USB Keyboard / Optical Scroll Mouse\nSystem Configuration 2 (08 units): Lenovo Intel Core i3 Processor (3G) 3.36 GHz / Intel Mother Board / 4GB RAM 3.29 GHz / 1 TB HDD 7200 RPM / PCI Tower (4x3), 18.5" TFT Monitor, USB Keyboard / Optical Scroll Mouse\nSystem Configuration 3 (06 units): Lenovo Intel Core i3 Processor (2G) 3.40 GHz / Intel Mother Board / 2GB RAM / 500GB HDD 7200 RPM / PCI Tower (4x3), 18.5" TFT Monitor, USB Keyboard / Optical Scroll Mouse',
     facilities: "01 UPS 5KVA with Batteries, 240 GB SSD 07",
   },
   {
     name: "Beginners Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_BEGINNERS.png",
     resources:
       'COMPUTER SYSTEMS: Quantity: 22\n03 Lenovo Intel 481 Chip Set Mother Board, 4GB DDR3 RAM, 500GB SATA SSD, USB Mouse, Keyboard, 18.5" LED Monitor\n19 HP i5 12th GEN PRO with Intel 28049MT Processor 3.06 GHz, 13MB Cache, 8GB DDR4 RAM, 512 GB SSD, USB Mouse, Keyboard, 19.5" TFT Monitor',
     facilities: "ONLINE 5KVA UPS with 30 min battery backup",
   },
   {
     name: "Data Science Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_DSCI.png",
     resources:
       'COMPUTER SYSTEMS: Quantity: 16\n15 Lenovo Desktop PC i3 6th Generation Model 8510 Tower Desktop Core i3 Processor, 4GB DDR4 RAM, 500 GB SATA HDD, USB Mouse, Keyboard, 19.5" LED Monitor\n01 LENOVO PC V520 Desktop PC i3-7th GEN7100 2 Core Processor / Single Module 4GB DDR4 RAM, 1TB SATA HDD, 7200RPM',
     facilities: "ONLINE 3KVA UPS with battery backup",
   },
   {
     name: "Machine Learning & IOT Laboratory",
-    image: "",
+    image: "https://www.ssgmce.ac.in/images/cse_faculty/CSE_LAB_MLIOT.png",
     resources:
       'Supported by PHRONESIS Partners Noida\nEquipments: Quantity: 08\n07 Lenovo Desktop PC i3 6th Generation Model 8510 Tower Desktop Core i3 Processor, 4GB DDR4 RAM, 500 GB SATA HDD, USB Mouse, Keyboard, 19.5" LED Monitor\n01 Lenovo Think Center i3 Intel Core i3 Processor, Intel 3.40GHz, USB Mouse, Keyboard, 2GB DDR3 RAM, 500GB HDD, 7200RPM, 18.5" TFT Monitor',
     facilities:

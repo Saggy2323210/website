@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const { noSqlInjectionGuard } = require("./middleware/nosqlGuard");
+const { streamUploadedFile } = require("./controllers/uploadController");
 
 // Load environment variables
 dotenv.config();
@@ -87,6 +88,8 @@ app.use("/api/admin", protect, adminOnly, (_req, res) => {
 });
 
 // Serve static files from uploads folder
+app.get("/uploads/:category/:filename", streamUploadedFile);
+
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {

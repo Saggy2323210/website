@@ -22,6 +22,7 @@ const MAX_IMAGE_SIZE_BYTES = 20 * 1024 * 1024;
 const EditableImage = ({
   path,
   src,
+  fallbackSrc,
   onSave,
   className = "",
   alt = "Image",
@@ -47,6 +48,19 @@ const EditableImage = ({
   const imageUrl =
     src !== undefined ? src : path ? getValueFromPath(data, path) : "";
   const resolvedImageUrl = resolveUploadedAssetUrl(imageUrl);
+  const resolvedFallbackUrl = resolveUploadedAssetUrl(fallbackSrc);
+  const displayImageUrl = resolvedImageUrl || resolvedFallbackUrl;
+
+  const applyFallbackImage = (event) => {
+    if (
+      resolvedFallbackUrl &&
+      event.currentTarget.src !== resolvedFallbackUrl
+    ) {
+      event.currentTarget.src = resolvedFallbackUrl;
+      return;
+    }
+    event.currentTarget.style.display = "none";
+  };
 
   const handleFileSelect = async (file) => {
     if (!file) return;
@@ -144,8 +158,13 @@ const EditableImage = ({
 
   // View Mode (not editing)
   if (!isEditing) {
-    return resolvedImageUrl ? (
-      <img src={resolvedImageUrl} alt={alt} className={className} />
+    return displayImageUrl ? (
+      <img
+        src={displayImageUrl}
+        alt={alt}
+        className={className}
+        onError={applyFallbackImage}
+      />
     ) : (
       <div
         className={`flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 ${className}`}
@@ -220,10 +239,15 @@ const EditableImage = ({
 
   // Edit Mode - Image Display
   return (
-    <div className="relative group">
-      {imageUrl ? (
+        <div className="relative group">
+      {displayImageUrl ? (
         <>
-          <img src={resolvedImageUrl} alt={alt} className={className} />
+          <img
+            src={displayImageUrl}
+            alt={alt}
+            className={className}
+            onError={applyFallbackImage}
+          />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
             <button
               onClick={() => setShowUploadUI(true)}

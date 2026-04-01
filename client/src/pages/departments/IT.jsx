@@ -2907,7 +2907,7 @@ const IT = () => {
   const defaultLaboratories = [
     {
       name: "Data Engineering Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_DMC_LAB.jpg",
       area: "60 Sq.Mtrs",
       systems: "18 PC",
       resources:
@@ -2915,7 +2915,7 @@ const IT = () => {
     },
     {
       name: "Programming Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_Programming_Lab.jpg",
       area: "75 Sq.Mtrs",
       systems: "19 PC (12 Lenovo + 7 HP)",
       resources:
@@ -2923,7 +2923,7 @@ const IT = () => {
     },
     {
       name: "WEBTECH Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_Webtech_lab.jpg",
       area: "65 Sq.Mtrs",
       systems: "17 PC",
       resources:
@@ -2931,7 +2931,7 @@ const IT = () => {
     },
     {
       name: "AI Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_AI_Lab.jpg",
       area: "70 Sq.Mtrs",
       systems: "16 PC",
       resources:
@@ -2939,7 +2939,7 @@ const IT = () => {
     },
     {
       name: "Operating System Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_OS_Lab.jpg",
       area: "68 Sq.Mtrs",
       systems: "15 PC",
       resources:
@@ -2947,7 +2947,7 @@ const IT = () => {
     },
     {
       name: "Project Laboratory",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_HW_Lab.jpg",
       area: "55 Sq.Mtrs",
       systems: "10 PC",
       resources:
@@ -2955,7 +2955,7 @@ const IT = () => {
     },
     {
       name: "Departmental Library",
-      image: "",
+      image: "https://www.ssgmce.ac.in/images/cse_faculty/Departmental%20%20Library.jpeg",
       area: "50 Sq.Mtrs",
       systems: "Reading Area",
       resources:
@@ -4642,6 +4642,7 @@ After successful completion of the course, students will be able to:
               <div className="md:col-span-5 bg-gray-50 p-6 border-r border-gray-100">
                 <EditableImage
                   src={lab.image || ""}
+                  fallbackSrc={defaultLaboratories[index]?.image || ""}
                   onSave={(url) => {
                     const updated = [...t("laboratories", defaultLaboratories)];
                     updated[index].image = url;

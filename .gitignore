@@ -37,8 +37,6 @@ desktop.ini
 *.swo
 *~
 
-# Uploaded files (runtime, not source)
-server/uploads/
 
 # Server log output files
 server-err.txt

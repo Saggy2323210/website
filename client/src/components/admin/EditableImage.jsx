@@ -52,8 +52,10 @@ const EditableImage = ({
     src !== undefined ? src : path ? getValueFromPath(data, path) : "";
   const resolvedImageUrl = resolveUploadedAssetUrl(imageUrl);
   const resolvedFallbackUrl = resolveUploadedAssetUrl(fallbackSrc);
-  const displayImageUrl = isGeneratedUploadImagePath(imageUrl)
-    ? resolvedFallbackUrl || ""
+  const shouldPreferFallback =
+    isGeneratedUploadImagePath(imageUrl) && Boolean(resolvedFallbackUrl);
+  const displayImageUrl = shouldPreferFallback
+    ? resolvedFallbackUrl
     : resolvedImageUrl || resolvedFallbackUrl;
 
   const applyFallbackImage = (event) => {
@@ -95,7 +97,11 @@ const EditableImage = ({
         },
       });
 
-      const newUrl = response.data.fileUrl || response.data.url;
+      const newUrl =
+        response?.data?.fileUrl ||
+        response?.data?.url ||
+        response?.data?.data?.fileUrl ||
+        response?.data?.data?.url;
 
       if (newUrl) {
         // Save the new URL

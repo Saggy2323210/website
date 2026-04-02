@@ -4,7 +4,7 @@ const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api$/, "");
 
 export const isGeneratedUploadImagePath = (url = "") => {
   const normalizedUrl = String(url || "").trim();
-  return /^(https?:\/\/[^/]+)?\/uploads\/images\/image-\d+-/i.test(
+  return /^(https?:\/\/[^/]+)?\/uploads\/images\/image-(?:\d+-\d+|url|placeholder)(?:$|[./?-])/i.test(
     normalizedUrl,
   );
 };
@@ -18,7 +18,9 @@ export const resolveUploadedAssetUrl = (url = "") => {
   if (/^(https?:|\/\/)/i.test(normalizedUrl)) {
     try {
       const parsedUrl = new URL(
-        normalizedUrl.startsWith("//") ? `https:${normalizedUrl}` : normalizedUrl,
+        normalizedUrl.startsWith("//")
+          ? `https:${normalizedUrl}`
+          : normalizedUrl,
       );
       if (/^\/(uploads|api)\//i.test(parsedUrl.pathname)) {
         return `${BACKEND_BASE_URL}${parsedUrl.pathname}${parsedUrl.search || ""}`;

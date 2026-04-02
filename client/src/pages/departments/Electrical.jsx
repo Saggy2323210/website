@@ -388,8 +388,7 @@ const defaultElectricalIndustrialVisitGallery = [
   },
   {
     image: ivAbbNashik2018,
-    caption:
-      "Industrial visit to M/s. ABB Ltd., Nashik on 27 August 2018",
+    caption: "Industrial visit to M/s. ABB Ltd., Nashik on 27 August 2018",
     location: "Nashik",
     date: "27 August 2018",
   },
@@ -502,11 +501,15 @@ const electricalParseIndustrialVisitsMarkdown = (markdown = "") => {
     .map((cells) => {
       const offset = cells.length >= 6 ? 1 : 0;
       return {
-        industries: electricalParseIndustrialVisitIndustries(cells[offset] || ""),
+        industries: electricalParseIndustrialVisitIndustries(
+          cells[offset] || "",
+        ),
         class: cells[offset + 1] || "",
         date: cells[offset + 2] || "",
         students: cells[offset + 3] || "",
-        report: electricalExtractMarkdownLinkHref(cells.slice(offset + 4).join(" | ")),
+        report: electricalExtractMarkdownLinkHref(
+          cells.slice(offset + 4).join(" | "),
+        ),
       };
     })
     .filter(
@@ -525,30 +528,114 @@ const createElectricalIndustrialVisitId = () =>
 const getElectricalIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
     industries: (Array.isArray(visit?.industries) ? visit.industries : [])
-      .map((item) => String(item || "").trim().toLowerCase())
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
       .filter(Boolean),
-    class: String(visit?.class || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
-    students: String(visit?.students || "").trim().toLowerCase(),
+    class: String(visit?.class || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
+    students: String(visit?.students || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const defaultElectricalMous = [
-  { no: "1.", org: "I Robots Innovative Solutions, Pune", date: "05-Apr-2025", report: "/uploads/documents/electrical_mous/MOU_IRobots_Innovative_2025.pdf" },
-  { no: "2.", org: "TATA Power Skill Development Institute (TPSDI), Shahad Mumbai", date: "21-Jun-2024", report: "/uploads/documents/electrical_mous/MOU_TPSDI_Mumbai_2024.pdf" },
-  { no: "3.", org: "Adani Electricity Mumbai Limited, ADTPS, Dahanu", date: "01-Jun-2024", report: "/uploads/documents/electrical_mous/MOU_Adani_ADTPS_Dahanu_2024.pdf" },
-  { no: "4.", org: "Mew Technology, Bengaluru", date: "04-Mar-2024", report: "/uploads/documents/electrical_mous/MOU_Mew_Technology_Bengaluru_2024.pdf" },
-  { no: "5.", org: "Samarthan System Private Limited, Pune", date: "10-Jan-2024", report: "/uploads/documents/electrical_mous/MOU_Samarthan_System_Pune_2024.pdf" },
-  { no: "6.", org: "SCR Elektronics, Mumbai", date: "08-Feb-2023", report: "/uploads/documents/electrical_mous/MOU_SCR_Elektronics_Mumbai_2023.pdf" },
-  { no: "7.", org: "Mitsubishi Electric India Private Limited", date: "06-Jan-2023", report: "/uploads/documents/electrical_mous/MOU_Mitsubishi_Electric_2023.pdf" },
-  { no: "8.", org: "Adani Electricity Mumbai Limited, ADTPS, Dahanu", date: "12-Feb-2022", report: "/uploads/documents/electrical_mous/MOU_Adani_ADTPS_Dahanu_2022.pdf" },
-  { no: "9.", org: "ISIE INDIA, Noida", date: "18-Jan-2022", report: "/uploads/documents/electrical_mous/MOU_ISIE_India_Noida_2022.pdf" },
-  { no: "10.", org: "VI Solutions, Bangalore", date: "28-Jan-2021", report: "/uploads/documents/electrical_mous/MOU_VI_Solutions_Bangalore_2021.pdf" },
-  { no: "11.", org: "SCR Elektronics, Mumbai", date: "08-Feb-2020", report: "/uploads/documents/electrical_mous/MOU_SCR_Elektronics_Mumbai_2020.pdf" },
-  { no: "12.", org: "TPSDI, Shahad Mumbai", date: "08-Sep-2018", report: "/uploads/documents/electrical_mous/MOU_TPSDI_Mumbai_2018.pdf" },
+  {
+    no: "1.",
+    org: "I Robots Innovative Solutions, Pune",
+    date: "05-Apr-2025",
+    report:
+      "/uploads/documents/electrical_mous/MOU_IRobots_Innovative_2025.pdf",
+  },
+  {
+    no: "2.",
+    org: "TATA Power Skill Development Institute (TPSDI), Shahad Mumbai",
+    date: "21-Jun-2024",
+    report: "/uploads/documents/electrical_mous/MOU_TPSDI_Mumbai_2024.pdf",
+  },
+  {
+    no: "3.",
+    org: "Adani Electricity Mumbai Limited, ADTPS, Dahanu",
+    date: "01-Jun-2024",
+    report:
+      "/uploads/documents/electrical_mous/MOU_Adani_ADTPS_Dahanu_2024.pdf",
+  },
+  {
+    no: "4.",
+    org: "Mew Technology, Bengaluru",
+    date: "04-Mar-2024",
+    report:
+      "/uploads/documents/electrical_mous/MOU_Mew_Technology_Bengaluru_2024.pdf",
+  },
+  {
+    no: "5.",
+    org: "Samarthan System Private Limited, Pune",
+    date: "10-Jan-2024",
+    report:
+      "/uploads/documents/electrical_mous/MOU_Samarthan_System_Pune_2024.pdf",
+  },
+  {
+    no: "6.",
+    org: "SCR Elektronics, Mumbai",
+    date: "08-Feb-2023",
+    report:
+      "/uploads/documents/electrical_mous/MOU_SCR_Elektronics_Mumbai_2023.pdf",
+  },
+  {
+    no: "7.",
+    org: "Mitsubishi Electric India Private Limited",
+    date: "06-Jan-2023",
+    report:
+      "/uploads/documents/electrical_mous/MOU_Mitsubishi_Electric_2023.pdf",
+  },
+  {
+    no: "8.",
+    org: "Adani Electricity Mumbai Limited, ADTPS, Dahanu",
+    date: "12-Feb-2022",
+    report:
+      "/uploads/documents/electrical_mous/MOU_Adani_ADTPS_Dahanu_2022.pdf",
+  },
+  {
+    no: "9.",
+    org: "ISIE INDIA, Noida",
+    date: "18-Jan-2022",
+    report: "/uploads/documents/electrical_mous/MOU_ISIE_India_Noida_2022.pdf",
+  },
+  {
+    no: "10.",
+    org: "VI Solutions, Bangalore",
+    date: "28-Jan-2021",
+    report:
+      "/uploads/documents/electrical_mous/MOU_VI_Solutions_Bangalore_2021.pdf",
+  },
+  {
+    no: "11.",
+    org: "SCR Elektronics, Mumbai",
+    date: "08-Feb-2020",
+    report:
+      "/uploads/documents/electrical_mous/MOU_SCR_Elektronics_Mumbai_2020.pdf",
+  },
+  {
+    no: "12.",
+    org: "TPSDI, Shahad Mumbai",
+    date: "08-Sep-2018",
+    report: "/uploads/documents/electrical_mous/MOU_TPSDI_Mumbai_2018.pdf",
+  },
 ];
 
 const electricalMousToMarkdown = (mous = []) => {
-  const lines = ["## MoUs", "", "| Name of the Organization | MOU Signing Date | MOU Copy / Report |", "|--------------------------|------------------|-------------------|"];
+  const lines = [
+    "## MoUs",
+    "",
+    "| Name of the Organization | MOU Signing Date | MOU Copy / Report |",
+    "|--------------------------|------------------|-------------------|",
+  ];
   if (!mous.length) {
     lines.push("| No MoUs added yet. | - | - |");
     return lines.join("\n");
@@ -563,12 +650,22 @@ const electricalMousToMarkdown = (mous = []) => {
 const parseElectricalMousMarkdown = (markdown = "") => {
   const text = String(markdown || "").trim();
   if (!text) return [];
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return dataLines
     .map((line) => electricalParseMarkdownTableRow(line))
     .filter((cells) => cells.length >= 3)
-    .map((cells) => ({ org: cells[0] || "", date: cells[1] || "", report: electricalExtractMarkdownLinkHref(cells.slice(2).join(" | ")) }))
+    .map((cells) => ({
+      org: cells[0] || "",
+      date: cells[1] || "",
+      report: electricalExtractMarkdownLinkHref(cells.slice(2).join(" | ")),
+    }))
     .filter((mou) => mou.org || mou.date || mou.report);
 };
 
@@ -576,7 +673,14 @@ const createElectricalMouId = () =>
   `electrical-mou-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 const getElectricalMouSignature = (mou = {}) =>
-  JSON.stringify({ org: String(mou?.org || "").trim().toLowerCase(), date: String(mou?.date || "").trim().toLowerCase() });
+  JSON.stringify({
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
+  });
 
 const electricalPatentsToMarkdown = (items = [], year = "2024-25") => {
   const lines = [
@@ -585,7 +689,11 @@ const electricalPatentsToMarkdown = (items = [], year = "2024-25") => {
     "| Title of Invention | Status | Application No. | Inventors | Link |",
     "|--------------------|--------|-----------------|-----------|------|",
   ];
-  if (!items.length) return [...lines, "| Add invention title | Published | Add application no. | Add inventors | - |"].join("\n");
+  if (!items.length)
+    return [
+      ...lines,
+      "| Add invention title | Published | Add application no. | Add inventors | - |",
+    ].join("\n");
   items.forEach((item) => {
     lines.push(
       `| ${item?.title || "-"} | ${item?.status || "-"} | ${item?.id || "-"} | ${item?.inventors || "-"} | ${item?.link ? `[Open](${item.link})` : "-"} |`,
@@ -594,13 +702,25 @@ const electricalPatentsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseElectricalPatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseElectricalPatentsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
+  );
   return {
     year,
     items: dataLines
@@ -613,7 +733,10 @@ const parseElectricalPatentsMarkdown = (markdown = "", fallbackYear = "2024-25")
         inventors: cells[3] || "",
         link: electricalExtractMarkdownLinkHref(cells.slice(4).join(" | ")),
       }))
-      .filter((item) => item.title || item.status || item.id || item.inventors || item.link),
+      .filter(
+        (item) =>
+          item.title || item.status || item.id || item.inventors || item.link,
+      ),
   };
 };
 
@@ -624,7 +747,11 @@ const electricalPublicationsToMarkdown = (items = [], year = "2024-25") => {
     "| Title of Paper | Authors | Journal Details | Link |",
     "|----------------|---------|-----------------|------|",
   ];
-  if (!items.length) return [...lines, "| Add paper title | Add authors | Add journal details | - |"].join("\n");
+  if (!items.length)
+    return [
+      ...lines,
+      "| Add paper title | Add authors | Add journal details | - |",
+    ].join("\n");
   items.forEach((item) => {
     lines.push(
       `| ${item?.title || "-"} | ${item?.authors || "-"} | ${item?.journal || "-"} | ${item?.link ? `[View](${item.link})` : "-"} |`,
@@ -633,13 +760,23 @@ const electricalPublicationsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseElectricalPublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseElectricalPublicationsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return {
     year,
     items: dataLines
@@ -651,7 +788,9 @@ const parseElectricalPublicationsMarkdown = (markdown = "", fallbackYear = "2024
         journal: cells[2] || "",
         link: electricalExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -662,7 +801,11 @@ const electricalCopyrightsToMarkdown = (items = [], year = "2024-25") => {
     "| Name of Faculty | Title of Work | Status | Link |",
     "|-----------------|---------------|--------|------|",
   ];
-  if (!items.length) return [...lines, "| Add faculty name | Add title of work | Published | - |"].join("\n");
+  if (!items.length)
+    return [
+      ...lines,
+      "| Add faculty name | Add title of work | Published | - |",
+    ].join("\n");
   items.forEach((item) => {
     lines.push(
       `| ${item?.name || "-"} | ${item?.title || "-"} | ${item?.status || "-"} | ${item?.link ? `[Open](${item.link})` : "-"} |`,
@@ -671,13 +814,23 @@ const electricalCopyrightsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseElectricalCopyrightsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseElectricalCopyrightsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return {
     year,
     items: dataLines
@@ -700,7 +853,11 @@ const electricalBooksToMarkdown = (items = [], year = "2024-25") => {
     "| Author(s) | Co-Authors | Title | Publisher | ISBN | Link |",
     "|-----------|------------|-------|-----------|------|------|",
   ];
-  if (!items.length) return [...lines, "| Add author names | - | Add title | Add publisher | Add ISBN | - |"].join("\n");
+  if (!items.length)
+    return [
+      ...lines,
+      "| Add author names | - | Add title | Add publisher | Add ISBN | - |",
+    ].join("\n");
   items.forEach((item) => {
     lines.push(
       `| ${item?.name || "-"} | ${item?.coAuthors || "-"} | ${item?.title || "-"} | ${item?.details || "-"} | ${item?.isbn || "-"} | ${item?.link ? `[Open](${item.link})` : "-"} |`,
@@ -709,13 +866,25 @@ const electricalBooksToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseElectricalBooksMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseElectricalBooksMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
+  );
   return {
     year,
     items: dataLines
@@ -729,7 +898,15 @@ const parseElectricalBooksMarkdown = (markdown = "", fallbackYear = "2024-25") =
         isbn: cells[4] || "",
         link: electricalExtractMarkdownLinkHref(cells.slice(5).join(" | ")),
       }))
-      .filter((item) => item.name || item.coAuthors || item.title || item.details || item.isbn || item.link),
+      .filter(
+        (item) =>
+          item.name ||
+          item.coAuthors ||
+          item.title ||
+          item.details ||
+          item.isbn ||
+          item.link,
+      ),
   };
 };
 
@@ -755,9 +932,12 @@ const ELECTRICAL_RESEARCH_FROM_MARKDOWN = {
 };
 
 const ELECTRICAL_RESEARCH_TEMPLATE_URLS = {
-  patents: "/uploads/documents/pride_templates/electrical_patents_template.docx",
-  publications: "/uploads/documents/pride_templates/electrical_publications_template.docx",
-  copyrights: "/uploads/documents/pride_templates/electrical_copyrights_template.docx",
+  patents:
+    "/uploads/documents/pride_templates/electrical_patents_template.docx",
+  publications:
+    "/uploads/documents/pride_templates/electrical_publications_template.docx",
+  copyrights:
+    "/uploads/documents/pride_templates/electrical_copyrights_template.docx",
   books: "/uploads/documents/pride_templates/electrical_books_template.docx",
 };
 
@@ -847,7 +1027,7 @@ const Electrical = () => {
     t: tBase,
   } = useDepartmentData("departments-electrical");
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [achievementTab, setAchievementTab] = useState("faculty");
   const [certificateLightbox, setCertificateLightbox] = useState(null);
@@ -896,7 +1076,7 @@ const Electrical = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
   const latestCourseMaterialRef = useRef(null);
@@ -950,7 +1130,9 @@ const Electrical = () => {
     ];
 
     if (!records.length) {
-      lines.push("| Add SIS ID | Add student name | Add class | Add training type | Add company | Add duration | Add start date | Add end date |");
+      lines.push(
+        "| Add SIS ID | Add student name | Add class | Add training type | Add company | Add duration | Add start date | Add end date |",
+      );
       return lines.join("\n");
     }
 
@@ -963,7 +1145,10 @@ const Electrical = () => {
     return lines.join("\n");
   };
 
-  const parseElectricalInternshipsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+  const parseElectricalInternshipsMarkdown = (
+    markdown = "",
+    fallbackYear = "2024-25",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) return { year: fallbackYear, records: [] };
 
@@ -1031,16 +1216,20 @@ const Electrical = () => {
     electricalIndustrialVisitsToMarkdown(visits);
 
   const persistElectricalIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createElectricalIndustrialVisitId()).trim(),
-      industries: Array.isArray(visit?.industries)
-        ? visit.industries.map((item) => String(item || "").trim()).filter(Boolean)
-        : [],
-      class: String(visit?.class || "").trim(),
-      date: String(visit?.date || "").trim(),
-      students: String(visit?.students || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
+      (visit) => ({
+        id: String(visit?.id || createElectricalIndustrialVisitId()).trim(),
+        industries: Array.isArray(visit?.industries)
+          ? visit.industries
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+          : [],
+        class: String(visit?.class || "").trim(),
+        date: String(visit?.date || "").trim(),
+        students: String(visit?.students || "").trim(),
+        report: String(visit?.report || "").trim(),
+      }),
+    );
 
     updateData("templateData.industrialVisits.items", normalizedVisits);
     updateData(
@@ -1106,7 +1295,10 @@ const Electrical = () => {
     if (!file) return;
 
     const uploadKey = `electrical-industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1167,12 +1359,14 @@ const Electrical = () => {
     );
 
   const persistElectricalIndustrialVisitGallery = (photos) => {
-    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map((photo) => ({
-      image: String(photo?.image || "").trim(),
-      caption: String(photo?.caption || "").trim(),
-      location: String(photo?.location || "").trim(),
-      date: String(photo?.date || "").trim(),
-    }));
+    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map(
+      (photo) => ({
+        image: String(photo?.image || "").trim(),
+        caption: String(photo?.caption || "").trim(),
+        location: String(photo?.location || "").trim(),
+        date: String(photo?.date || "").trim(),
+      }),
+    );
 
     updateData("templateData.industrialVisits.gallery", normalizedPhotos);
   };
@@ -1208,7 +1402,10 @@ const Electrical = () => {
     if (!file) return;
 
     const uploadKey = `electrical-gallery-${index}`;
-    setIndustrialVisitGalleryUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitGalleryUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitGalleryErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1227,9 +1424,16 @@ const Electrical = () => {
         throw new Error("Upload did not return a file URL.");
       }
 
-      updateElectricalIndustrialVisitPhoto(index, "image", response.data.fileUrl);
+      updateElectricalIndustrialVisitPhoto(
+        index,
+        "image",
+        response.data.fileUrl,
+      );
     } catch (error) {
-      console.error("Electrical industrial visit gallery upload failed:", error);
+      console.error(
+        "Electrical industrial visit gallery upload failed:",
+        error,
+      );
       setIndustrialVisitGalleryErrors((prev) => ({
         ...prev,
         [uploadKey]:
@@ -1253,7 +1457,10 @@ const Electrical = () => {
           tBase("templateData.mous.items", defaultElectricalMous) ||
           defaultElectricalMous,
       ),
-    ).map((mou) => ({ ...mou, id: String(mou?.id || createElectricalMouId()) }));
+    ).map((mou) => ({
+      ...mou,
+      id: String(mou?.id || createElectricalMouId()),
+    }));
 
   const getElectricalMousMarkdown = (mous = getElectricalMous()) =>
     electricalMousToMarkdown(mous);
@@ -1266,7 +1473,10 @@ const Electrical = () => {
       report: String(mou?.report || "").trim(),
     }));
     updateData("templateData.mous.items", normalizedMous);
-    updateData("templateData.mous.markdown", electricalMousToMarkdown(normalizedMous));
+    updateData(
+      "templateData.mous.markdown",
+      electricalMousToMarkdown(normalizedMous),
+    );
   };
 
   const handleElectricalMousMarkdownSave = (markdown) => {
@@ -1282,20 +1492,35 @@ const Electrical = () => {
     const usedIds = new Set();
     const mergedMous = parsed.map((mou, index) => {
       const signature = getElectricalMouSignature(mou);
-      let match = (signaturePool.get(signature) || []).find((item) => !usedIds.has(item.id));
+      let match = (signaturePool.get(signature) || []).find(
+        (item) => !usedIds.has(item.id),
+      );
       if (!match) {
         const fallback = existingMous[index];
         if (fallback && !usedIds.has(fallback.id)) match = fallback;
       }
       if (match?.id) usedIds.add(match.id);
-      return { id: match?.id || createElectricalMouId(), org: mou.org, date: mou.date, report: mou.report || match?.report || "" };
+      return {
+        id: match?.id || createElectricalMouId(),
+        org: mou.org,
+        date: mou.date,
+        report: mou.report || match?.report || "",
+      };
     });
     persistElectricalMous(mergedMous);
   };
 
   const addElectricalMouRowOnTop = () => {
     const mous = getElectricalMous();
-    persistElectricalMous([{ id: createElectricalMouId(), org: "New organization", date: "Add signing date", report: "" }, ...mous]);
+    persistElectricalMous([
+      {
+        id: createElectricalMouId(),
+        org: "New organization",
+        date: "Add signing date",
+        report: "",
+      },
+      ...mous,
+    ]);
   };
 
   const uploadElectricalMouReport = async (mouId, file) => {
@@ -1308,15 +1533,25 @@ const Electrical = () => {
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/file", formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.data.fileUrl) {
         const mous = getElectricalMous();
-        persistElectricalMous(mous.map((mou) => (mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou)));
+        persistElectricalMous(
+          mous.map((mou) =>
+            mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou,
+          ),
+        );
       }
     } catch (error) {
       console.error("Electrical MOU upload failed:", error);
-      setMouReportErrors((prev) => ({ ...prev, [uploadKey]: "Failed to upload report." }));
+      setMouReportErrors((prev) => ({
+        ...prev,
+        [uploadKey]: "Failed to upload report.",
+      }));
     } finally {
       setMouReportUploading((prev) => ({ ...prev, [uploadKey]: false }));
     }
@@ -1385,7 +1620,10 @@ const Electrical = () => {
     JSON.parse(
       JSON.stringify(
         contextData?.templateData?.research?.[section]?.[year] ||
-          tBase(`templateData.research.${section}.${year}`, ELECTRICAL_RESEARCH_DEFAULTS[section]?.[year] || []) ||
+          tBase(
+            `templateData.research.${section}.${year}`,
+            ELECTRICAL_RESEARCH_DEFAULTS[section]?.[year] || [],
+          ) ||
           ELECTRICAL_RESEARCH_DEFAULTS[section]?.[year] ||
           [],
       ),
@@ -1414,21 +1652,33 @@ const Electrical = () => {
       "2019-20",
       "2018-19",
     ];
-    const configuredYears = Array.isArray(tBase("templateData.researchYears", null))
+    const configuredYears = Array.isArray(
+      tBase("templateData.researchYears", null),
+    )
       ? tBase("templateData.researchYears", [])
       : [];
-    const storedResearch = contextData?.templateData?.research || tBase("templateData.research", {});
+    const storedResearch =
+      contextData?.templateData?.research || tBase("templateData.research", {});
     const storedResearchMarkdown =
-      contextData?.templateData?.researchMarkdown || tBase("templateData.researchMarkdown", {});
-    const discoveredYears = Object.keys(ELECTRICAL_RESEARCH_DEFAULTS).flatMap((section) => [
-      ...Object.keys(ELECTRICAL_RESEARCH_DEFAULTS[section] || {}),
-      ...Object.keys(storedResearch?.[section] && typeof storedResearch[section] === "object" ? storedResearch[section] : {}),
-      ...Object.keys(
-        storedResearchMarkdown?.[section] && typeof storedResearchMarkdown[section] === "object"
-          ? storedResearchMarkdown[section]
-          : {},
-      ),
-    ]);
+      contextData?.templateData?.researchMarkdown ||
+      tBase("templateData.researchMarkdown", {});
+    const discoveredYears = Object.keys(ELECTRICAL_RESEARCH_DEFAULTS).flatMap(
+      (section) => [
+        ...Object.keys(ELECTRICAL_RESEARCH_DEFAULTS[section] || {}),
+        ...Object.keys(
+          storedResearch?.[section] &&
+            typeof storedResearch[section] === "object"
+            ? storedResearch[section]
+            : {},
+        ),
+        ...Object.keys(
+          storedResearchMarkdown?.[section] &&
+            typeof storedResearchMarkdown[section] === "object"
+            ? storedResearchMarkdown[section]
+            : {},
+        ),
+      ],
+    );
     const years = normalizePlacementYears([
       ...defaultResearchYears,
       ...configuredYears,
@@ -1437,7 +1687,11 @@ const Electrical = () => {
     return years.length ? years : [...defaultResearchYears];
   };
 
-  const persistElectricalResearchSection = (section, items, year = patentsYear) => {
+  const persistElectricalResearchSection = (
+    section,
+    items,
+    year = patentsYear,
+  ) => {
     const normalizedItems = Array.isArray(items) ? items : [];
     updateData(`templateData.research.${section}.${year}`, normalizedItems);
     updateData(
@@ -1452,22 +1706,56 @@ const Electrical = () => {
   const handleElectricalResearchMarkdownSave = (markdown) => {
     const parser = ELECTRICAL_RESEARCH_FROM_MARKDOWN[patentsTab];
     const parsed = parser(markdown, patentsYear);
-    persistElectricalResearchSection(patentsTab, parsed.items || [], patentsYear);
+    persistElectricalResearchSection(
+      patentsTab,
+      parsed.items || [],
+      patentsYear,
+    );
   };
 
   const addElectricalResearchRowOnTop = (section = patentsTab) => {
     const items = getElectricalResearchItems(section, patentsYear);
     const blankRows = {
-      patents: { title: "Add invention title", status: "Published", id: "Add application no.", inventors: "Add inventors", link: "" },
-      publications: { title: "Add paper title", authors: "Add authors", journal: "Add journal details", link: "" },
-      copyrights: { name: "Add faculty name", title: "Add title of work", status: "Published", link: "" },
-      books: { name: "Add author names", coAuthors: "", title: "Add title", details: "Add publisher", isbn: "Add ISBN", link: "" },
+      patents: {
+        title: "Add invention title",
+        status: "Published",
+        id: "Add application no.",
+        inventors: "Add inventors",
+        link: "",
+      },
+      publications: {
+        title: "Add paper title",
+        authors: "Add authors",
+        journal: "Add journal details",
+        link: "",
+      },
+      copyrights: {
+        name: "Add faculty name",
+        title: "Add title of work",
+        status: "Published",
+        link: "",
+      },
+      books: {
+        name: "Add author names",
+        coAuthors: "",
+        title: "Add title",
+        details: "Add publisher",
+        isbn: "Add ISBN",
+        link: "",
+      },
     };
-    persistElectricalResearchSection(section, [blankRows[section] || {}, ...items], patentsYear);
+    persistElectricalResearchSection(
+      section,
+      [blankRows[section] || {}, ...items],
+      patentsYear,
+    );
   };
 
   const dynamicPatentsYears = getElectricalResearchYears();
-  const selectedResearchItems = getElectricalResearchItems(patentsTab, patentsYear);
+  const selectedResearchItems = getElectricalResearchItems(
+    patentsTab,
+    patentsYear,
+  );
   const selectedResearchMarkdown = getElectricalResearchMarkdownValue(
     patentsTab,
     patentsYear,
@@ -1497,7 +1785,10 @@ const Electrical = () => {
         createEmptyElectricalResearchMarkdown(section, normalizedYear),
       );
     });
-    updateData("templateData.researchYears", [normalizedYear, ...dynamicPatentsYears]);
+    updateData("templateData.researchYears", [
+      normalizedYear,
+      ...dynamicPatentsYears,
+    ]);
     setPatentsYear(normalizedYear);
     setNewResearchYear("");
     setResearchYearError("");
@@ -1524,9 +1815,13 @@ const Electrical = () => {
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/file", formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
-      if (!response.data.fileUrl) throw new Error("Upload did not return a file URL.");
+      if (!response.data.fileUrl)
+        throw new Error("Upload did not return a file URL.");
       updateData(`templateData.researchReports.${year}`, response.data.fileUrl);
     } catch (error) {
       console.error("Electrical research report upload failed:", error);
@@ -1721,7 +2016,10 @@ const Electrical = () => {
       [projectYear]: parsed.records[projectYear] || [],
     };
     persistUgProjects(mergedRecords, getUgProjectYears());
-    updateData(`templateData.ugProjectsMarkdownByYear.${projectYear}`, markdown);
+    updateData(
+      `templateData.ugProjectsMarkdownByYear.${projectYear}`,
+      markdown,
+    );
   };
 
   const handleAddUgProjectYear = () => {
@@ -1743,7 +2041,9 @@ const Electrical = () => {
     persistUgProjects(dataObj, [normalizedYear, ...ugProjectYears]);
     updateData(
       `templateData.ugProjectsMarkdownByYear.${normalizedYear}`,
-      electricalUgProjectsToMarkdown({ [normalizedYear]: [] }, [normalizedYear]),
+      electricalUgProjectsToMarkdown({ [normalizedYear]: [] }, [
+        normalizedYear,
+      ]),
     );
     setProjectYear(normalizedYear);
     setNewUgProjectYear("");
@@ -1756,7 +2056,8 @@ const Electrical = () => {
       ? t("internshipsYears", [])
       : [];
     const recordYears = Object.keys(
-      t("internships", defaultElectricalInternships) || defaultElectricalInternships,
+      t("internships", defaultElectricalInternships) ||
+        defaultElectricalInternships,
     ).filter(isAcademicYearKey);
 
     return [...new Set([...storedYears, ...recordYears])]
@@ -2037,7 +2338,9 @@ const Electrical = () => {
 
     if (typeof stored === "string" && stored.trim()) {
       const lines = stored.split("\n").map((line) => line.trim());
-      const tableStart = lines.findIndex((line) => line.startsWith("| Sr. No."));
+      const tableStart = lines.findIndex((line) =>
+        line.startsWith("| Sr. No."),
+      );
       if (tableStart !== -1) {
         return lines
           .slice(tableStart + 2)
@@ -2083,7 +2386,10 @@ const Electrical = () => {
           <MarkdownEditor
             value={markdown}
             onSave={(value) =>
-              updateData(`templateData.placements.details.${placementYear}`, value)
+              updateData(
+                `templateData.placements.details.${placementYear}`,
+                value,
+              )
             }
             showDocImport
             placeholder="Paste or import placement data (Markdown) here..."
@@ -2494,12 +2800,14 @@ const Electrical = () => {
   };
 
   const getAchievementDeletableUploadPath = (link) => {
-    if (typeof link !== "string" || !link.startsWith("/uploads/images/")) {
+    if (typeof link !== "string") {
       return null;
     }
-    if (link.includes("..")) return null;
-    if (!link.startsWith("/uploads/images/image-")) return null;
-    return link;
+    const normalizedLink = link.trim();
+    if (!normalizedLink.startsWith("/uploads/images/")) return null;
+    if (normalizedLink.includes("..")) return null;
+    if (normalizedLink.endsWith("/")) return null;
+    return normalizedLink;
   };
 
   const deleteAchievementFileIfNeeded = async (link) => {
@@ -2668,7 +2976,9 @@ const Electrical = () => {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -2710,7 +3020,8 @@ const Electrical = () => {
   const defaultLaboratories = [
     {
       name: "Electrical Machines Laboratory",
-      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_MachineLab.jpg",
+      image:
+        "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_MachineLab.jpg",
       resources:
         "DC Motors & Generators, Induction motors, Synchronous motor, Alternators, Transformers, Special machines, MG Sets",
       facilities:
@@ -2753,7 +3064,8 @@ const Electrical = () => {
     },
     {
       name: "Computer Laboratory",
-      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_Computer_Lab.jpg",
+      image:
+        "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_Computer_Lab.jpg",
       resources:
         "20 Desktop Computers, MATLAB, PSCAD, ETAP software's, d-SPACE Hardware kit",
       facilities: "",
@@ -2766,7 +3078,8 @@ const Electrical = () => {
     },
     {
       name: "PLC & Factory Automation Laboratory",
-      image: "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_PLCFA_Lab.jpg",
+      image:
+        "https://www.ssgmce.ac.in/images/elect_faculty/ELECT_PLCFA_Lab.jpg",
       resources: "Basic Fabrication Facility, Desktop Computers",
       facilities:
         "MATLAB, PSCAD, ETAP software, Transformer with various toppings, Induction Motor",
@@ -2794,7 +3107,8 @@ const Electrical = () => {
     },
     {
       name: "Center of Excellence in Renewable Energy",
-      image: "https://www.ssgmce.ac.in/images/elect_faculty/solar_research_center.jpg",
+      image:
+        "https://www.ssgmce.ac.in/images/elect_faculty/solar_research_center.jpg",
       resources:
         "Solar Research Lab, Sun Simulators, Battery Assembly setup, Solar panel Production facility, Solar Product Display gallery, Solar Radiation measurement facility, etc.",
       facilities: "",
@@ -3315,7 +3629,8 @@ const Electrical = () => {
     );
   };
 
-  const courseMaterialItems = t("courseMaterials", defaultCourseMaterials) || [];
+  const courseMaterialItems =
+    t("courseMaterials", defaultCourseMaterials) || [];
 
   useEffect(() => {
     if (
@@ -5865,7 +6180,9 @@ Upon successful completion of this course, students will be able to:
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300  flex relative ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               {/* Delete Button */}
@@ -6063,17 +6380,29 @@ Upon successful completion of this course, students will be able to:
                         </div>
                         <div className="grid gap-3 md:grid-cols-2">
                           <div>
-                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">Profile ID</div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Profile ID
+                            </div>
                             <EditableText
                               value={fac.id || createFacultySlug(fac.name)}
-                              onSave={(val) => updateFacultyMember(i, "id", createFacultySlug(val))}
+                              onSave={(val) =>
+                                updateFacultyMember(
+                                  i,
+                                  "id",
+                                  createFacultySlug(val),
+                                )
+                              }
                             />
                           </div>
                           <div>
-                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">Vidwan ID</div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Vidwan ID
+                            </div>
                             <EditableText
                               value={fac.vidwanId || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanId", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanId", val)
+                              }
                             />
                           </div>
                           {[
@@ -6090,10 +6419,22 @@ Upon successful completion of this course, students will be able to:
                             ["achievements", "Other Achievements", true],
                           ].map(([field, label, isList]) => (
                             <div key={field} className="md:col-span-2">
-                              <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">{label}</div>
+                              <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                                {label}
+                              </div>
                               <EditableText
-                                value={isList ? (fac[field] || []).join("\n") : fac[field] || ""}
-                                onSave={(val) => updateFacultyMember(i, field, isList ? splitFacultyMultiline(val) : val)}
+                                value={
+                                  isList
+                                    ? (fac[field] || []).join("\n")
+                                    : fac[field] || ""
+                                }
+                                onSave={(val) =>
+                                  updateFacultyMember(
+                                    i,
+                                    field,
+                                    isList ? splitFacultyMultiline(val) : val,
+                                  )
+                                }
                                 multiline
                                 richText={false}
                               />
@@ -6388,14 +6729,17 @@ Upon successful completion of this course, students will be able to:
           const ugProjectYears = getUgProjectYears();
           const ugProjectRecords = getUgProjectRecords();
           const ugProjectMarkdownByYear = getUgProjectMarkdownByYear();
-          const currentUgProjects = Array.isArray(ugProjectRecords?.[projectYear])
+          const currentUgProjects = Array.isArray(
+            ugProjectRecords?.[projectYear],
+          )
             ? ugProjectRecords[projectYear]
             : [];
           const selectedUgProjectsMarkdown =
             ugProjectMarkdownByYear?.[projectYear] ||
-            electricalUgProjectsToMarkdown({ [projectYear]: currentUgProjects }, [
-              projectYear,
-            ]);
+            electricalUgProjectsToMarkdown(
+              { [projectYear]: currentUgProjects },
+              [projectYear],
+            );
 
           return (
             <>
@@ -6520,7 +6864,8 @@ Upon successful completion of this course, students will be able to:
                     >
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                          <FaPlus className="text-ssgmce-blue" /> Add UG Project Session
+                          <FaPlus className="text-ssgmce-blue" /> Add UG Project
+                          Session
                         </h3>
                         <button
                           onClick={() => {
@@ -6536,7 +6881,8 @@ Upon successful completion of this course, students will be able to:
                       <div className="space-y-4 mb-6">
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Academic Year <span className="text-red-500">*</span>
+                            Academic Year{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -6562,8 +6908,8 @@ Upon successful completion of this course, students will be able to:
                           <p className="text-sm text-blue-800">
                             <strong>Note:</strong> After adding the session, you
                             will get an empty markdown editor with the same UG
-                            Projects table structure and DOCX import support
-                            for that session.
+                            Projects table structure and DOCX import support for
+                            that session.
                           </p>
                         </div>
                       </div>
@@ -6675,7 +7021,9 @@ Upon successful completion of this course, students will be able to:
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -6889,9 +7237,7 @@ Upon successful completion of this course, students will be able to:
             <button
               onClick={() =>
                 setActivitiesVisible((prev) =>
-                  prev >= activitiesData.length
-                    ? 6
-                    : prev + 6,
+                  prev >= activitiesData.length ? 6 : prev + 6,
                 )
               }
               className="px-8 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
@@ -6951,8 +7297,7 @@ Upon successful completion of this course, students will be able to:
                     <FaChevronLeft />
                   </button>
                 )}
-                {lightboxActivity <
-                  activitiesData.length - 1 && (
+                {lightboxActivity < activitiesData.length - 1 && (
                   <button
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-white text-3xl bg-black/40 rounded-full p-2 hover:bg-black/60"
                     onClick={() =>
@@ -7159,7 +7504,10 @@ Upon successful completion of this course, students will be able to:
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -7399,7 +7747,9 @@ Upon successful completion of this course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -7556,7 +7906,9 @@ Upon successful completion of this course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -7679,7 +8031,11 @@ Upon successful completion of this course, students will be able to:
               {courseMaterialItems.map((material, i) => (
                 <div
                   key={i}
-                  ref={i === courseMaterialItems.length - 1 ? latestCourseMaterialRef : null}
+                  ref={
+                    i === courseMaterialItems.length - 1
+                      ? latestCourseMaterialRef
+                      : null
+                  }
                   className="p-6"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -7837,7 +8193,9 @@ Upon successful completion of this course, students will be able to:
                           sn: String(index + 1).padStart(2, "0"),
                         }));
                         const nextMarkdown =
-                          electricalInnovativePracticesToMarkdown(nextPractices);
+                          electricalInnovativePracticesToMarkdown(
+                            nextPractices,
+                          );
                         updateData(
                           "templateData.innovativePractices.markdown",
                           nextMarkdown,
@@ -7846,7 +8204,10 @@ Upon successful completion of this course, students will be able to:
                           "templateData.innovativePractices.items",
                           nextPractices,
                         );
-                        updateData("innovativePractices.markdown", nextMarkdown);
+                        updateData(
+                          "innovativePractices.markdown",
+                          nextMarkdown,
+                        );
                         updateData("innovativePractices", nextPractices);
                       }}
                       className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
@@ -7859,8 +8220,14 @@ Upon successful completion of this course, students will be able to:
                     value={md}
                     onSave={(v) => {
                       const parsed = electricalMarkdownToInnovativePractices(v);
-                      updateData("templateData.innovativePractices.markdown", v);
-                      updateData("templateData.innovativePractices.items", parsed);
+                      updateData(
+                        "templateData.innovativePractices.markdown",
+                        v,
+                      );
+                      updateData(
+                        "templateData.innovativePractices.items",
+                        parsed,
+                      );
                       updateData("innovativePractices.markdown", v);
                       updateData("innovativePractices", parsed);
                     }}
@@ -7909,7 +8276,9 @@ Upon successful completion of this course, students will be able to:
                               className="px-6 py-4 text-center whitespace-nowrap"
                               style={{ color: "#003366" }}
                             >
-                              <span className="font-medium">{item.faculty}</span>
+                              <span className="font-medium">
+                                {item.faculty}
+                              </span>
                             </td>
                             <td className="px-6 py-4 text-gray-700">
                               {item.subject}
@@ -7945,9 +8314,8 @@ Upon successful completion of this course, students will be able to:
     "industrial-visits": (() => {
       const industrialVisitPhotos = getElectricalIndustrialVisitGallery();
       const industrialVisitTable = getElectricalIndustrialVisits();
-      const industrialVisitsMarkdown = getElectricalIndustrialVisitsMarkdown(
-        industrialVisitTable,
-      );
+      const industrialVisitsMarkdown =
+        getElectricalIndustrialVisitsMarkdown(industrialVisitTable);
 
       return (
         <div className="space-y-10">
@@ -7969,7 +8337,9 @@ Upon successful completion of this course, students will be able to:
               <>
                 <div className="flex items-center gap-3 mb-4">
                   <FaImages className="text-2xl text-ssgmce-blue" />
-                  <h4 className="text-xl font-bold text-gray-800">Visit Gallery</h4>
+                  <h4 className="text-xl font-bold text-gray-800">
+                    Visit Gallery
+                  </h4>
                   <span className="text-sm font-medium text-ssgmce-blue bg-blue-50 px-3 py-1 rounded-full">
                     {industrialVisitPhotos.length} Photos
                   </span>
@@ -8023,7 +8393,8 @@ Upon successful completion of this course, students will be able to:
                       Manage Visit Gallery
                     </h5>
                     <p className="text-sm text-gray-500 mt-1">
-                      Add new visit photos and update the caption, location, and date for each gallery item.
+                      Add new visit photos and update the caption, location, and
+                      date for each gallery item.
                     </p>
                   </div>
                   <button
@@ -8050,7 +8421,9 @@ Upon successful completion of this course, students will be able to:
                               {photo.image ? (
                                 <img
                                   src={resolveUploadedAssetUrl(photo.image)}
-                                  alt={photo.caption || `Visit photo ${idx + 1}`}
+                                  alt={
+                                    photo.caption || `Visit photo ${idx + 1}`
+                                  }
                                   className="h-full w-full object-cover"
                                 />
                               ) : (
@@ -8068,12 +8441,17 @@ Upon successful completion of this course, students will be able to:
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
-                                disabled={industrialVisitGalleryUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitGalleryUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
                                   if (file) {
-                                    uploadElectricalIndustrialVisitPhoto(idx, file);
+                                    uploadElectricalIndustrialVisitPhoto(
+                                      idx,
+                                      file,
+                                    );
                                   }
                                 }}
                               />
@@ -8144,7 +8522,9 @@ Upon successful completion of this course, students will be able to:
                           <div className="flex lg:w-32 lg:justify-end">
                             <button
                               type="button"
-                              onClick={() => deleteElectricalIndustrialVisitPhoto(idx)}
+                              onClick={() =>
+                                deleteElectricalIndustrialVisitPhoto(idx)
+                              }
                               className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
                             >
                               <FaTrash className="text-xs" />
@@ -8200,7 +8580,9 @@ Upon successful completion of this course, students will be able to:
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
-                    src={resolveUploadedAssetUrl(industrialVisitPhotos[ivLightbox].image)}
+                    src={resolveUploadedAssetUrl(
+                      industrialVisitPhotos[ivLightbox].image,
+                    )}
                     alt={industrialVisitPhotos[ivLightbox].caption}
                     className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
                   />
@@ -8330,7 +8712,8 @@ Upon successful completion of this course, students will be able to:
                           Edit Industrial Visits in Markdown
                         </h4>
                         <p className="text-sm text-gray-500 mt-1">
-                          Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
+                          Serial numbers are automatic now. Add a new blank row
+                          on top, then edit only the actual visit details.
                         </p>
                       </div>
                       <button
@@ -8356,7 +8739,8 @@ Upon successful completion of this course, students will be able to:
                       Optional Detailed Reports
                     </h4>
                     <p className="text-sm text-gray-500 mt-1">
-                      Upload a detailed report only for the visit rows that need one.
+                      Upload a detailed report only for the visit rows that need
+                      one.
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -8400,12 +8784,17 @@ Upon successful completion of this course, students will be able to:
                                 type="file"
                                 accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png"
                                 className="hidden"
-                                disabled={industrialVisitReportUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitReportUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
                                   if (file) {
-                                    uploadElectricalIndustrialVisitReport(visit.id, file);
+                                    uploadElectricalIndustrialVisitReport(
+                                      visit.id,
+                                      file,
+                                    );
                                   }
                                 }}
                               />
@@ -8437,8 +8826,9 @@ Upon successful completion of this course, students will be able to:
               <div className="text-center mb-8">
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Strategic partnerships with industry leaders to enhance learning
-                  outcomes and provide students with real-world exposure.
+                  Strategic partnerships with industry leaders to enhance
+                  learning outcomes and provide students with real-world
+                  exposure.
                 </p>
               </div>
               <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
@@ -8446,21 +8836,41 @@ Upon successful completion of this course, students will be able to:
                   <table className="w-full text-sm">
                     <thead className="bg-ssgmce-blue text-white">
                       <tr>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">Sr. No.</th>
-                        <th className="px-6 py-4 text-left font-bold">Name of the Organization</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Signing Date</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Copy / Report</th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          Sr. No.
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">
+                          Name of the Organization
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Signing Date
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Copy / Report
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {mous.map((mou, idx) => (
-                        <tr key={mou.id || idx} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-gray-900">{idx + 1}.</td>
+                        <tr
+                          key={mou.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {idx + 1}.
+                          </td>
                           <td className="px-6 py-4 text-gray-700">{mou.org}</td>
-                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{mou.date}</td>
+                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                            {mou.date}
+                          </td>
                           <td className="px-6 py-4">
                             {mou.report ? (
-                              <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors">
+                              <a
+                                href={mou.report}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors"
+                              >
                                 <FaFileAlt className="mr-1.5" />
                                 View Document
                               </a>
@@ -8480,53 +8890,98 @@ Upon successful completion of this course, students will be able to:
                     <div className="mb-4">
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-800">Edit MoUs in Markdown</h4>
-                          <p className="text-sm text-gray-500 mt-1">Serial numbers are automatic now. Add a new blank row on top, then edit only the actual MoU details.</p>
+                          <h4 className="text-lg font-bold text-gray-800">
+                            Edit MoUs in Markdown
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual MoU details.
+                          </p>
                         </div>
-                        <button type="button" onClick={addElectricalMouRowOnTop} className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange">
+                        <button
+                          type="button"
+                          onClick={addElectricalMouRowOnTop}
+                          className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
+                        >
                           <FaPlus className="text-xs" />
                           Add New Row On Top
                         </button>
                       </div>
                     </div>
-                    <MarkdownEditor value={mousMarkdown} onSave={handleElectricalMousMarkdownSave} placeholder="MoUs table without serial-number column (GFM Markdown)..." />
+                    <MarkdownEditor
+                      value={mousMarkdown}
+                      onSave={handleElectricalMousMarkdownSave}
+                      placeholder="MoUs table without serial-number column (GFM Markdown)..."
+                    />
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
                     <div className="mb-4">
-                      <h4 className="text-lg font-bold text-gray-800">Upload MoU PDF / Report</h4>
-                      <p className="text-sm text-gray-500 mt-1">Upload the PDF only for the row you want to attach a document to.</p>
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Upload MoU PDF / Report
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Upload the PDF only for the row you want to attach a
+                        document to.
+                      </p>
                     </div>
                     <div className="space-y-3">
                       {mous.map((mou, idx) => {
                         const uploadKey = `electrical-mou-${mou.id}`;
                         return (
-                          <div key={mou.id || idx} className="rounded-lg border border-gray-200 p-4">
+                          <div
+                            key={mou.id || idx}
+                            className="rounded-lg border border-gray-200 p-4"
+                          >
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                               <div>
-                                <p className="text-sm font-semibold text-gray-800">{idx + 1}. {mou.org || "MoU"}</p>
-                                <p className="text-xs text-gray-500">{mou.date || "Signing date not set"}</p>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {idx + 1}. {mou.org || "MoU"}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {mou.date || "Signing date not set"}
+                                </p>
                               </div>
                               <div className="flex items-center gap-3">
                                 {mou.report ? (
-                                  <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange">
+                                  <a
+                                    href={mou.report}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
+                                  >
                                     <FaFileAlt className="text-xs" />
                                     Current Document
                                   </a>
                                 ) : (
-                                  <span className="text-xs text-gray-400">No document uploaded</span>
+                                  <span className="text-xs text-gray-400">
+                                    No document uploaded
+                                  </span>
                                 )}
                                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
                                   <FaUpload className="text-xs" />
-                                  {mouReportUploading[uploadKey] ? "Uploading..." : "Upload PDF"}
-                                  <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={mouReportUploading[uploadKey]} onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) uploadElectricalMouReport(mou.id, file);
-                                    e.target.value = "";
-                                  }} />
+                                  {mouReportUploading[uploadKey]
+                                    ? "Uploading..."
+                                    : "Upload PDF"}
+                                  <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    disabled={mouReportUploading[uploadKey]}
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file)
+                                        uploadElectricalMouReport(mou.id, file);
+                                      e.target.value = "";
+                                    }}
+                                  />
                                 </label>
                               </div>
                             </div>
-                            {mouReportErrors[uploadKey] ? <p className="mt-2 text-xs text-red-600">{mouReportErrors[uploadKey]}</p> : null}
+                            {mouReportErrors[uploadKey] ? (
+                              <p className="mt-2 text-xs text-red-600">
+                                {mouReportErrors[uploadKey]}
+                              </p>
+                            ) : null}
                           </div>
                         );
                       })}
@@ -8631,32 +9086,30 @@ Upon successful completion of this course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pat, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-green-50/30 transition-colors group"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pat.title}
-                                <span
-                                  className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
-                                >
-                                  {pat.status}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
-                                {pat.id}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-right">
-                                {pat.inventors}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pat, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-green-50/30 transition-colors group"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pat.title}
+                              <span
+                                className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                              >
+                                {pat.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
+                              {pat.id}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-right">
+                              {pat.inventors}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8736,44 +9189,40 @@ Upon successful completion of this course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pub, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pub.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {pub.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {pub.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {pub.link ? (
-                                  <a
-                                    href={pub.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    —
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pub, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pub.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {pub.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {pub.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {pub.link ? (
+                                <a
+                                  href={pub.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">—</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8850,29 +9299,27 @@ Upon successful completion of this course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.title}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((cr, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.title}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8952,31 +9399,29 @@ Upon successful completion of this course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (book, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-teal-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {book.name}
-                                {book.coAuthors ? `, ${book.coAuthors}` : ""}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {book.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {book.details}
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
-                                {book.isbn || "—"}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((book, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-teal-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {book.name}
+                              {book.coAuthors ? `, ${book.coAuthors}` : ""}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {book.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {book.details}
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
+                              {book.isbn || "—"}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -9061,7 +9506,9 @@ Upon successful completion of this course, students will be able to:
                     className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 md:flex-row md:items-center md:justify-between"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-gray-800">{year}</p>
+                      <p className="text-sm font-semibold text-gray-800">
+                        {year}
+                      </p>
                       {reportUrl ? (
                         <a
                           href={reportUrl}
@@ -9081,7 +9528,9 @@ Upon successful completion of this course, students will be able to:
                     <div className="flex flex-col items-start gap-2 md:items-end">
                       <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-r from-[#003366] to-[#004d99] px-4 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:from-[#004d99] hover:to-[#0066cc] hover:shadow-lg">
                         <FaUpload className="text-yellow-300" />
-                        {researchReportUploading[uploadKey] ? "Uploading..." : "Upload Report"}
+                        {researchReportUploading[uploadKey]
+                          ? "Uploading..."
+                          : "Upload Report"}
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx"
@@ -9090,7 +9539,8 @@ Upon successful completion of this course, students will be able to:
                           onChange={(event) => {
                             const file = event.target.files?.[0];
                             event.target.value = "";
-                            if (file) uploadElectricalResearchReport(year, file);
+                            if (file)
+                              uploadElectricalResearchReport(year, file);
                           }}
                         />
                       </label>
@@ -9202,7 +9652,9 @@ Upon successful completion of this course, students will be able to:
                       <th className="px-3 py-4 text-left font-bold">
                         Name of Company
                       </th>
-                      <th className="px-3 py-4 text-left font-bold">Duration</th>
+                      <th className="px-3 py-4 text-left font-bold">
+                        Duration
+                      </th>
                       <th className="px-3 py-4 text-left font-bold whitespace-nowrap">
                         Start Date
                       </th>
@@ -9213,12 +9665,19 @@ Upon successful completion of this course, students will be able to:
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {currentInternships.map((intern, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={idx}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
                         <td className="px-3 py-3 font-medium text-gray-900">
                           {idx + 1}
                         </td>
-                        <td className="px-3 py-3 text-gray-700">{intern.sis}</td>
-                        <td className="px-3 py-3 text-gray-700">{intern.name}</td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.sis}
+                        </td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.name}
+                        </td>
                         <td className="px-3 py-3 text-gray-700 text-center whitespace-nowrap">
                           {intern.class}
                         </td>
@@ -9651,14 +10110,17 @@ Upon successful completion of this course, students will be able to:
                       Enter the academic year in format YYYY-YY.
                     </p>
                     {researchYearError ? (
-                      <p className="text-xs text-red-600 mt-2">{researchYearError}</p>
+                      <p className="text-xs text-red-600 mt-2">
+                        {researchYearError}
+                      </p>
                     ) : null}
                   </div>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-800">
                       <strong>Note:</strong> The new session will be created for
                       patents, publications, copyrights, and books with an empty
-                      markdown table plus DOCX import and template download support.
+                      markdown table plus DOCX import and template download
+                      support.
                     </p>
                   </div>
                 </div>
@@ -9708,8 +10170,9 @@ const normalizeElectricalActivity = (activity = {}) => ({
   image: String(activity.image || "").trim(),
 });
 
-const defaultElectricalActivityCards =
-  defaultActivities.map(normalizeElectricalActivity);
+const defaultElectricalActivityCards = defaultActivities.map(
+  normalizeElectricalActivity,
+);
 
 const getRenderedElectricalActivityImage = (activity = {}, index = -1) => {
   const currentImage = String(activity?.image || "").trim();

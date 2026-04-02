@@ -29,6 +29,9 @@ const allowedOrigins = Array.from(
   ),
 );
 
+const isLocalDevOrigin = (origin = "") =>
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(String(origin || ""));
+
 const securityHeaders = (req, res, next) => {
   const cspDirectives = [
     "default-src 'self'",
@@ -46,7 +49,10 @@ const securityHeaders = (req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()",
+  );
   res.setHeader("X-XSS-Protection", "1; mode=block");
   res.setHeader("Content-Security-Policy", cspDirectives.join("; "));
 
@@ -58,7 +64,11 @@ app.use(securityHeaders);
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        isLocalDevOrigin(origin)
+      ) {
         return callback(null, true);
       }
       return callback(new Error("Origin not allowed by CORS"));
@@ -165,7 +175,8 @@ app.use((err, req, res, next) => {
   // Handle multer errors
   if (err.code === "LIMIT_FILE_SIZE") {
     const isDocumentRoute =
-      req.path.includes("/upload/file") || req.path.includes("/upload/nirf-pdf");
+      req.path.includes("/upload/file") ||
+      req.path.includes("/upload/nirf-pdf");
     return res.status(400).json({
       success: false,
       error: isDocumentRoute

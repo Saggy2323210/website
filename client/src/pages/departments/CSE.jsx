@@ -151,7 +151,9 @@ const getFileNameFromUrl = (value = "") => {
 };
 
 const extractMarkdownLinkLabel = (value = "") => {
-  const markdownLinkMatch = String(value || "").match(/\[([^\]]+)\]\(([^)]+)\)/);
+  const markdownLinkMatch = String(value || "").match(
+    /\[([^\]]+)\]\(([^)]+)\)/,
+  );
   if (markdownLinkMatch?.[1]) return markdownLinkMatch[1].trim();
   return "";
 };
@@ -191,8 +193,7 @@ const parseUgProjectsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
     const tableLines = lines.filter((line) => line.startsWith("|"));
     const dataLines = tableLines.filter(
       (line, index) =>
-        index > 1 &&
-        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+        index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
     );
 
     records[normalizedYear] = dataLines
@@ -204,10 +205,7 @@ const parseUgProjectsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         link: extractMarkdownLinkHref(cells.slice(2).join(" | ")),
         fileName: extractMarkdownLinkLabel(cells.slice(2).join(" | ")),
       }))
-      .filter(
-        (project) =>
-          project.id || project.title || project.link,
-      );
+      .filter((project) => project.id || project.title || project.link);
 
     if (!years.includes(normalizedYear)) {
       years.push(normalizedYear);
@@ -226,7 +224,9 @@ const internshipsToMarkdown = (records = [], year = "2024-25") => {
   ];
 
   if (!records.length) {
-    lines.push("| Add SIS ID | Add intern name | Add organization | Add class | Add duration | Add stipend |");
+    lines.push(
+      "| Add SIS ID | Add intern name | Add organization | Add class | Add duration | Add stipend |",
+    );
     return lines.join("\n");
   }
 
@@ -322,7 +322,10 @@ const defaultIndustrialVisits = [
   },
   {
     sn: "04",
-    industries: ["Value momentum, Hyderabad", "Microsoft Corporation , Hyderabad"],
+    industries: [
+      "Value momentum, Hyderabad",
+      "Microsoft Corporation , Hyderabad",
+    ],
     class: "Third Year",
     date: "23-01-2017 to 24-01-2017",
     students: "53",
@@ -536,11 +539,21 @@ const createIndustrialVisitId = () =>
 const getIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
     industries: (Array.isArray(visit?.industries) ? visit.industries : [])
-      .map((item) => String(item || "").trim().toLowerCase())
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
       .filter(Boolean),
-    class: String(visit?.class || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
-    students: String(visit?.students || "").trim().toLowerCase(),
+    class: String(visit?.class || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
+    students: String(visit?.students || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const mousToMarkdown = (mous = []) => {
@@ -558,9 +571,7 @@ const mousToMarkdown = (mous = []) => {
 
   mous.forEach((mou) => {
     const reportCell = mou?.report ? `[View Document](${mou.report})` : "-";
-    lines.push(
-      `| ${mou?.org || "-"} | ${mou?.date || "-"} | ${reportCell} |`,
-    );
+    lines.push(`| ${mou?.org || "-"} | ${mou?.date || "-"} | ${reportCell} |`);
   });
 
   return lines.join("\n");
@@ -577,8 +588,7 @@ const parseMousMarkdown = (markdown = "") => {
 
   const dataLines = tableLines.filter(
     (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
   );
 
   return dataLines
@@ -597,8 +607,12 @@ const createMouId = () =>
 
 const getMouSignature = (mou = {}) =>
   JSON.stringify({
-    org: String(mou?.org || "").trim().toLowerCase(),
-    date: String(mou?.date || "").trim().toLowerCase(),
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const patentsToMarkdown = (items = [], year = "2024-25") => {
@@ -610,7 +624,9 @@ const patentsToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add invention title | Published | Add application no. | Add inventors | - |");
+    lines.push(
+      "| Add invention title | Published | Add application no. | Add inventors | - |",
+    );
     return lines.join("\n");
   }
 
@@ -637,7 +653,9 @@ const parsePatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
   const dataLines = tableLines.filter(
     (line, index) =>
       index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
   );
 
   return {
@@ -652,7 +670,10 @@ const parsePatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         inventors: cells[3] || "",
         link: extractMarkdownLinkHref(cells.slice(4).join(" | ")),
       }))
-      .filter((item) => item.title || item.status || item.id || item.inventors || item.link),
+      .filter(
+        (item) =>
+          item.title || item.status || item.id || item.inventors || item.link,
+      ),
   };
 };
 
@@ -665,7 +686,9 @@ const publicationsToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add journal or conference | - |");
+    lines.push(
+      "| Add paper title | Add authors | Add journal or conference | - |",
+    );
     return lines.join("\n");
   }
 
@@ -706,7 +729,9 @@ const parsePublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         journal: cells[2] || "",
         link: extractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -773,7 +798,9 @@ const booksToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add author names | - | Add title | Add publisher | Add ISBN | - |");
+    lines.push(
+      "| Add author names | - | Add title | Add publisher | Add ISBN | - |",
+    );
     return lines.join("\n");
   }
 
@@ -800,7 +827,9 @@ const parseBooksMarkdown = (markdown = "", fallbackYear = "2024-25") => {
   const dataLines = tableLines.filter(
     (line, index) =>
       index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
   );
 
   return {
@@ -853,8 +882,7 @@ const RESEARCH_TEMPLATE_URLS = {
   patents: "/uploads/documents/pride_templates/cse_patents_template.docx",
   publications:
     "/uploads/documents/pride_templates/cse_publications_template.docx",
-  copyrights:
-    "/uploads/documents/pride_templates/cse_copyrights_template.docx",
+  copyrights: "/uploads/documents/pride_templates/cse_copyrights_template.docx",
   books: "/uploads/documents/pride_templates/cse_books_template.docx",
 };
 
@@ -877,7 +905,9 @@ const normalizeIndustrialVisits = (visits) => {
   }
 
   const serialized = visits
-    .flatMap((visit) => (Array.isArray(visit?.industries) ? visit.industries : []))
+    .flatMap((visit) =>
+      Array.isArray(visit?.industries) ? visit.industries : [],
+    )
     .join(" | ");
 
   if (hasIncorrectIndustrialVisitsSignature(serialized)) {
@@ -1004,7 +1034,11 @@ const cseActivitiesToMarkdown = (activities = []) =>
       [
         `## ${activity.title}`,
         formatActivityMarkdownField("Date", activity.date, true),
-        formatActivityMarkdownField("Participants", activity.participants, true),
+        formatActivityMarkdownField(
+          "Participants",
+          activity.participants,
+          true,
+        ),
         formatActivityMarkdownField("Organized by", activity.organizer, true),
         formatActivityMarkdownField("Resource Person", activity.resource, true),
         formatActivityMarkdownField("Image", activity.image, true),
@@ -1115,7 +1149,7 @@ const CSE = () => {
   const location = useLocation();
   // Department of Computer Science & Engineering Page
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
 
   // State for Vision/Mission/PEO section tabs
@@ -1145,7 +1179,7 @@ const CSE = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
 
@@ -1898,7 +1932,9 @@ const CSE = () => {
     return String(Number(startYear) + 1).slice(-2) === endSuffix;
   };
 
-  const storedPlacementYears = Array.isArray(t("templateData.placements.years", null))
+  const storedPlacementYears = Array.isArray(
+    t("templateData.placements.years", null),
+  )
     ? t("templateData.placements.years", [])
     : [];
   const storedPlacementDetails = t("templateData.placements.details", {});
@@ -2349,7 +2385,8 @@ const CSE = () => {
     );
   };
 
-  const courseMaterialItems = t("courseMaterials", defaultCourseMaterials) || [];
+  const courseMaterialItems =
+    t("courseMaterials", defaultCourseMaterials) || [];
 
   useEffect(() => {
     if (
@@ -2405,7 +2442,9 @@ const CSE = () => {
 
   const updateActivity = (index, field, value) => {
     const storedActivitiesMarkdown = t("activitiesMarkdown", "");
-    const parsedActivities = parseCseActivitiesMarkdown(storedActivitiesMarkdown);
+    const parsedActivities = parseCseActivitiesMarkdown(
+      storedActivitiesMarkdown,
+    );
     const sourceActivities = (
       parsedActivities.length
         ? parsedActivities
@@ -2476,10 +2515,9 @@ const CSE = () => {
     const markdownByYear = orderedYears.reduce((acc, year) => {
       acc[year] =
         existingMarkdownByYear?.[year] ||
-        cseUgProjectsToMarkdown(
-          { [year]: normalizedRecords[year] || [] },
-          [year],
-        );
+        cseUgProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [
+          year,
+        ]);
       return acc;
     }, {});
 
@@ -2638,23 +2676,29 @@ const CSE = () => {
 
   const getIndustrialVisits = () =>
     normalizeIndustrialVisits(
-      JSON.parse(JSON.stringify(t("industrialVisits.items", defaultIndustrialVisits))),
+      JSON.parse(
+        JSON.stringify(t("industrialVisits.items", defaultIndustrialVisits)),
+      ),
     );
 
   const getIndustrialVisitsMarkdown = (visits = getIndustrialVisits()) =>
     industrialVisitsToMarkdown(visits);
 
   const persistIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createIndustrialVisitId()).trim(),
-      industries: Array.isArray(visit?.industries)
-        ? visit.industries.map((item) => String(item || "").trim()).filter(Boolean)
-        : [],
-      class: String(visit?.class || "").trim(),
-      date: String(visit?.date || "").trim(),
-      students: String(visit?.students || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
+      (visit) => ({
+        id: String(visit?.id || createIndustrialVisitId()).trim(),
+        industries: Array.isArray(visit?.industries)
+          ? visit.industries
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+          : [],
+        class: String(visit?.class || "").trim(),
+        date: String(visit?.date || "").trim(),
+        students: String(visit?.students || "").trim(),
+        report: String(visit?.report || "").trim(),
+      }),
+    );
 
     updateData("industrialVisits.items", normalizedVisits);
     updateData(
@@ -2719,7 +2763,10 @@ const CSE = () => {
   const uploadIndustrialVisitReport = async (visitId, file) => {
     if (!file) return;
     const uploadKey = `industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -2876,7 +2923,10 @@ const CSE = () => {
   const getResearchItems = (section, year = researchYear) =>
     JSON.parse(
       JSON.stringify(
-        t(`research.${section}.${year}`, RESEARCH_DEFAULTS[section]?.[year] || []),
+        t(
+          `research.${section}.${year}`,
+          RESEARCH_DEFAULTS[section]?.[year] || [],
+        ),
       ),
     );
 
@@ -2897,12 +2947,14 @@ const CSE = () => {
       ? t("researchYears", [])
       : [];
 
-    const recordYears = Object.values(RESEARCH_DEFAULTS).flatMap((sectionDefaults) =>
-      Object.keys(sectionDefaults || {}),
+    const recordYears = Object.values(RESEARCH_DEFAULTS).flatMap(
+      (sectionDefaults) => Object.keys(sectionDefaults || {}),
     );
 
     const savedYears = Object.keys(t("research.patents", defaultPatents) || {})
-      .concat(Object.keys(t("research.publications", defaultPublications) || {}))
+      .concat(
+        Object.keys(t("research.publications", defaultPublications) || {}),
+      )
       .concat(Object.keys(t("research.copyrights", defaultCopyrights) || {}))
       .concat(Object.keys(t("research.books", defaultBooks) || {}));
 
@@ -3182,7 +3234,9 @@ const CSE = () => {
         });
       } else {
         const archives = JSON.parse(
-          JSON.stringify(t("newsletters.archives", defaultNewsletters.archives)),
+          JSON.stringify(
+            t("newsletters.archives", defaultNewsletters.archives),
+          ),
         );
         archives[index] = {
           ...archives[index],
@@ -3227,7 +3281,9 @@ const CSE = () => {
     : [];
   const selectedUgProjectsMarkdown =
     ugProjectMarkdownByYear?.[projectYear] ||
-    cseUgProjectsToMarkdown({ [projectYear]: currentUgProjects }, [projectYear]);
+    cseUgProjectsToMarkdown({ [projectYear]: currentUgProjects }, [
+      projectYear,
+    ]);
 
   useEffect(() => {
     if (!ugProjectYears.length) return;
@@ -3399,12 +3455,14 @@ const CSE = () => {
   };
 
   const getAchievementDeletableUploadPath = (link) => {
-    if (typeof link !== "string" || !link.startsWith("/uploads/images/")) {
+    if (typeof link !== "string") {
       return null;
     }
-    if (link.includes("..")) return null;
-    if (!link.startsWith("/uploads/images/image-")) return null;
-    return link;
+    const normalizedLink = link.trim();
+    if (!normalizedLink.startsWith("/uploads/images/")) return null;
+    if (normalizedLink.includes("..")) return null;
+    if (normalizedLink.endsWith("/")) return null;
+    return normalizedLink;
   };
 
   const deleteAchievementFileIfNeeded = async (link) => {
@@ -3535,7 +3593,9 @@ const CSE = () => {
   };
 
   const deleteActivityCard = (index) => {
-    updateActivityList((items) => items.filter((_, itemIndex) => itemIndex !== index));
+    updateActivityList((items) =>
+      items.filter((_, itemIndex) => itemIndex !== index),
+    );
   };
 
   const activityMarkdownComponents = {
@@ -3565,7 +3625,9 @@ const CSE = () => {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -4944,7 +5006,9 @@ const CSE = () => {
                         {isEditing ? (
                           <MarkdownEditor
                             value={activity.participants}
-                            onSave={(val) => updateActivity(idx, "participants", val)}
+                            onSave={(val) =>
+                              updateActivity(idx, "participants", val)
+                            }
                             placeholder="Add participant details..."
                           />
                         ) : (
@@ -4962,7 +5026,9 @@ const CSE = () => {
                         {isEditing ? (
                           <MarkdownEditor
                             value={activity.organizer}
-                            onSave={(val) => updateActivity(idx, "organizer", val)}
+                            onSave={(val) =>
+                              updateActivity(idx, "organizer", val)
+                            }
                             placeholder="Add organizer details..."
                           />
                         ) : (
@@ -4981,11 +5047,16 @@ const CSE = () => {
                           {isEditing ? (
                             <MarkdownEditor
                               value={activity.resource}
-                              onSave={(val) => updateActivity(idx, "resource", val)}
+                              onSave={(val) =>
+                                updateActivity(idx, "resource", val)
+                              }
                               placeholder="Add resource person details..."
                             />
                           ) : (
-                            renderActivityMarkdown(activity.resource, "Not specified")
+                            renderActivityMarkdown(
+                              activity.resource,
+                              "Not specified",
+                            )
                           )}
                         </div>
                       </div>
@@ -5048,9 +5119,7 @@ const CSE = () => {
                         <button
                           onClick={() =>
                             setLightboxActivity((prev) =>
-                              prev > 0
-                                ? prev - 1
-                                : activitiesData.length - 1,
+                              prev > 0 ? prev - 1 : activitiesData.length - 1,
                             )
                           }
                           className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
@@ -5060,9 +5129,7 @@ const CSE = () => {
                         <button
                           onClick={() =>
                             setLightboxActivity((prev) =>
-                              prev < activitiesData.length - 1
-                                ? prev + 1
-                                : 0,
+                              prev < activitiesData.length - 1 ? prev + 1 : 0,
                             )
                           }
                           className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
@@ -5211,62 +5278,65 @@ const CSE = () => {
           {isEditing ? (
             <div className="divide-y divide-gray-100">
               {courseMaterialItems.map((material, i) => (
-                  <div
-                    key={i}
-                    ref={i === courseMaterialItems.length - 1 ? latestCourseMaterialRef : null}
-                    className="p-6"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex min-w-0 flex-1 gap-4">
-                        <div className="w-10 flex-shrink-0 pt-2 text-center font-mono text-sm text-gray-400">
-                          {i + 1}
-                        </div>
-                        <div className="min-w-0 flex-1 space-y-4">
-                          <div>
-                            <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-500">
-                              Year / Class
-                            </label>
-                            <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
-                              <EditableText
-                                value={material.title}
-                                onSave={(val) =>
-                                  updateCourseMaterial(i, "title", val)
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-500">
-                              OneDrive Link
-                            </label>
-                            <textarea
-                              value={material.link || ""}
-                              onChange={(event) =>
-                                updateCourseMaterial(
-                                  i,
-                                  "link",
-                                  event.target.value,
-                                )
+                <div
+                  key={i}
+                  ref={
+                    i === courseMaterialItems.length - 1
+                      ? latestCourseMaterialRef
+                      : null
+                  }
+                  className="p-6"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex min-w-0 flex-1 gap-4">
+                      <div className="w-10 flex-shrink-0 pt-2 text-center font-mono text-sm text-gray-400">
+                        {i + 1}
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-4">
+                        <div>
+                          <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-500">
+                            Year / Class
+                          </label>
+                          <div className="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                            <EditableText
+                              value={material.title}
+                              onSave={(val) =>
+                                updateCourseMaterial(i, "title", val)
                               }
-                              rows={3}
-                              placeholder="Paste the OneDrive share link here..."
-                              className="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100"
                             />
                           </div>
                         </div>
+                        <div>
+                          <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-gray-500">
+                            OneDrive Link
+                          </label>
+                          <textarea
+                            value={material.link || ""}
+                            onChange={(event) =>
+                              updateCourseMaterial(
+                                i,
+                                "link",
+                                event.target.value,
+                              )
+                            }
+                            rows={3}
+                            placeholder="Paste the OneDrive share link here..."
+                            className="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition focus:border-orange-400 focus:bg-white focus:ring-2 focus:ring-orange-100"
+                          />
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => deleteCourseMaterial(i)}
-                        className="inline-flex flex-shrink-0 items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
-                      >
-                        <FaTrash className="text-xs" />
-                        Delete
-                      </button>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => deleteCourseMaterial(i)}
+                      className="inline-flex flex-shrink-0 items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
+                    >
+                      <FaTrash className="text-xs" />
+                      Delete
+                    </button>
                   </div>
-                ),
-              )}
+                </div>
+              ))}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -5284,31 +5354,30 @@ const CSE = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-sm">
                   {courseMaterialItems.map((material, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-orange-50/30 transition-colors"
-                      >
-                        <td className="px-6 py-4 text-center font-mono text-gray-400">
-                          {i + 1}
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="font-bold text-gray-800 block">
-                            {material.title}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <a
-                            href={material.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-ssgmce-orange hover:text-orange-700 font-medium text-xs border border-gray-200 hover:border-orange-400 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-all"
-                          >
-                            <FaDownload className="text-xs" /> Access OneDrive
-                          </a>
-                        </td>
-                      </tr>
-                    ),
-                  )}
+                    <tr
+                      key={i}
+                      className="hover:bg-orange-50/30 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-center font-mono text-gray-400">
+                        {i + 1}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="font-bold text-gray-800 block">
+                          {material.title}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <a
+                          href={material.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-ssgmce-orange hover:text-orange-700 font-medium text-xs border border-gray-200 hover:border-orange-400 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-all"
+                        >
+                          <FaDownload className="text-xs" /> Access OneDrive
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -5486,7 +5555,9 @@ const CSE = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group relative flex overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-300 hover:shadow-lg ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               {/* Delete Button */}
@@ -5523,7 +5594,9 @@ const CSE = () => {
                 <h4 className="text-lg font-bold text-gray-900 group-hover:text-ssgmce-blue transition-colors">
                   <EditableText
                     value={fac.name}
-                    onSave={(val) => updateFacultyWithFallbackId(i, "name", val)}
+                    onSave={(val) =>
+                      updateFacultyWithFallbackId(i, "name", val)
+                    }
                   />
                 </h4>
                 <div className="text-ssgmce-blue font-medium text-sm mb-3 uppercase tracking-wide text-[11px]">
@@ -5553,7 +5626,10 @@ const CSE = () => {
                           updateFaculty(
                             i,
                             "area",
-                            val.split(",").map((s) => s.trim()).filter(Boolean),
+                            val
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
                           )
                         }
                       />
@@ -5629,175 +5705,185 @@ const CSE = () => {
 
                     {expandedFacultyEditorIndex === i && (
                       <div className="rounded-lg border border-blue-100 bg-blue-50/60 p-3">
-                      <div className="text-[11px] font-semibold uppercase tracking-wide text-blue-700 mb-2">
-                        Detailed Profile Editor
-                      </div>
-                      <div className="grid gap-3 md:grid-cols-2">
-                        <div>
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Profile ID
-                          </div>
-                          <EditableText
-                            value={fac.id || createFacultySlug(fac.name)}
-                            onSave={(val) =>
-                              updateFaculty(i, "id", createFacultySlug(val))
-                            }
-                          />
+                        <div className="text-[11px] font-semibold uppercase tracking-wide text-blue-700 mb-2">
+                          Detailed Profile Editor
                         </div>
-                        <div>
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Vidwan ID
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Profile ID
+                            </div>
+                            <EditableText
+                              value={fac.id || createFacultySlug(fac.name)}
+                              onSave={(val) =>
+                                updateFaculty(i, "id", createFacultySlug(val))
+                              }
+                            />
                           </div>
-                          <EditableText
-                            value={fac.vidwanId || ""}
-                            onSave={(val) => updateFaculty(i, "vidwanId", val)}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Vidwan Link
+                          <div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Vidwan ID
+                            </div>
+                            <EditableText
+                              value={fac.vidwanId || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "vidwanId", val)
+                              }
+                            />
                           </div>
-                          <EditableText
-                            value={fac.vidwanLink || ""}
-                            onSave={(val) => updateFaculty(i, "vidwanLink", val)}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Qualification
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Vidwan Link
+                            </div>
+                            <EditableText
+                              value={fac.vidwanLink || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "vidwanLink", val)
+                              }
+                            />
                           </div>
-                          <EditableText
-                            value={fac.qualification || ""}
-                            onSave={(val) =>
-                              updateFaculty(i, "qualification", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Experience
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Qualification
+                            </div>
+                            <EditableText
+                              value={fac.qualification || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "qualification", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={fac.experience || ""}
-                            onSave={(val) => updateFaculty(i, "experience", val)}
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Scholar IDs
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Experience
+                            </div>
+                            <EditableText
+                              value={fac.experience || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "experience", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={fac.scholarIds || ""}
-                            onSave={(val) => updateFaculty(i, "scholarIds", val)}
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Research Areas
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Scholar IDs
+                            </div>
+                            <EditableText
+                              value={fac.scholarIds || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "scholarIds", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.area || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "area", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Courses Taught
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Research Areas
+                            </div>
+                            <EditableText
+                              value={(fac.area || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "area", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.coursesTaught || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "coursesTaught", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Membership
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Courses Taught
+                            </div>
+                            <EditableText
+                              value={(fac.coursesTaught || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "coursesTaught", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.membership || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "membership", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Publications
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Membership
+                            </div>
+                            <EditableText
+                              value={(fac.membership || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "membership", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.publications || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "publications", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Research & Development
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Publications
+                            </div>
+                            <EditableText
+                              value={(fac.publications || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "publications", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={fac.research || ""}
-                            onSave={(val) => updateFaculty(i, "research", val)}
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            FDP / STTP / Workshops
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Research & Development
+                            </div>
+                            <EditableText
+                              value={fac.research || ""}
+                              onSave={(val) =>
+                                updateFaculty(i, "research", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={fac.fdp || ""}
-                            onSave={(val) => updateFaculty(i, "fdp", val)}
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Fellowship / Awards
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              FDP / STTP / Workshops
+                            </div>
+                            <EditableText
+                              value={fac.fdp || ""}
+                              onSave={(val) => updateFaculty(i, "fdp", val)}
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.fellowship || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "fellowship", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
-                            Other Achievements
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Fellowship / Awards
+                            </div>
+                            <EditableText
+                              value={(fac.fellowship || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "fellowship", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
                           </div>
-                          <EditableText
-                            value={(fac.achievements || []).join("\n")}
-                            onSave={(val) =>
-                              updateFacultyArrayField(i, "achievements", val)
-                            }
-                            multiline
-                            richText={false}
-                          />
+                          <div className="md:col-span-2">
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Other Achievements
+                            </div>
+                            <EditableText
+                              value={(fac.achievements || []).join("\n")}
+                              onSave={(val) =>
+                                updateFacultyArrayField(i, "achievements", val)
+                              }
+                              multiline
+                              richText={false}
+                            />
+                          </div>
                         </div>
-                      </div>
                       </div>
                     )}
                   </div>
@@ -6629,7 +6715,9 @@ const CSE = () => {
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -6690,7 +6778,7 @@ const CSE = () => {
             parsedPractices && parsedPractices.length > 0
               ? parsedPractices
               : defaultPractices;
-          
+
           return (
             <motion.div
               initial={{ opacity: 0 }}
@@ -6725,7 +6813,10 @@ const CSE = () => {
                           "templateData.innovativePractices.items",
                           nextPractices,
                         );
-                        updateData("innovativePractices.markdown", nextMarkdown);
+                        updateData(
+                          "innovativePractices.markdown",
+                          nextMarkdown,
+                        );
                         updateData("innovativePractices", nextPractices);
                       }}
                       className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
@@ -6738,8 +6829,14 @@ const CSE = () => {
                     value={md}
                     onSave={(v) => {
                       const parsed = markdownToInnovativePractices(v);
-                      updateData("templateData.innovativePractices.markdown", v);
-                      updateData("templateData.innovativePractices.items", parsed);
+                      updateData(
+                        "templateData.innovativePractices.markdown",
+                        v,
+                      );
+                      updateData(
+                        "templateData.innovativePractices.items",
+                        parsed,
+                      );
                       updateData("innovativePractices.markdown", v);
                       updateData("innovativePractices", parsed);
                     }}
@@ -6788,7 +6885,9 @@ const CSE = () => {
                               className="px-6 py-4 text-center whitespace-nowrap"
                               style={{ color: "#003366" }}
                             >
-                              <span className="font-medium">{item.faculty}</span>
+                              <span className="font-medium">
+                                {item.faculty}
+                              </span>
                             </td>
                             <td className="px-6 py-4 text-gray-700">
                               {item.subject}
@@ -6830,183 +6929,197 @@ const CSE = () => {
 
           return (
             <>
-        <div className="text-center mb-8">
-          <h3 className="text-3xl font-bold text-gray-800 mb-3">
-            Industrial Visits
-          </h3>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Hands-on exposure to industry practices, technologies, and work
-            culture through structured visits to leading organizations.
-          </p>
-        </div>
-
-        {/* Table */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-ssgmce-blue text-white">
-                <tr>
-                  <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
-                    S.N.
-                  </th>
-                  <th className="px-6 py-4 text-left font-bold">
-                    Name of Industry Visited
-                  </th>
-                  <th className="px-6 py-4 text-left font-bold">Class</th>
-                  <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
-                    Date
-                  </th>
-                  <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
-                    No of Students
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {industrialVisits.map((visit, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {String(idx + 1).padStart(2, "0")}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="space-y-1">
-                        {visit.industries.map((ind, i) => (
-                          <div key={i} className="text-gray-700">
-                            {ind}
-                          </div>
-                        ))}
-                        {visit.report ? (
-                          <a
-                            href={visit.report}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-xs mt-2"
-                          >
-                            <FaFileAlt className="text-xs" />
-                            Detailed Report
-                          </a>
-                        ) : null}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700">{visit.class}</td>
-                    <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
-                      {visit.date}
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 text-center font-medium">
-                      {visit.students}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        {isEditing && (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <div className="mb-4">
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-800">
-                      Edit Industrial Visits in Markdown
-                    </h4>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={addIndustrialVisitRowOnTop}
-                    className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
-                  >
-                    <FaPlus className="text-xs" />
-                    Add New Row On Top
-                  </button>
-                </div>
-              </div>
-              <MarkdownEditor
-                value={industrialVisitsMarkdown}
-                onSave={handleIndustrialVisitsMarkdownSave}
-                placeholder="Industrial visits table without serial-number column (GFM Markdown)..."
-              />
-            </div>
-
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <div className="mb-4">
-                <h4 className="text-lg font-bold text-gray-800">
-                  Optional Detailed Reports
-                </h4>
-                <p className="text-sm text-gray-500 mt-1">
-                  Upload a detailed report only for the visits that have one.
-                  Otherwise, you can ignore it.
+              <div className="text-center mb-8">
+                <h3 className="text-3xl font-bold text-gray-800 mb-3">
+                  Industrial Visits
+                </h3>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Hands-on exposure to industry practices, technologies, and
+                  work culture through structured visits to leading
+                  organizations.
                 </p>
               </div>
-              <div className="space-y-3">
-                {industrialVisits.map((visit, idx) => {
-                  const uploadKey = `industrial-visit-${visit.id}`;
-                  return (
-                    <div
-                      key={visit.id || idx}
-                      className="rounded-lg border border-gray-200 p-4"
-                    >
-                      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-gray-800">
-                            {idx + 1}.{" "}
-                            {(visit.industries || []).join(", ") || "Industrial Visit"}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {visit.class || "Class not set"} | {visit.date || "Date not set"}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          {visit.report ? (
-                            <a
-                              href={visit.report}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
-                            >
-                              <FaFileAlt className="text-xs" />
-                              Current Report
-                            </a>
-                          ) : (
-                            <span className="text-xs text-gray-400">
-                              No report uploaded
-                            </span>
-                          )}
-                          <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
-                            <FaUpload className="text-xs" />
-                            {industrialVisitReportUploading[uploadKey]
-                              ? "Uploading..."
-                              : "Upload Report"}
-                            <input
-                              type="file"
-                              accept=".pdf,.doc,.docx"
-                              className="hidden"
-                              disabled={industrialVisitReportUploading[uploadKey]}
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  uploadIndustrialVisitReport(visit.id, file);
-                                }
-                                e.target.value = "";
-                              }}
-                            />
-                          </label>
-                        </div>
-                      </div>
-                      {industrialVisitReportErrors[uploadKey] ? (
-                        <p className="mt-2 text-xs text-red-600">
-                          {industrialVisitReportErrors[uploadKey]}
-                        </p>
-                      ) : null}
-                    </div>
-                  );
-                })}
+
+              {/* Table */}
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-ssgmce-blue text-white">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          S.N.
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">
+                          Name of Industry Visited
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">Class</th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          Date
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          No of Students
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {industrialVisits.map((visit, idx) => (
+                        <tr
+                          key={idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {String(idx + 1).padStart(2, "0")}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="space-y-1">
+                              {visit.industries.map((ind, i) => (
+                                <div key={i} className="text-gray-700">
+                                  {ind}
+                                </div>
+                              ))}
+                              {visit.report ? (
+                                <a
+                                  href={visit.report}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-xs mt-2"
+                                >
+                                  <FaFileAlt className="text-xs" />
+                                  Detailed Report
+                                </a>
+                              ) : null}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {visit.class}
+                          </td>
+                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                            {visit.date}
+                          </td>
+                          <td className="px-6 py-4 text-gray-700 text-center font-medium">
+                            {visit.students}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+              {isEditing && (
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <div className="mb-4">
+                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        <div>
+                          <h4 className="text-lg font-bold text-gray-800">
+                            Edit Industrial Visits in Markdown
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual visit details.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={addIndustrialVisitRowOnTop}
+                          className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
+                        >
+                          <FaPlus className="text-xs" />
+                          Add New Row On Top
+                        </button>
+                      </div>
+                    </div>
+                    <MarkdownEditor
+                      value={industrialVisitsMarkdown}
+                      onSave={handleIndustrialVisitsMarkdownSave}
+                      placeholder="Industrial visits table without serial-number column (GFM Markdown)..."
+                    />
+                  </div>
+
+                  <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <div className="mb-4">
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Optional Detailed Reports
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Upload a detailed report only for the visits that have
+                        one. Otherwise, you can ignore it.
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      {industrialVisits.map((visit, idx) => {
+                        const uploadKey = `industrial-visit-${visit.id}`;
+                        return (
+                          <div
+                            key={visit.id || idx}
+                            className="rounded-lg border border-gray-200 p-4"
+                          >
+                            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                              <div>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {idx + 1}.{" "}
+                                  {(visit.industries || []).join(", ") ||
+                                    "Industrial Visit"}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {visit.class || "Class not set"} |{" "}
+                                  {visit.date || "Date not set"}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                {visit.report ? (
+                                  <a
+                                    href={visit.report}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
+                                  >
+                                    <FaFileAlt className="text-xs" />
+                                    Current Report
+                                  </a>
+                                ) : (
+                                  <span className="text-xs text-gray-400">
+                                    No report uploaded
+                                  </span>
+                                )}
+                                <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
+                                  <FaUpload className="text-xs" />
+                                  {industrialVisitReportUploading[uploadKey]
+                                    ? "Uploading..."
+                                    : "Upload Report"}
+                                  <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    disabled={
+                                      industrialVisitReportUploading[uploadKey]
+                                    }
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        uploadIndustrialVisitReport(
+                                          visit.id,
+                                          file,
+                                        );
+                                      }
+                                      e.target.value = "";
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                            </div>
+                            {industrialVisitReportErrors[uploadKey] ? (
+                              <p className="mt-2 text-xs text-red-600">
+                                {industrialVisitReportErrors[uploadKey]}
+                              </p>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           );
         })()}
@@ -7023,8 +7136,9 @@ const CSE = () => {
               <div className="text-center mb-8">
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Strategic partnerships with industry leaders to enhance learning
-                  outcomes and provide students with real-world exposure.
+                  Strategic partnerships with industry leaders to enhance
+                  learning outcomes and provide students with real-world
+                  exposure.
                 </p>
               </div>
 
@@ -7049,7 +7163,10 @@ const CSE = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {mous.map((mou, idx) => (
-                        <tr key={mou.id || idx} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={mou.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
                           <td className="px-6 py-4 font-medium text-gray-900">
                             {idx + 1}.
                           </td>
@@ -7089,7 +7206,8 @@ const CSE = () => {
                             Edit MoUs in Markdown
                           </h4>
                           <p className="text-sm text-gray-500 mt-1">
-                            Serial numbers are automatic now. Add a new blank row on top, then edit only the actual MoU details.
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual MoU details.
                           </p>
                         </div>
                         <button
@@ -7115,7 +7233,8 @@ const CSE = () => {
                         Upload MoU PDF / Report
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
-                        Upload the PDF only for the row you want to attach a document to.
+                        Upload the PDF only for the row you want to attach a
+                        document to.
                       </p>
                     </div>
                     <div className="space-y-3">
@@ -7591,37 +7710,37 @@ const CSE = () => {
                       </thead>
                       <tbody className="divide-y divide-gray-100">
                         {selectedResearchItems.map((cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.link ? (
-                                  <a
-                                    href={cr.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline"
-                                  >
-                                    {cr.title}
-                                  </a>
-                                ) : (
-                                  cr.title
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.link ? (
+                                <a
+                                  href={cr.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline"
+                                >
+                                  {cr.title}
+                                </a>
+                              ) : (
+                                cr.title
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -7796,7 +7915,9 @@ const CSE = () => {
                   </div>
                   <MarkdownEditor
                     value={selectedResearchMarkdown}
-                    onSave={(value) => handleResearchMarkdownSave("books", value)}
+                    onSave={(value) =>
+                      handleResearchMarkdownSave("books", value)
+                    }
                     placeholder="Edit books table in markdown..."
                     showDocImport
                     docTemplateUrl={RESEARCH_TEMPLATE_URLS.books}
@@ -7888,7 +8009,10 @@ const CSE = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {currentInternships.map((intern, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       <td className="px-4 py-3 font-medium text-gray-900">
                         {idx + 1}
                       </td>
@@ -8138,7 +8262,10 @@ const CSE = () => {
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -8378,7 +8505,9 @@ const CSE = () => {
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -8535,7 +8664,9 @@ const CSE = () => {
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -8854,8 +8985,7 @@ const CSE = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Enter the academic year in format YYYY-YY (e.g.,
-                      2025-26)
+                      Enter the academic year in format YYYY-YY (e.g., 2025-26)
                     </p>
                     {ugProjectYearError ? (
                       <p className="text-xs text-red-600 mt-2">
@@ -8949,8 +9079,7 @@ const CSE = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Enter the academic year in format YYYY-YY (e.g.,
-                      2025-26)
+                      Enter the academic year in format YYYY-YY (e.g., 2025-26)
                     </p>
                     {internshipYearError ? (
                       <p className="text-xs text-red-600 mt-2">

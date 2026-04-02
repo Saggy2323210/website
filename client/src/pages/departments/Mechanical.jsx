@@ -611,7 +611,9 @@ const parseMechIndustrialVisitsMarkdown = (markdown = "") => {
         class: cells[offset + 1] || "",
         date: cells[offset + 2] || "",
         students: cells[offset + 3] || "",
-        report: mechExtractMarkdownLinkHref(cells.slice(offset + 4).join(" | ")),
+        report: mechExtractMarkdownLinkHref(
+          cells.slice(offset + 4).join(" | "),
+        ),
       };
     })
     .filter(
@@ -630,48 +632,149 @@ const createMechIndustrialVisitId = () =>
 const getMechIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
     industries: (Array.isArray(visit?.industries) ? visit.industries : [])
-      .map((item) => String(item || "").trim().toLowerCase())
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
       .filter(Boolean),
-    class: String(visit?.class || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
-    students: String(visit?.students || "").trim().toLowerCase(),
+    class: String(visit?.class || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
+    students: String(visit?.students || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const defaultMechMous = [
-  { no: "1.", org: "Joshi Jampala Engineering Pvt. Ltd., Satara", date: "05/03/2025", report: "/uploads/documents/mech_mous/MOU_Joshi_Jampala_2025.pdf" },
-  { no: "2.", org: "Endress Hauser, Chat. Sambhajinagar", date: "05/03/2025", report: "/uploads/documents/mech_mous/MOU_Endress_Hauser_2025.pdf" },
-  { no: "3.", org: "SW System, Pune", date: "05/03/2025", report: "/uploads/documents/mech_mous/MOU_SW_System_2025.pdf" },
-  { no: "4.", org: "Tejas Polymer Engineers, Pune", date: "05/03/2025", report: "/uploads/documents/mech_mous/MOU_Tejas_Polymer_2025.pdf" },
-  { no: "5.", org: "Sharv Polyplast Pvt. Ltd., Pune", date: "05/03/2025", report: "/uploads/documents/mech_mous/MOU_Sharv_Polyplast_2025.pdf" },
-  { no: "6.", org: 'Krishna Vishwa Vidyapeeth "Deemed to be University", Karad, Maharashtra', date: "16/01/2024", report: "/uploads/documents/mech_mous/MOU_KVV_Karad_2024.pdf" },
-  { no: "7.", org: "Endress Hauser, Sambhaji Nagar (Aurangabad)", date: "31/03/2022", report: "/uploads/documents/mech_mous/MOU_Endress_Hauser_2022.pdf" },
-  { no: "8.", org: "Tool Tech Toolings Kirdak Auto Com Pvt. Ltd., Sambhaji Nagar (Aurangabad)", date: "27/07/2022", report: "/uploads/documents/mech_mous/MOU_Tool_Tech_Toolings_2022.pdf" },
-  { no: "9.", org: "Vinodrai Engg Pvt Ltd., MIDC, Jalna", date: "16/03/2019", report: "/uploads/documents/mech_mous/MOU_Vinodrai_Engg_2019.pdf" },
-  { no: "10.", org: "Mechatol Engg Solutions Pvt Ltd., Kothrud, Pune", date: "19/01/2019", report: "/uploads/documents/mech_mous/MOU_Mechatol_Engg_2019.pdf" },
-  { no: "11.", org: "Kala Group of Companies, MIDC Chakan, Pune", date: "19/01/2019", report: "/uploads/documents/mech_mous/MOU_Kala_Group_2019.pdf" },
-  { no: "12.", org: "Wadhokar Group of Companies, MIDC Chakan, Pune", date: "19/01/2019", report: "/uploads/documents/mech_mous/MOU_Wadhokar_Group_2019.pdf" },
+  {
+    no: "1.",
+    org: "Joshi Jampala Engineering Pvt. Ltd., Satara",
+    date: "05/03/2025",
+    report: "/uploads/documents/mech_mous/MOU_Joshi_Jampala_2025.pdf",
+  },
+  {
+    no: "2.",
+    org: "Endress Hauser, Chat. Sambhajinagar",
+    date: "05/03/2025",
+    report: "/uploads/documents/mech_mous/MOU_Endress_Hauser_2025.pdf",
+  },
+  {
+    no: "3.",
+    org: "SW System, Pune",
+    date: "05/03/2025",
+    report: "/uploads/documents/mech_mous/MOU_SW_System_2025.pdf",
+  },
+  {
+    no: "4.",
+    org: "Tejas Polymer Engineers, Pune",
+    date: "05/03/2025",
+    report: "/uploads/documents/mech_mous/MOU_Tejas_Polymer_2025.pdf",
+  },
+  {
+    no: "5.",
+    org: "Sharv Polyplast Pvt. Ltd., Pune",
+    date: "05/03/2025",
+    report: "/uploads/documents/mech_mous/MOU_Sharv_Polyplast_2025.pdf",
+  },
+  {
+    no: "6.",
+    org: 'Krishna Vishwa Vidyapeeth "Deemed to be University", Karad, Maharashtra',
+    date: "16/01/2024",
+    report: "/uploads/documents/mech_mous/MOU_KVV_Karad_2024.pdf",
+  },
+  {
+    no: "7.",
+    org: "Endress Hauser, Sambhaji Nagar (Aurangabad)",
+    date: "31/03/2022",
+    report: "/uploads/documents/mech_mous/MOU_Endress_Hauser_2022.pdf",
+  },
+  {
+    no: "8.",
+    org: "Tool Tech Toolings Kirdak Auto Com Pvt. Ltd., Sambhaji Nagar (Aurangabad)",
+    date: "27/07/2022",
+    report: "/uploads/documents/mech_mous/MOU_Tool_Tech_Toolings_2022.pdf",
+  },
+  {
+    no: "9.",
+    org: "Vinodrai Engg Pvt Ltd., MIDC, Jalna",
+    date: "16/03/2019",
+    report: "/uploads/documents/mech_mous/MOU_Vinodrai_Engg_2019.pdf",
+  },
+  {
+    no: "10.",
+    org: "Mechatol Engg Solutions Pvt Ltd., Kothrud, Pune",
+    date: "19/01/2019",
+    report: "/uploads/documents/mech_mous/MOU_Mechatol_Engg_2019.pdf",
+  },
+  {
+    no: "11.",
+    org: "Kala Group of Companies, MIDC Chakan, Pune",
+    date: "19/01/2019",
+    report: "/uploads/documents/mech_mous/MOU_Kala_Group_2019.pdf",
+  },
+  {
+    no: "12.",
+    org: "Wadhokar Group of Companies, MIDC Chakan, Pune",
+    date: "19/01/2019",
+    report: "/uploads/documents/mech_mous/MOU_Wadhokar_Group_2019.pdf",
+  },
 ];
 
 const mechMousToMarkdown = (mous = []) => {
-  const lines = ["## MoUs", "", "| Name of the Organization | MOU Signing Date | MOU Copy / Report |", "|--------------------------|------------------|-------------------|"];
-  if (!mous.length) return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
-  mous.forEach((mou) => lines.push(`| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`));
+  const lines = [
+    "## MoUs",
+    "",
+    "| Name of the Organization | MOU Signing Date | MOU Copy / Report |",
+    "|--------------------------|------------------|-------------------|",
+  ];
+  if (!mous.length)
+    return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
+  mous.forEach((mou) =>
+    lines.push(
+      `| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`,
+    ),
+  );
   return lines.join("\n");
 };
 
 const parseMechMousMarkdown = (markdown = "") => {
   const text = String(markdown || "").trim();
   if (!text) return [];
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
-  return dataLines.map((line) => mechParseMarkdownTableRow(line)).filter((cells) => cells.length >= 3).map((cells) => ({ org: cells[0] || "", date: cells[1] || "", report: mechExtractMarkdownLinkHref(cells.slice(2).join(" | ")) })).filter((mou) => mou.org || mou.date || mou.report);
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
+  return dataLines
+    .map((line) => mechParseMarkdownTableRow(line))
+    .filter((cells) => cells.length >= 3)
+    .map((cells) => ({
+      org: cells[0] || "",
+      date: cells[1] || "",
+      report: mechExtractMarkdownLinkHref(cells.slice(2).join(" | ")),
+    }))
+    .filter((mou) => mou.org || mou.date || mou.report);
 };
 
 const createMechMouId = () =>
   `mech-mou-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 const getMechMouSignature = (mou = {}) =>
-  JSON.stringify({ org: String(mou?.org || "").trim().toLowerCase(), date: String(mou?.date || "").trim().toLowerCase() });
+  JSON.stringify({
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
+  });
 
 const mechPatentsToMarkdown = (items = [], year = "2024-25") => {
   const lines = [
@@ -682,7 +785,9 @@ const mechPatentsToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add invention title | Published | Add application no. | Add inventors | - |");
+    lines.push(
+      "| Add invention title | Published | Add application no. | Add inventors | - |",
+    );
     return lines.join("\n");
   }
 
@@ -702,8 +807,17 @@ const parseMechPatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
 
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
+  );
 
   return {
     year,
@@ -717,7 +831,10 @@ const parseMechPatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         inventors: cells[3] || "",
         link: mechExtractMarkdownLinkHref(cells.slice(4).join(" | ")),
       }))
-      .filter((item) => item.title || item.status || item.id || item.inventors || item.link),
+      .filter(
+        (item) =>
+          item.title || item.status || item.id || item.inventors || item.link,
+      ),
   };
 };
 
@@ -730,7 +847,9 @@ const mechPublicationsToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add journal or conference | - |");
+    lines.push(
+      "| Add paper title | Add authors | Add journal or conference | - |",
+    );
     return lines.join("\n");
   }
 
@@ -744,14 +863,24 @@ const mechPublicationsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseMechPublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseMechPublicationsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
 
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
 
   return {
     year,
@@ -764,7 +893,9 @@ const parseMechPublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") 
         journal: cells[2] || "",
         link: mechExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -791,14 +922,24 @@ const mechCopyrightsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseMechCopyrightsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseMechCopyrightsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
 
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
 
   return {
     year,
@@ -822,7 +963,9 @@ const mechInstitutePatentsToMarkdown = (items = []) => {
   ];
 
   if (!items.length) {
-    lines.push("| Add invention title | Add application no. | Add filing date | Add status |");
+    lines.push(
+      "| Add invention title | Add application no. | Add filing date | Add status |",
+    );
     return lines.join("\n");
   }
 
@@ -839,8 +982,15 @@ const parseMechInstitutePatentsMarkdown = (markdown = "") => {
   const text = String(markdown || "").trim();
   if (!text) return [];
 
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
 
   return dataLines
     .map((line) => mechParseMarkdownTableRow(line))
@@ -873,7 +1023,8 @@ const MECH_RESEARCH_FROM_MARKDOWN = {
 };
 
 const MECH_RESEARCH_TEMPLATE_URLS = {
-  patents: "/uploads/documents/pride_templates/mechanical_patents_template.docx",
+  patents:
+    "/uploads/documents/pride_templates/mechanical_patents_template.docx",
   publications:
     "/uploads/documents/pride_templates/mechanical_publications_template.docx",
   copyrights:
@@ -885,7 +1036,7 @@ const MECH_RESEARCH_TEMPLATE_URLS = {
 const Mechanical = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [vmTab, setVmTab] = useState("vision");
   const [poTab, setPoTab] = useState("peo");
@@ -930,8 +1081,10 @@ const Mechanical = () => {
     useState({});
   const [mouReportUploading, setMouReportUploading] = useState({});
   const [mouReportErrors, setMouReportErrors] = useState({});
-  const [shouldScrollToNewLearningResource, setShouldScrollToNewLearningResource] =
-    useState(false);
+  const [
+    shouldScrollToNewLearningResource,
+    setShouldScrollToNewLearningResource,
+  ] = useState(false);
   const [expandedFacultyEditorIndex, setExpandedFacultyEditorIndex] =
     useState(null);
 
@@ -939,7 +1092,7 @@ const Mechanical = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
   const latestLearningResourceRef = useRef(null);
@@ -1015,7 +1168,9 @@ const Mechanical = () => {
     ];
 
     if (!records.length) {
-      lines.push("| Add SIS ID | Add student name | Add company | Add class | Add start date | Add end date | Add paid status |");
+      lines.push(
+        "| Add SIS ID | Add student name | Add company | Add class | Add start date | Add end date | Add paid status |",
+      );
       return lines.join("\n");
     }
 
@@ -1028,7 +1183,10 @@ const Mechanical = () => {
     return lines.join("\n");
   };
 
-  const parseMechInternshipsMarkdown = (markdown = "", fallbackYear = "2023-24") => {
+  const parseMechInternshipsMarkdown = (
+    markdown = "",
+    fallbackYear = "2023-24",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) return { year: fallbackYear, records: [] };
 
@@ -1076,30 +1234,38 @@ const Mechanical = () => {
   };
 
   const getMechIndustrialVisits = () =>
-    JSON.parse(JSON.stringify(t("industrialVisits.items", defaultMechIndustrialVisits))).map(
+    JSON.parse(
+      JSON.stringify(t("industrialVisits.items", defaultMechIndustrialVisits)),
+    ).map((visit) => ({
+      ...visit,
+      id: String(visit?.id || createMechIndustrialVisitId()),
+    }));
+
+  const getMechIndustrialVisitsMarkdown = (
+    visits = getMechIndustrialVisits(),
+  ) => mechIndustrialVisitsToMarkdown(visits);
+
+  const persistMechIndustrialVisits = (visits) => {
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
       (visit) => ({
-        ...visit,
-        id: String(visit?.id || createMechIndustrialVisitId()),
+        id: String(visit?.id || createMechIndustrialVisitId()).trim(),
+        industries: Array.isArray(visit?.industries)
+          ? visit.industries
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+          : [],
+        class: String(visit?.class || "").trim(),
+        date: String(visit?.date || "").trim(),
+        students: String(visit?.students || "").trim(),
+        report: String(visit?.report || "").trim(),
       }),
     );
 
-  const getMechIndustrialVisitsMarkdown = (visits = getMechIndustrialVisits()) =>
-    mechIndustrialVisitsToMarkdown(visits);
-
-  const persistMechIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createMechIndustrialVisitId()).trim(),
-      industries: Array.isArray(visit?.industries)
-        ? visit.industries.map((item) => String(item || "").trim()).filter(Boolean)
-        : [],
-      class: String(visit?.class || "").trim(),
-      date: String(visit?.date || "").trim(),
-      students: String(visit?.students || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
-
     updateData("industrialVisits.items", normalizedVisits);
-    updateData("industrialVisits.markdown", mechIndustrialVisitsToMarkdown(normalizedVisits));
+    updateData(
+      "industrialVisits.markdown",
+      mechIndustrialVisitsToMarkdown(normalizedVisits),
+    );
   };
 
   const handleMechIndustrialVisitsMarkdownSave = (markdown) => {
@@ -1168,7 +1334,9 @@ const Mechanical = () => {
 
     return [...new Set([...storedYears, ...recordYears])]
       .filter(Boolean)
-      .sort((a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)));
+      .sort(
+        (a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)),
+      );
   };
 
   const getInternshipRecords = () =>
@@ -1186,7 +1354,9 @@ const Mechanical = () => {
         (value) =>
           typeof value === "string" && /^\d{4}-\d{2}$/.test(value.trim()),
       )
-      .sort((a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)));
+      .sort(
+        (a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)),
+      );
 
     const normalizedRecords = orderedYears.reduce((acc, year) => {
       acc[year] = (Array.isArray(records?.[year]) ? records[year] : []).map(
@@ -1318,7 +1488,10 @@ const Mechanical = () => {
     if (!file) return;
 
     const uploadKey = `mech-industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1368,16 +1541,20 @@ const Mechanical = () => {
 
   const getMechIndustrialVisitGallery = () =>
     JSON.parse(
-      JSON.stringify(t("industrialVisits.gallery", defaultMechIndustrialVisitGallery)),
+      JSON.stringify(
+        t("industrialVisits.gallery", defaultMechIndustrialVisitGallery),
+      ),
     );
 
   const persistMechIndustrialVisitGallery = (photos) => {
-    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map((photo) => ({
-      image: String(photo?.image || "").trim(),
-      caption: String(photo?.caption || "").trim(),
-      location: String(photo?.location || "").trim(),
-      date: String(photo?.date || "").trim(),
-    }));
+    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map(
+      (photo) => ({
+        image: String(photo?.image || "").trim(),
+        caption: String(photo?.caption || "").trim(),
+        location: String(photo?.location || "").trim(),
+        date: String(photo?.date || "").trim(),
+      }),
+    );
 
     updateData("industrialVisits.gallery", normalizedPhotos);
   };
@@ -1413,7 +1590,10 @@ const Mechanical = () => {
     if (!file) return;
 
     const uploadKey = `mech-gallery-${index}`;
-    setIndustrialVisitGalleryUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitGalleryUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitGalleryErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1434,7 +1614,10 @@ const Mechanical = () => {
 
       updateMechIndustrialVisitPhoto(index, "image", response.data.fileUrl);
     } catch (error) {
-      console.error("Mechanical industrial visit gallery upload failed:", error);
+      console.error(
+        "Mechanical industrial visit gallery upload failed:",
+        error,
+      );
       setIndustrialVisitGalleryErrors((prev) => ({
         ...prev,
         [uploadKey]:
@@ -1457,7 +1640,8 @@ const Mechanical = () => {
       id: String(mou?.id || createMechMouId()),
     }));
 
-  const getMechMousMarkdown = (mous = getMechMous()) => mechMousToMarkdown(mous);
+  const getMechMousMarkdown = (mous = getMechMous()) =>
+    mechMousToMarkdown(mous);
 
   const persistMechMous = (mous) => {
     const normalizedMous = (Array.isArray(mous) ? mous : []).map((mou) => ({
@@ -1483,20 +1667,35 @@ const Mechanical = () => {
     const usedIds = new Set();
     const mergedMous = parsed.map((mou, index) => {
       const signature = getMechMouSignature(mou);
-      let match = (signaturePool.get(signature) || []).find((item) => !usedIds.has(item.id));
+      let match = (signaturePool.get(signature) || []).find(
+        (item) => !usedIds.has(item.id),
+      );
       if (!match) {
         const fallback = existingMous[index];
         if (fallback && !usedIds.has(fallback.id)) match = fallback;
       }
       if (match?.id) usedIds.add(match.id);
-      return { id: match?.id || createMechMouId(), org: mou.org, date: mou.date, report: mou.report || match?.report || "" };
+      return {
+        id: match?.id || createMechMouId(),
+        org: mou.org,
+        date: mou.date,
+        report: mou.report || match?.report || "",
+      };
     });
     persistMechMous(mergedMous);
   };
 
   const addMechMouRowOnTop = () => {
     const mous = getMechMous();
-    persistMechMous([{ id: createMechMouId(), org: "New organization", date: "Add signing date", report: "" }, ...mous]);
+    persistMechMous([
+      {
+        id: createMechMouId(),
+        org: "New organization",
+        date: "Add signing date",
+        report: "",
+      },
+      ...mous,
+    ]);
   };
 
   const uploadMechMouReport = async (mouId, file) => {
@@ -1509,15 +1708,25 @@ const Mechanical = () => {
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/file", formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.data.fileUrl) {
         const mous = getMechMous();
-        persistMechMous(mous.map((mou) => (mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou)));
+        persistMechMous(
+          mous.map((mou) =>
+            mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou,
+          ),
+        );
       }
     } catch (error) {
       console.error("Mechanical MOU upload failed:", error);
-      setMouReportErrors((prev) => ({ ...prev, [uploadKey]: "Failed to upload report." }));
+      setMouReportErrors((prev) => ({
+        ...prev,
+        [uploadKey]: "Failed to upload report.",
+      }));
     } finally {
       setMouReportUploading((prev) => ({ ...prev, [uploadKey]: false }));
     }
@@ -1719,7 +1928,9 @@ const Mechanical = () => {
 
     if (typeof stored === "string" && stored.trim()) {
       const lines = stored.split("\n").map((line) => line.trim());
-      const tableStart = lines.findIndex((line) => line.startsWith("| Sr. No."));
+      const tableStart = lines.findIndex((line) =>
+        line.startsWith("| Sr. No."),
+      );
       if (tableStart !== -1) {
         const rows = lines
           .slice(tableStart + 2)
@@ -2057,7 +2268,9 @@ const Mechanical = () => {
   };
 
   const getLearningResources = () =>
-    JSON.parse(JSON.stringify(t("learningResources", defaultLearningResources)));
+    JSON.parse(
+      JSON.stringify(t("learningResources", defaultLearningResources)),
+    );
 
   const updateLearningResource = (index, field, value) => {
     const items = getLearningResources();
@@ -2114,7 +2327,9 @@ const Mechanical = () => {
 
   const getAchievementItems = (section) =>
     JSON.parse(
-      JSON.stringify(t(`achievements.${section}`, defaultAchievements[section] || [])),
+      JSON.stringify(
+        t(`achievements.${section}`, defaultAchievements[section] || []),
+      ),
     );
 
   const achievementsToMarkdown = (section, items = []) =>
@@ -2225,7 +2440,7 @@ const Mechanical = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/image", formData, {
@@ -2345,7 +2560,9 @@ const Mechanical = () => {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -2386,7 +2603,10 @@ const Mechanical = () => {
   function getMechResearchItems(section, year = researchYear) {
     return JSON.parse(
       JSON.stringify(
-        t(`research.${section}.${year}`, MECH_RESEARCH_DEFAULTS[section]?.[year] || []),
+        t(
+          `research.${section}.${year}`,
+          MECH_RESEARCH_DEFAULTS[section]?.[year] || [],
+        ),
       ),
     );
   }
@@ -2398,23 +2618,34 @@ const Mechanical = () => {
   function getMechResearchMarkdownValue(section, year = researchYear) {
     const storedMarkdown = getMechResearchMarkdownByYear(section)?.[year];
     if (storedMarkdown) return storedMarkdown;
-    return MECH_RESEARCH_TO_MARKDOWN[section](getMechResearchItems(section, year), year);
+    return MECH_RESEARCH_TO_MARKDOWN[section](
+      getMechResearchItems(section, year),
+      year,
+    );
   }
 
   function getMechResearchYears() {
     const storedYears = Array.isArray(t("researchYears", null))
       ? t("researchYears", [])
       : [];
-    const defaultYears = Object.values(MECH_RESEARCH_DEFAULTS).flatMap((sectionDefaults) =>
-      Object.keys(sectionDefaults || {}),
+    const defaultYears = Object.values(MECH_RESEARCH_DEFAULTS).flatMap(
+      (sectionDefaults) => Object.keys(sectionDefaults || {}),
     );
-    const savedYears = Object.keys(t("research.patents", defaultMechPatents) || {})
-      .concat(Object.keys(t("research.publications", defaultMechPublications) || {}))
-      .concat(Object.keys(t("research.copyrights", defaultMechCopyrights) || {}));
+    const savedYears = Object.keys(
+      t("research.patents", defaultMechPatents) || {},
+    )
+      .concat(
+        Object.keys(t("research.publications", defaultMechPublications) || {}),
+      )
+      .concat(
+        Object.keys(t("research.copyrights", defaultMechCopyrights) || {}),
+      );
 
     return [...new Set([...storedYears, ...defaultYears, ...savedYears])]
       .filter((value) => /^\d{4}-\d{2}$/.test(String(value || "").trim()))
-      .sort((a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)));
+      .sort(
+        (a, b) => Number(String(b).slice(0, 4)) - Number(String(a).slice(0, 4)),
+      );
   }
 
   const persistMechResearchSection = (section, year, items) => {
@@ -2480,7 +2711,10 @@ const Mechanical = () => {
       },
     };
 
-    persistMechResearchSection(section, researchYear, [emptyRows[section], ...items]);
+    persistMechResearchSection(section, researchYear, [
+      emptyRows[section],
+      ...items,
+    ]);
   };
 
   function createEmptyMechResearchMarkdown(section, year) {
@@ -4930,7 +5164,9 @@ After successfully completing the course, students will be able to:
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -5611,7 +5847,9 @@ After successfully completing the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -5768,7 +6006,9 @@ After successfully completing the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -6022,7 +6262,10 @@ After successfully completing the course, students will be able to:
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -6213,7 +6456,9 @@ After successfully completing the course, students will be able to:
                       Sr. No.
                     </th>
                     <th className="px-6 py-4 font-bold">Year / Class</th>
-                    <th className="px-6 py-4 font-bold text-center">Syllabus</th>
+                    <th className="px-6 py-4 font-bold text-center">
+                      Syllabus
+                    </th>
                     <th className="px-6 py-4 font-bold text-center">
                       Access Materials
                     </th>
@@ -6316,10 +6561,7 @@ After successfully completing the course, students will be able to:
             <div>
               <h4 className="font-bold text-gray-800 text-lg">
                 <EditableText
-                  value={t(
-                    "nbaResources.cardTitle",
-                    "NBA Department Details",
-                  )}
+                  value={t("nbaResources.cardTitle", "NBA Department Details")}
                   onSave={(val) => updateData("nbaResources.cardTitle", val)}
                 />
               </h4>
@@ -6370,8 +6612,7 @@ After successfully completing the course, students will be able to:
                 onClick={() =>
                   updateData(
                     "nbaResources.driveLink",
-                    nbaDriveLinkDraft.trim() ||
-                      defaultNBAResources.driveLink,
+                    nbaDriveLinkDraft.trim() || defaultNBAResources.driveLink,
                   )
                 }
                 className="inline-flex items-center gap-2 bg-ssgmce-orange hover:bg-orange-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
@@ -6409,86 +6650,82 @@ After successfully completing the course, students will be able to:
             )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {getMechNbaVideos().map(
-              (video, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden group hover:shadow-xl transition-shadow"
-                >
-                  <div className="aspect-video">
-                    {video.embedUrl ? (
-                      <iframe
-                        src={video.embedUrl}
-                        title={video.title || `NBA Video ${i + 1}`}
-                        className="w-full h-full"
-                        allowFullScreen
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-100 flex items-center justify-center text-center px-6">
-                        <p className="text-sm text-gray-500">
-                          Add a YouTube link to show the video here.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 space-y-3">
-                    <p className="text-sm font-medium text-gray-600">
-                      <EditableText
-                        value={video.title || `NBA Resource Video ${i + 1}`}
-                        onSave={(val) =>
-                          updateMechNbaVideo(i, { title: val })
+            {getMechNbaVideos().map((video, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden group hover:shadow-xl transition-shadow"
+              >
+                <div className="aspect-video">
+                  {video.embedUrl ? (
+                    <iframe
+                      src={video.embedUrl}
+                      title={video.title || `NBA Video ${i + 1}`}
+                      className="w-full h-full"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center text-center px-6">
+                      <p className="text-sm text-gray-500">
+                        Add a YouTube link to show the video here.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 space-y-3">
+                  <p className="text-sm font-medium text-gray-600">
+                    <EditableText
+                      value={video.title || `NBA Resource Video ${i + 1}`}
+                      onSave={(val) => updateMechNbaVideo(i, { title: val })}
+                    />
+                  </p>
+                  {isEditing && (
+                    <div className="space-y-3">
+                      <input
+                        type="url"
+                        value={nbaVideoLinkDrafts[i] || ""}
+                        onChange={(e) =>
+                          setNbaVideoLinkDrafts((prev) => ({
+                            ...prev,
+                            [i]: e.target.value,
+                          }))
                         }
+                        placeholder="Paste YouTube watch/share/embed link"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent text-sm"
                       />
-                    </p>
-                    {isEditing && (
-                      <div className="space-y-3">
-                        <input
-                          type="url"
-                          value={nbaVideoLinkDrafts[i] || ""}
-                          onChange={(e) =>
-                            setNbaVideoLinkDrafts((prev) => ({
-                              ...prev,
-                              [i]: e.target.value,
-                            }))
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateMechNbaVideo(i, {
+                              sourceUrl: (nbaVideoLinkDrafts[i] || "").trim(),
+                              embedUrl: normalizeMechYoutubeEmbedUrl(
+                                nbaVideoLinkDrafts[i] || "",
+                              ),
+                            })
                           }
-                          placeholder="Paste YouTube watch/share/embed link"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent text-sm"
-                        />
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateMechNbaVideo(i, {
-                                sourceUrl: (nbaVideoLinkDrafts[i] || "").trim(),
-                                embedUrl: normalizeMechYoutubeEmbedUrl(
-                                  nbaVideoLinkDrafts[i] || "",
-                                ),
-                              })
-                            }
-                            className="inline-flex items-center gap-2 bg-ssgmce-orange hover:bg-orange-700 text-white font-semibold px-3 py-2 rounded-lg transition-colors text-sm"
-                          >
-                            <FaExternalLinkAlt className="text-xs" />
-                            Update YT Link
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeMechNbaVideo(i)}
-                            className="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-semibold px-3 py-2 rounded-lg transition-colors text-sm"
-                          >
-                            <FaTrash className="text-xs" />
-                            Remove
-                          </button>
-                        </div>
+                          className="inline-flex items-center gap-2 bg-ssgmce-orange hover:bg-orange-700 text-white font-semibold px-3 py-2 rounded-lg transition-colors text-sm"
+                        >
+                          <FaExternalLinkAlt className="text-xs" />
+                          Update YT Link
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeMechNbaVideo(i)}
+                          className="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-semibold px-3 py-2 rounded-lg transition-colors text-sm"
+                        >
+                          <FaTrash className="text-xs" />
+                          Remove
+                        </button>
                       </div>
-                    )}
-                  </div>
-                </motion.div>
-              ),
-            )}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -6511,7 +6748,9 @@ After successfully completing the course, students will be able to:
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               <div className="w-32 sm:w-40 bg-gray-50 flex-shrink-0 relative flex items-center justify-center border-r border-gray-100">
@@ -6640,7 +6879,11 @@ After successfully completing the course, students will be able to:
                             <EditableText
                               value={fac.id || createFacultySlug(fac.name)}
                               onSave={(val) =>
-                                updateFacultyMember(i, "id", createFacultySlug(val))
+                                updateFacultyMember(
+                                  i,
+                                  "id",
+                                  createFacultySlug(val),
+                                )
                               }
                             />
                           </div>
@@ -6650,7 +6893,9 @@ After successfully completing the course, students will be able to:
                             </div>
                             <EditableText
                               value={fac.vidwanId || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanId", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanId", val)
+                              }
                             />
                           </div>
                           <div className="md:col-span-2">
@@ -6659,7 +6904,9 @@ After successfully completing the course, students will be able to:
                             </div>
                             <EditableText
                               value={fac.vidwanLink || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanLink", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanLink", val)
+                              }
                             />
                           </div>
                           {[
@@ -6861,42 +7108,44 @@ After successfully completing the course, students will be able to:
       );
 
       return (
-      <div className="space-y-10">
-        <div className="text-center border-b border-gray-200 pb-6 mb-8">
-          <h3 className="text-3xl font-bold text-gray-900">
-            <EditableText
-              value={t("templateData.staff.title", "Staff @ Department")}
-              onSave={(val) => updateField("templateData.staff.title", val)}
-            />
-          </h3>
-          <p className="text-gray-500 mt-2">
-            <EditableText
-              value={t(
-                "templateData.staff.subtitle",
-                "Department of Mechanical Engineering",
-              )}
-              onSave={(val) => updateField("templateData.staff.subtitle", val)}
-            />
-          </p>
+        <div className="space-y-10">
+          <div className="text-center border-b border-gray-200 pb-6 mb-8">
+            <h3 className="text-3xl font-bold text-gray-900">
+              <EditableText
+                value={t("templateData.staff.title", "Staff @ Department")}
+                onSave={(val) => updateField("templateData.staff.title", val)}
+              />
+            </h3>
+            <p className="text-gray-500 mt-2">
+              <EditableText
+                value={t(
+                  "templateData.staff.subtitle",
+                  "Department of Mechanical Engineering",
+                )}
+                onSave={(val) =>
+                  updateField("templateData.staff.subtitle", val)
+                }
+              />
+            </p>
+          </div>
+
+          {renderStaffGroup(
+            departmentStaff,
+            "templateData.staff.department",
+            MECH_DEFAULT_DEPARTMENT_STAFF,
+            "Department Staff",
+            "Lab Assistant",
+          )}
+
+          {renderStaffGroup(
+            workshopStaff,
+            "templateData.staff.workshop",
+            MECH_DEFAULT_WORKSHOP_STAFF,
+            "Workshop Staff",
+            "Lab Assistant",
+          )}
         </div>
-
-        {renderStaffGroup(
-          departmentStaff,
-          "templateData.staff.department",
-          MECH_DEFAULT_DEPARTMENT_STAFF,
-          "Department Staff",
-          "Lab Assistant",
-        )}
-
-        {renderStaffGroup(
-          workshopStaff,
-          "templateData.staff.workshop",
-          MECH_DEFAULT_WORKSHOP_STAFF,
-          "Workshop Staff",
-          "Lab Assistant",
-        )}
-      </div>
-    );
+      );
     })(),
 
     "student-projects": (() => {
@@ -6942,8 +7191,8 @@ After successfully completing the course, students will be able to:
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Strategic partnerships with industry leaders and academic
-                  institutions to enhance learning outcomes and provide students with
-                  real-world exposure.
+                  institutions to enhance learning outcomes and provide students
+                  with real-world exposure.
                 </p>
               </div>
               <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
@@ -6951,21 +7200,41 @@ After successfully completing the course, students will be able to:
                   <table className="w-full text-sm">
                     <thead className="bg-ssgmce-blue text-white">
                       <tr>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">Sr. No.</th>
-                        <th className="px-6 py-4 text-left font-bold">Name of the Organization</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Signing Date</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Copy / Report</th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          Sr. No.
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">
+                          Name of the Organization
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Signing Date
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Copy / Report
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {mous.map((mou, idx) => (
-                        <tr key={mou.id || idx} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-gray-900">{idx + 1}.</td>
+                        <tr
+                          key={mou.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {idx + 1}.
+                          </td>
                           <td className="px-6 py-4 text-gray-700">{mou.org}</td>
-                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{mou.date}</td>
+                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                            {mou.date}
+                          </td>
                           <td className="px-6 py-4">
                             {mou.report ? (
-                              <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors">
+                              <a
+                                href={mou.report}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors"
+                              >
                                 <FaFileAlt className="mr-1.5" />
                                 View Document
                               </a>
@@ -6985,53 +7254,98 @@ After successfully completing the course, students will be able to:
                     <div className="mb-4">
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-800">Edit MoUs in Markdown</h4>
-                          <p className="text-sm text-gray-500 mt-1">Serial numbers are automatic now. Add a new blank row on top, then edit only the actual MoU details.</p>
+                          <h4 className="text-lg font-bold text-gray-800">
+                            Edit MoUs in Markdown
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual MoU details.
+                          </p>
                         </div>
-                        <button type="button" onClick={addMechMouRowOnTop} className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange">
+                        <button
+                          type="button"
+                          onClick={addMechMouRowOnTop}
+                          className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
+                        >
                           <FaPlus className="text-xs" />
                           Add New Row On Top
                         </button>
                       </div>
                     </div>
-                    <MarkdownEditor value={mousMarkdown} onSave={handleMechMousMarkdownSave} placeholder="MoUs table without serial-number column (GFM Markdown)..." />
+                    <MarkdownEditor
+                      value={mousMarkdown}
+                      onSave={handleMechMousMarkdownSave}
+                      placeholder="MoUs table without serial-number column (GFM Markdown)..."
+                    />
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
                     <div className="mb-4">
-                      <h4 className="text-lg font-bold text-gray-800">Upload MoU PDF / Report</h4>
-                      <p className="text-sm text-gray-500 mt-1">Upload the PDF only for the row you want to attach a document to.</p>
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Upload MoU PDF / Report
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Upload the PDF only for the row you want to attach a
+                        document to.
+                      </p>
                     </div>
                     <div className="space-y-3">
                       {mous.map((mou, idx) => {
                         const uploadKey = `mech-mou-${mou.id}`;
                         return (
-                          <div key={mou.id || idx} className="rounded-lg border border-gray-200 p-4">
+                          <div
+                            key={mou.id || idx}
+                            className="rounded-lg border border-gray-200 p-4"
+                          >
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                               <div>
-                                <p className="text-sm font-semibold text-gray-800">{idx + 1}. {mou.org || "MoU"}</p>
-                                <p className="text-xs text-gray-500">{mou.date || "Signing date not set"}</p>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {idx + 1}. {mou.org || "MoU"}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {mou.date || "Signing date not set"}
+                                </p>
                               </div>
                               <div className="flex items-center gap-3">
                                 {mou.report ? (
-                                  <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange">
+                                  <a
+                                    href={mou.report}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
+                                  >
                                     <FaFileAlt className="text-xs" />
                                     Current Document
                                   </a>
                                 ) : (
-                                  <span className="text-xs text-gray-400">No document uploaded</span>
+                                  <span className="text-xs text-gray-400">
+                                    No document uploaded
+                                  </span>
                                 )}
                                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
                                   <FaUpload className="text-xs" />
-                                  {mouReportUploading[uploadKey] ? "Uploading..." : "Upload PDF"}
-                                  <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={mouReportUploading[uploadKey]} onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) uploadMechMouReport(mou.id, file);
-                                    e.target.value = "";
-                                  }} />
+                                  {mouReportUploading[uploadKey]
+                                    ? "Uploading..."
+                                    : "Upload PDF"}
+                                  <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    disabled={mouReportUploading[uploadKey]}
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file)
+                                        uploadMechMouReport(mou.id, file);
+                                      e.target.value = "";
+                                    }}
+                                  />
                                 </label>
                               </div>
                             </div>
-                            {mouReportErrors[uploadKey] ? <p className="mt-2 text-xs text-red-600">{mouReportErrors[uploadKey]}</p> : null}
+                            {mouReportErrors[uploadKey] ? (
+                              <p className="mt-2 text-xs text-red-600">
+                                {mouReportErrors[uploadKey]}
+                              </p>
+                            ) : null}
                           </div>
                         );
                       })}
@@ -7065,7 +7379,8 @@ After successfully completing the course, students will be able to:
             ? storedPractices
             : defaultInnovativePractices;
           const md =
-            storedMarkdown || mechInnovativePracticesToMarkdown(defaultPractices);
+            storedMarkdown ||
+            mechInnovativePracticesToMarkdown(defaultPractices);
 
           // Prefer saved CMS data and only fall back to bundled defaults
           // when neither markdown nor stored structured data is available.
@@ -7074,7 +7389,7 @@ After successfully completing the course, students will be able to:
             parsedPractices && parsedPractices.length > 0
               ? parsedPractices
               : defaultPractices;
-          
+
           return (
             <motion.div
               initial={{ opacity: 0 }}
@@ -7109,7 +7424,10 @@ After successfully completing the course, students will be able to:
                           "templateData.innovativePractices.items",
                           nextPractices,
                         );
-                        updateData("innovativePractices.markdown", nextMarkdown);
+                        updateData(
+                          "innovativePractices.markdown",
+                          nextMarkdown,
+                        );
                         updateData("innovativePractices", nextPractices);
                       }}
                       className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
@@ -7122,8 +7440,14 @@ After successfully completing the course, students will be able to:
                     value={md}
                     onSave={(v) => {
                       const parsed = mechMarkdownToInnovativePractices(v);
-                      updateData("templateData.innovativePractices.markdown", v);
-                      updateData("templateData.innovativePractices.items", parsed);
+                      updateData(
+                        "templateData.innovativePractices.markdown",
+                        v,
+                      );
+                      updateData(
+                        "templateData.innovativePractices.items",
+                        parsed,
+                      );
                       updateData("innovativePractices.markdown", v);
                       updateData("innovativePractices", parsed);
                     }}
@@ -7172,7 +7496,9 @@ After successfully completing the course, students will be able to:
                               className="px-6 py-4 text-center whitespace-nowrap"
                               style={{ color: "#003366" }}
                             >
-                              <span className="font-medium">{item.faculty}</span>
+                              <span className="font-medium">
+                                {item.faculty}
+                              </span>
                             </td>
                             <td className="px-6 py-4 text-gray-700">
                               {item.subject}
@@ -7209,9 +7535,8 @@ After successfully completing the course, students will be able to:
     visits: (() => {
       const industrialVisitPhotos = getMechIndustrialVisitGallery();
       const industrialVisitTable = getMechIndustrialVisits();
-      const industrialVisitsMarkdown = getMechIndustrialVisitsMarkdown(
-        industrialVisitTable,
-      );
+      const industrialVisitsMarkdown =
+        getMechIndustrialVisitsMarkdown(industrialVisitTable);
 
       return (
         <div className="space-y-10">
@@ -7233,7 +7558,9 @@ After successfully completing the course, students will be able to:
               <>
                 <div className="flex items-center gap-3 mb-4">
                   <FaImages className="text-2xl text-ssgmce-blue" />
-                  <h4 className="text-xl font-bold text-gray-800">Visit Gallery</h4>
+                  <h4 className="text-xl font-bold text-gray-800">
+                    Visit Gallery
+                  </h4>
                   <span className="text-sm font-medium text-ssgmce-blue bg-blue-50 px-3 py-1 rounded-full">
                     {industrialVisitPhotos.length} Photos
                   </span>
@@ -7287,7 +7614,8 @@ After successfully completing the course, students will be able to:
                       Manage Visit Gallery
                     </h5>
                     <p className="text-sm text-gray-500 mt-1">
-                      Add new visit photos and update the caption, location, and date for each gallery item.
+                      Add new visit photos and update the caption, location, and
+                      date for each gallery item.
                     </p>
                   </div>
                   <button
@@ -7314,7 +7642,9 @@ After successfully completing the course, students will be able to:
                               {photo.image ? (
                                 <img
                                   src={resolveUploadedAssetUrl(photo.image)}
-                                  alt={photo.caption || `Visit photo ${idx + 1}`}
+                                  alt={
+                                    photo.caption || `Visit photo ${idx + 1}`
+                                  }
                                   className="h-full w-full object-cover"
                                 />
                               ) : (
@@ -7332,11 +7662,14 @@ After successfully completing the course, students will be able to:
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
-                                disabled={industrialVisitGalleryUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitGalleryUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
-                                  if (file) uploadMechIndustrialVisitPhoto(idx, file);
+                                  if (file)
+                                    uploadMechIndustrialVisitPhoto(idx, file);
                                 }}
                               />
                             </label>
@@ -7406,7 +7739,9 @@ After successfully completing the course, students will be able to:
                           <div className="flex lg:w-32 lg:justify-end">
                             <button
                               type="button"
-                              onClick={() => deleteMechIndustrialVisitPhoto(idx)}
+                              onClick={() =>
+                                deleteMechIndustrialVisitPhoto(idx)
+                              }
                               className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
                             >
                               <FaTrash className="text-xs" />
@@ -7462,7 +7797,9 @@ After successfully completing the course, students will be able to:
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
-                    src={resolveUploadedAssetUrl(industrialVisitPhotos[ivLightbox].image)}
+                    src={resolveUploadedAssetUrl(
+                      industrialVisitPhotos[ivLightbox].image,
+                    )}
                     alt={industrialVisitPhotos[ivLightbox].caption}
                     className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
                   />
@@ -7584,7 +7921,8 @@ After successfully completing the course, students will be able to:
                           Edit Industrial Visits in Markdown
                         </h4>
                         <p className="text-sm text-gray-500 mt-1">
-                          Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
+                          Serial numbers are automatic now. Add a new blank row
+                          on top, then edit only the actual visit details.
                         </p>
                       </div>
                       <button
@@ -7610,7 +7948,8 @@ After successfully completing the course, students will be able to:
                       Optional Detailed Reports
                     </h4>
                     <p className="text-sm text-gray-500 mt-1">
-                      Upload a detailed report only for the visit rows that need one.
+                      Upload a detailed report only for the visit rows that need
+                      one.
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -7654,12 +7993,17 @@ After successfully completing the course, students will be able to:
                                 type="file"
                                 accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png"
                                 className="hidden"
-                                disabled={industrialVisitReportUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitReportUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
                                   if (file) {
-                                    uploadMechIndustrialVisitReport(visit.id, file);
+                                    uploadMechIndustrialVisitReport(
+                                      visit.id,
+                                      file,
+                                    );
                                   }
                                 }}
                               />
@@ -7788,7 +8132,9 @@ After successfully completing the course, students will be able to:
                               <span
                                 className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Given" || pat.status === "Granted" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
                               >
-                                {pat.status === "Given" ? "Granted" : pat.status}
+                                {pat.status === "Given"
+                                  ? "Granted"
+                                  : pat.status}
                               </span>
                             </td>
                             <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
@@ -7823,7 +8169,8 @@ After successfully completing the course, students will be able to:
                         Edit Patents Table in Markdown
                       </h4>
                       <p className="text-sm text-gray-500">
-                        Add patent links in the last column to make application numbers clickable.
+                        Add patent links in the last column to make application
+                        numbers clickable.
                       </p>
                     </div>
                     <button
@@ -7837,7 +8184,9 @@ After successfully completing the course, students will be able to:
                   </div>
                   <MarkdownEditor
                     value={selectedResearchMarkdown}
-                    onSave={(value) => handleMechResearchMarkdownSave("patents", value)}
+                    onSave={(value) =>
+                      handleMechResearchMarkdownSave("patents", value)
+                    }
                     placeholder="Edit patents table in markdown..."
                     showDocImport
                     docTemplateUrl={MECH_RESEARCH_TEMPLATE_URLS.patents}
@@ -7859,7 +8208,8 @@ After successfully completing the course, students will be able to:
                           Edit Institute-Level Patents in Markdown
                         </h4>
                         <p className="text-sm text-gray-500">
-                          This section uses only a markdown table in admin while keeping the public table layout unchanged.
+                          This section uses only a markdown table in admin while
+                          keeping the public table layout unchanged.
                         </p>
                       </div>
                       <button
@@ -7880,7 +8230,9 @@ After successfully completing the course, students will be able to:
                       }
                       placeholder="Edit institute-level patents table in markdown..."
                       showDocImport
-                      docTemplateUrl={MECH_RESEARCH_TEMPLATE_URLS.institutePatents}
+                      docTemplateUrl={
+                        MECH_RESEARCH_TEMPLATE_URLS.institutePatents
+                      }
                     />
                   </div>
                 ) : (
@@ -7926,7 +8278,17 @@ After successfully completing the course, students will be able to:
                               </td>
                               <td className="px-6 py-4 text-right">
                                 <span
-                                  className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${String(pat.status || "").toLowerCase().includes("granted") ? "bg-green-100 text-green-700" : String(pat.status || "").toLowerCase().includes("published") ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"}`}
+                                  className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${
+                                    String(pat.status || "")
+                                      .toLowerCase()
+                                      .includes("granted")
+                                      ? "bg-green-100 text-green-700"
+                                      : String(pat.status || "")
+                                            .toLowerCase()
+                                            .includes("published")
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : "bg-gray-100 text-gray-600"
+                                  }`}
                                 >
                                   {pat.status}
                                 </span>
@@ -8081,7 +8443,8 @@ After successfully completing the course, students will be able to:
                         Edit Publications Table in Markdown
                       </h4>
                       <p className="text-sm text-gray-500">
-                        Add publication URLs in the last column to keep the public View button working.
+                        Add publication URLs in the last column to keep the
+                        public View button working.
                       </p>
                     </div>
                     <button
@@ -8095,7 +8458,9 @@ After successfully completing the course, students will be able to:
                   </div>
                   <MarkdownEditor
                     value={selectedResearchMarkdown}
-                    onSave={(value) => handleMechResearchMarkdownSave("publications", value)}
+                    onSave={(value) =>
+                      handleMechResearchMarkdownSave("publications", value)
+                    }
                     placeholder="Edit publications table in markdown..."
                     showDocImport
                     docTemplateUrl={MECH_RESEARCH_TEMPLATE_URLS.publications}
@@ -8176,37 +8541,37 @@ After successfully completing the course, students will be able to:
                       </thead>
                       <tbody className="divide-y divide-gray-100">
                         {selectedResearchItems.map((cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.link ? (
-                                  <a
-                                    href={cr.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline"
-                                  >
-                                    {cr.title}
-                                  </a>
-                                ) : (
-                                  cr.title
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.link ? (
+                                <a
+                                  href={cr.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline"
+                                >
+                                  {cr.title}
+                                </a>
+                              ) : (
+                                cr.title
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8220,7 +8585,8 @@ After successfully completing the course, students will be able to:
                         Edit Copyrights Table in Markdown
                       </h4>
                       <p className="text-sm text-gray-500">
-                        Add optional links in the last column if a copyright entry should open a document or page.
+                        Add optional links in the last column if a copyright
+                        entry should open a document or page.
                       </p>
                     </div>
                     <button
@@ -8234,7 +8600,9 @@ After successfully completing the course, students will be able to:
                   </div>
                   <MarkdownEditor
                     value={selectedResearchMarkdown}
-                    onSave={(value) => handleMechResearchMarkdownSave("copyrights", value)}
+                    onSave={(value) =>
+                      handleMechResearchMarkdownSave("copyrights", value)
+                    }
                     placeholder="Edit copyrights table in markdown..."
                     showDocImport
                     docTemplateUrl={MECH_RESEARCH_TEMPLATE_URLS.copyrights}
@@ -8351,12 +8719,19 @@ After successfully completing the course, students will be able to:
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {currentInternships.map((intern, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={idx}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
                         <td className="px-3 py-3 font-medium text-gray-900">
                           {idx + 1}
                         </td>
-                        <td className="px-3 py-3 text-gray-700">{intern.sis}</td>
-                        <td className="px-3 py-3 text-gray-700">{intern.name}</td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.sis}
+                        </td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.name}
+                        </td>
                         <td className="px-3 py-3 text-gray-700 text-xs">
                           {intern.org}
                         </td>
@@ -8568,7 +8943,9 @@ After successfully completing the course, students will be able to:
 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> This will create a new empty year for Mechanical patents, publications, and copyrights with markdown, DOCX import, and template download support.
+                      <strong>Note:</strong> This will create a new empty year
+                      for Mechanical patents, publications, and copyrights with
+                      markdown, DOCX import, and template download support.
                     </p>
                   </div>
                 </div>
@@ -8861,7 +9238,9 @@ After successfully completing the course, students will be able to:
 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> This will create a new empty year for Mechanical patents, publications, and copyrights with markdown, DOCX import, and template download support.
+                      <strong>Note:</strong> This will create a new empty year
+                      for Mechanical patents, publications, and copyrights with
+                      markdown, DOCX import, and template download support.
                     </p>
                   </div>
                 </div>
@@ -8912,8 +9291,9 @@ const normalizeMechanicalActivity = (activity = {}) => ({
   image: String(activity.image || "").trim(),
 });
 
-const defaultMechanicalActivityCards =
-  defaultActivities.map(normalizeMechanicalActivity);
+const defaultMechanicalActivityCards = defaultActivities.map(
+  normalizeMechanicalActivity,
+);
 
 const getRenderedMechanicalActivityImage = (activity = {}, index = -1) => {
   const currentImage = String(activity?.image || "").trim();

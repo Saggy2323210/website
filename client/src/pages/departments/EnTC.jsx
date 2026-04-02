@@ -329,7 +329,9 @@ const entcInternshipsToMarkdown = (records = [], year = "2024-25") => {
   ];
 
   if (!records.length) {
-    lines.push("| Add student name | Add class | Add company | Add duration | Add start date | Add end date |");
+    lines.push(
+      "| Add student name | Add class | Add company | Add duration | Add start date | Add end date |",
+    );
     return lines.join("\n");
   }
 
@@ -342,7 +344,10 @@ const entcInternshipsToMarkdown = (records = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseEntcInternshipsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseEntcInternshipsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, records: [] };
 
@@ -450,7 +455,9 @@ const parseEntcIndustrialVisitsMarkdown = (markdown = "") => {
         class: cells[offset + 1] || "",
         date: cells[offset + 2] || "",
         students: cells[offset + 3] || "",
-        report: entcExtractMarkdownLinkHref(cells.slice(offset + 4).join(" | ")),
+        report: entcExtractMarkdownLinkHref(
+          cells.slice(offset + 4).join(" | "),
+        ),
       };
     })
     .filter(
@@ -469,50 +476,163 @@ const createEntcIndustrialVisitId = () =>
 const getEntcIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
     industries: (Array.isArray(visit?.industries) ? visit.industries : [])
-      .map((item) => String(item || "").trim().toLowerCase())
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
       .filter(Boolean),
-    class: String(visit?.class || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
-    students: String(visit?.students || "").trim().toLowerCase(),
+    class: String(visit?.class || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
+    students: String(visit?.students || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const defaultEntcMous = [
-  { no: "1.", org: "ADOLF SOLUTIONS (OPC) PVT. LTD", date: "05-April-2025", report: "/uploads/documents/entc_mous/MOU_Adolf_Solutions_2025.pdf" },
-  { no: "2.", org: "DAccess IT Infra Pvt. Ltd., Pune", date: "05-April-2025", report: "/uploads/documents/entc_mous/MOU_DAccess_IT_Infra_2025.pdf" },
-  { no: "3.", org: "Iravan Technologies., Pune", date: "05-April-2025", report: "/uploads/documents/entc_mous/MOU_Iravan_Technologies_2025.pdf" },
-  { no: "4.", org: "SSG Embedded Solutions, Nagpur", date: "05-April-2025", report: "/uploads/documents/entc_mous/MOU_SSG_Embedded_Solutions_2025.pdf" },
-  { no: "5.", org: "Symbiosis Institute of Technology, Pune", date: "15-Sept-2023", report: "/uploads/documents/entc_mous/MOU_Symbiosis_2023.pdf" },
-  { no: "6.", org: "S M Technologies Pvt Ltd", date: "16-Apr-2022", report: "/uploads/documents/entc_mous/MOU_SM_Technologies_2022.pdf" },
-  { no: "7.", org: "TOR VERGATA University of ROME", date: "11-Feb-2020", report: "/uploads/documents/entc_mous/MOU_Tor_Vergata_Rome_2020.pdf" },
-  { no: "8.", org: "ioCare, Pune", date: "07-Feb-2020", report: "/uploads/documents/entc_mous/MOU_ioCare_2020.pdf" },
-  { no: "9.", org: "SSGM Electronic Solutions Pvt. Ltd., Akola", date: "16-Sept-2019", report: "/uploads/documents/entc_mous/MOU_SSGM_Electronic_Solutions_2019.pdf" },
-  { no: "10.", org: "Green Field Control Systems, Gandhinagar, Gujarat", date: "16-Sept-2019", report: "/uploads/documents/entc_mous/MOU_Green_Field_Control_2019.pdf" },
-  { no: "11.", org: "Integral Power Solutions Pvt. Ltd., Nashik", date: "02-Aug-2019", report: "/uploads/documents/entc_mous/MOU_Integral_Power_Solutions_2019.pdf" },
-  { no: "12.", org: "Scientech Tech Pvt. Ltd., Indore", date: "Jan-2019", report: "/uploads/documents/entc_mous/MOU_Scientech_2019.pdf" },
-  { no: "13.", org: "V-Chip Technology Pvt. Ltd., Pune", date: "10-Aug-2018", report: "/uploads/documents/entc_mous/MOU_VChip_Technology_2018.pdf" },
-  { no: "14.", org: "Dr. P.D.K.V., Akola", date: "25-Jul-2018", report: "/uploads/documents/entc_mous/MOU_PDKV_Akola_2018.pdf" },
+  {
+    no: "1.",
+    org: "ADOLF SOLUTIONS (OPC) PVT. LTD",
+    date: "05-April-2025",
+    report: "/uploads/documents/entc_mous/MOU_Adolf_Solutions_2025.pdf",
+  },
+  {
+    no: "2.",
+    org: "DAccess IT Infra Pvt. Ltd., Pune",
+    date: "05-April-2025",
+    report: "/uploads/documents/entc_mous/MOU_DAccess_IT_Infra_2025.pdf",
+  },
+  {
+    no: "3.",
+    org: "Iravan Technologies., Pune",
+    date: "05-April-2025",
+    report: "/uploads/documents/entc_mous/MOU_Iravan_Technologies_2025.pdf",
+  },
+  {
+    no: "4.",
+    org: "SSG Embedded Solutions, Nagpur",
+    date: "05-April-2025",
+    report: "/uploads/documents/entc_mous/MOU_SSG_Embedded_Solutions_2025.pdf",
+  },
+  {
+    no: "5.",
+    org: "Symbiosis Institute of Technology, Pune",
+    date: "15-Sept-2023",
+    report: "/uploads/documents/entc_mous/MOU_Symbiosis_2023.pdf",
+  },
+  {
+    no: "6.",
+    org: "S M Technologies Pvt Ltd",
+    date: "16-Apr-2022",
+    report: "/uploads/documents/entc_mous/MOU_SM_Technologies_2022.pdf",
+  },
+  {
+    no: "7.",
+    org: "TOR VERGATA University of ROME",
+    date: "11-Feb-2020",
+    report: "/uploads/documents/entc_mous/MOU_Tor_Vergata_Rome_2020.pdf",
+  },
+  {
+    no: "8.",
+    org: "ioCare, Pune",
+    date: "07-Feb-2020",
+    report: "/uploads/documents/entc_mous/MOU_ioCare_2020.pdf",
+  },
+  {
+    no: "9.",
+    org: "SSGM Electronic Solutions Pvt. Ltd., Akola",
+    date: "16-Sept-2019",
+    report:
+      "/uploads/documents/entc_mous/MOU_SSGM_Electronic_Solutions_2019.pdf",
+  },
+  {
+    no: "10.",
+    org: "Green Field Control Systems, Gandhinagar, Gujarat",
+    date: "16-Sept-2019",
+    report: "/uploads/documents/entc_mous/MOU_Green_Field_Control_2019.pdf",
+  },
+  {
+    no: "11.",
+    org: "Integral Power Solutions Pvt. Ltd., Nashik",
+    date: "02-Aug-2019",
+    report:
+      "/uploads/documents/entc_mous/MOU_Integral_Power_Solutions_2019.pdf",
+  },
+  {
+    no: "12.",
+    org: "Scientech Tech Pvt. Ltd., Indore",
+    date: "Jan-2019",
+    report: "/uploads/documents/entc_mous/MOU_Scientech_2019.pdf",
+  },
+  {
+    no: "13.",
+    org: "V-Chip Technology Pvt. Ltd., Pune",
+    date: "10-Aug-2018",
+    report: "/uploads/documents/entc_mous/MOU_VChip_Technology_2018.pdf",
+  },
+  {
+    no: "14.",
+    org: "Dr. P.D.K.V., Akola",
+    date: "25-Jul-2018",
+    report: "/uploads/documents/entc_mous/MOU_PDKV_Akola_2018.pdf",
+  },
 ];
 
 const entcMousToMarkdown = (mous = []) => {
-  const lines = ["## MoUs", "", "| Name of the Organization | MOU Signing Date | MOU Copy / Report |", "|--------------------------|------------------|-------------------|"];
-  if (!mous.length) return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
-  mous.forEach((mou) => lines.push(`| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`));
+  const lines = [
+    "## MoUs",
+    "",
+    "| Name of the Organization | MOU Signing Date | MOU Copy / Report |",
+    "|--------------------------|------------------|-------------------|",
+  ];
+  if (!mous.length)
+    return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
+  mous.forEach((mou) =>
+    lines.push(
+      `| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`,
+    ),
+  );
   return lines.join("\n");
 };
 
 const parseEntcMousMarkdown = (markdown = "") => {
   const text = String(markdown || "").trim();
   if (!text) return [];
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
-  return dataLines.map((line) => entcParseMarkdownTableRow(line)).filter((cells) => cells.length >= 3).map((cells) => ({ org: cells[0] || "", date: cells[1] || "", report: entcExtractMarkdownLinkHref(cells.slice(2).join(" | ")) })).filter((mou) => mou.org || mou.date || mou.report);
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
+  return dataLines
+    .map((line) => entcParseMarkdownTableRow(line))
+    .filter((cells) => cells.length >= 3)
+    .map((cells) => ({
+      org: cells[0] || "",
+      date: cells[1] || "",
+      report: entcExtractMarkdownLinkHref(cells.slice(2).join(" | ")),
+    }))
+    .filter((mou) => mou.org || mou.date || mou.report);
 };
 
 const createEntcMouId = () =>
   `entc-mou-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 const getEntcMouSignature = (mou = {}) =>
-  JSON.stringify({ org: String(mou?.org || "").trim().toLowerCase(), date: String(mou?.date || "").trim().toLowerCase() });
+  JSON.stringify({
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
+  });
 
 const entcPatentsToMarkdown = (items = [], year = "2024-25") => {
   const lines = [
@@ -522,7 +642,9 @@ const entcPatentsToMarkdown = (items = [], year = "2024-25") => {
     "|--------------------|--------|-----------------|-----------|------|",
   ];
   if (!items.length) {
-    lines.push("| Add invention title | Published | Add application no. | Add inventors | - |");
+    lines.push(
+      "| Add invention title | Published | Add application no. | Add inventors | - |",
+    );
     return lines.join("\n");
   }
   items.forEach((item) => {
@@ -538,8 +660,17 @@ const parseEntcPatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
+  );
   return {
     year,
     items: dataLines
@@ -552,7 +683,10 @@ const parseEntcPatentsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         inventors: cells[3] || "",
         link: entcExtractMarkdownLinkHref(cells.slice(4).join(" | ")),
       }))
-      .filter((item) => item.title || item.status || item.id || item.inventors || item.link),
+      .filter(
+        (item) =>
+          item.title || item.status || item.id || item.inventors || item.link,
+      ),
   };
 };
 
@@ -575,13 +709,23 @@ const entcPublicationsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseEntcPublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseEntcPublicationsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return {
     year,
     items: dataLines
@@ -593,7 +737,9 @@ const parseEntcPublicationsMarkdown = (markdown = "", fallbackYear = "2024-25") 
         journal: cells[2] || "",
         link: entcExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -605,7 +751,9 @@ const entcConferencesToMarkdown = (items = [], year = "2024-25") => {
     "|----------------|---------|--------------------|------|",
   ];
   if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add conference details | - |");
+    lines.push(
+      "| Add paper title | Add authors | Add conference details | - |",
+    );
     return lines.join("\n");
   }
   items.forEach((item) => {
@@ -616,13 +764,23 @@ const entcConferencesToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseEntcConferencesMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseEntcConferencesMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return {
     year,
     items: dataLines
@@ -634,7 +792,9 @@ const parseEntcConferencesMarkdown = (markdown = "", fallbackYear = "2024-25") =
         journal: cells[2] || "",
         link: entcExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -657,13 +817,23 @@ const entcCopyrightsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseEntcCopyrightsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+const parseEntcCopyrightsMarkdown = (
+  markdown = "",
+  fallbackYear = "2024-25",
+) => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
   return {
     year,
     items: dataLines
@@ -687,7 +857,9 @@ const entcBooksToMarkdown = (items = [], year = "2024-25") => {
     "|-----------|------------|-------|-----------|------|------|",
   ];
   if (!items.length) {
-    lines.push("| Add author names | - | Add title | Add publisher | Add ISBN | - |");
+    lines.push(
+      "| Add author names | - | Add title | Add publisher | Add ISBN | - |",
+    );
     return lines.join("\n");
   }
   items.forEach((item) => {
@@ -703,8 +875,17 @@ const parseEntcBooksMarkdown = (markdown = "", fallbackYear = "2024-25") => {
   if (!text) return { year: fallbackYear, items: [] };
   const headingMatch = text.match(/^##\s+(.+)$/m);
   const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 &&
+      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+        line,
+      ),
+  );
   return {
     year,
     items: dataLines
@@ -718,7 +899,15 @@ const parseEntcBooksMarkdown = (markdown = "", fallbackYear = "2024-25") => {
         isbn: cells[4] || "",
         link: entcExtractMarkdownLinkHref(cells.slice(5).join(" | ")),
       }))
-      .filter((item) => item.name || item.coAuthors || item.title || item.details || item.isbn || item.link),
+      .filter(
+        (item) =>
+          item.name ||
+          item.coAuthors ||
+          item.title ||
+          item.details ||
+          item.isbn ||
+          item.link,
+      ),
   };
 };
 
@@ -748,16 +937,19 @@ const ENTC_RESEARCH_FROM_MARKDOWN = {
 
 const ENTC_RESEARCH_TEMPLATE_URLS = {
   patents: "/uploads/documents/pride_templates/entc_patents_template.docx",
-  publications: "/uploads/documents/pride_templates/entc_publications_template.docx",
-  conferences: "/uploads/documents/pride_templates/entc_conferences_template.docx",
+  publications:
+    "/uploads/documents/pride_templates/entc_publications_template.docx",
+  conferences:
+    "/uploads/documents/pride_templates/entc_conferences_template.docx",
   books: "/uploads/documents/pride_templates/entc_books_template.docx",
-  copyrights: "/uploads/documents/pride_templates/entc_copyrights_template.docx",
+  copyrights:
+    "/uploads/documents/pride_templates/entc_copyrights_template.docx",
 };
 
 const EnTC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [achievementTab, setAchievementTab] = useState("faculty");
   const [certificateLightbox, setCertificateLightbox] = useState(null);
@@ -824,7 +1016,7 @@ const EnTC = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
   const latestCourseMaterialRef = useRef(null);
@@ -845,30 +1037,38 @@ const EnTC = () => {
   };
 
   const getEntcIndustrialVisits = () =>
-    JSON.parse(JSON.stringify(t("industrialVisits.items", defaultEntcIndustrialVisits))).map(
+    JSON.parse(
+      JSON.stringify(t("industrialVisits.items", defaultEntcIndustrialVisits)),
+    ).map((visit) => ({
+      ...visit,
+      id: String(visit?.id || createEntcIndustrialVisitId()),
+    }));
+
+  const getEntcIndustrialVisitsMarkdown = (
+    visits = getEntcIndustrialVisits(),
+  ) => entcIndustrialVisitsToMarkdown(visits);
+
+  const persistEntcIndustrialVisits = (visits) => {
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
       (visit) => ({
-        ...visit,
-        id: String(visit?.id || createEntcIndustrialVisitId()),
+        id: String(visit?.id || createEntcIndustrialVisitId()).trim(),
+        industries: Array.isArray(visit?.industries)
+          ? visit.industries
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+          : [],
+        class: String(visit?.class || "").trim(),
+        date: String(visit?.date || "").trim(),
+        students: String(visit?.students || "").trim(),
+        report: String(visit?.report || "").trim(),
       }),
     );
 
-  const getEntcIndustrialVisitsMarkdown = (visits = getEntcIndustrialVisits()) =>
-    entcIndustrialVisitsToMarkdown(visits);
-
-  const persistEntcIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createEntcIndustrialVisitId()).trim(),
-      industries: Array.isArray(visit?.industries)
-        ? visit.industries.map((item) => String(item || "").trim()).filter(Boolean)
-        : [],
-      class: String(visit?.class || "").trim(),
-      date: String(visit?.date || "").trim(),
-      students: String(visit?.students || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
-
     updateData("industrialVisits.items", normalizedVisits);
-    updateData("industrialVisits.markdown", entcIndustrialVisitsToMarkdown(normalizedVisits));
+    updateData(
+      "industrialVisits.markdown",
+      entcIndustrialVisitsToMarkdown(normalizedVisits),
+    );
   };
 
   const handleEntcIndustrialVisitsMarkdownSave = (markdown) => {
@@ -928,7 +1128,10 @@ const EnTC = () => {
     if (!file) return;
 
     const uploadKey = `entc-industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -982,7 +1185,8 @@ const EnTC = () => {
       id: String(mou?.id || createEntcMouId()),
     }));
 
-  const getEntcMousMarkdown = (mous = getEntcMous()) => entcMousToMarkdown(mous);
+  const getEntcMousMarkdown = (mous = getEntcMous()) =>
+    entcMousToMarkdown(mous);
 
   const persistEntcMous = (mous) => {
     const normalizedMous = (Array.isArray(mous) ? mous : []).map((mou) => ({
@@ -1008,20 +1212,35 @@ const EnTC = () => {
     const usedIds = new Set();
     const mergedMous = parsed.map((mou, index) => {
       const signature = getEntcMouSignature(mou);
-      let match = (signaturePool.get(signature) || []).find((item) => !usedIds.has(item.id));
+      let match = (signaturePool.get(signature) || []).find(
+        (item) => !usedIds.has(item.id),
+      );
       if (!match) {
         const fallback = existingMous[index];
         if (fallback && !usedIds.has(fallback.id)) match = fallback;
       }
       if (match?.id) usedIds.add(match.id);
-      return { id: match?.id || createEntcMouId(), org: mou.org, date: mou.date, report: mou.report || match?.report || "" };
+      return {
+        id: match?.id || createEntcMouId(),
+        org: mou.org,
+        date: mou.date,
+        report: mou.report || match?.report || "",
+      };
     });
     persistEntcMous(mergedMous);
   };
 
   const addEntcMouRowOnTop = () => {
     const mous = getEntcMous();
-    persistEntcMous([{ id: createEntcMouId(), org: "New organization", date: "Add signing date", report: "" }, ...mous]);
+    persistEntcMous([
+      {
+        id: createEntcMouId(),
+        org: "New organization",
+        date: "Add signing date",
+        report: "",
+      },
+      ...mous,
+    ]);
   };
 
   const uploadEntcMouReport = async (mouId, file) => {
@@ -1034,15 +1253,25 @@ const EnTC = () => {
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/file", formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.data.fileUrl) {
         const mous = getEntcMous();
-        persistEntcMous(mous.map((mou) => (mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou)));
+        persistEntcMous(
+          mous.map((mou) =>
+            mou.id === mouId ? { ...mou, report: response.data.fileUrl } : mou,
+          ),
+        );
       }
     } catch (error) {
       console.error("EnTC MOU upload failed:", error);
-      setMouReportErrors((prev) => ({ ...prev, [uploadKey]: "Failed to upload report." }));
+      setMouReportErrors((prev) => ({
+        ...prev,
+        [uploadKey]: "Failed to upload report.",
+      }));
     } finally {
       setMouReportUploading((prev) => ({ ...prev, [uploadKey]: false }));
     }
@@ -1088,14 +1317,21 @@ const EnTC = () => {
   const getEntcResearchItems = (section, year = researchYear) =>
     JSON.parse(
       JSON.stringify(
-        t(`research.${section}.${year}`, ENTC_RESEARCH_DEFAULTS[section]?.[year] || []),
+        t(
+          `research.${section}.${year}`,
+          ENTC_RESEARCH_DEFAULTS[section]?.[year] || [],
+        ),
       ),
     );
 
   const getEntcResearchMarkdownValue = (section, year = researchYear) => {
     const storedMarkdown = t(`researchMarkdown.${section}.${year}`, null);
-    if (typeof storedMarkdown === "string" && storedMarkdown.trim()) return storedMarkdown;
-    return ENTC_RESEARCH_TO_MARKDOWN[section](getEntcResearchItems(section, year), year);
+    if (typeof storedMarkdown === "string" && storedMarkdown.trim())
+      return storedMarkdown;
+    return ENTC_RESEARCH_TO_MARKDOWN[section](
+      getEntcResearchItems(section, year),
+      year,
+    );
   };
 
   const getEntcResearchYears = () => {
@@ -1104,11 +1340,23 @@ const EnTC = () => {
       : [];
     const storedResearch = t("research", {});
     const storedResearchMarkdown = t("researchMarkdown", {});
-    const discoveredYears = Object.keys(ENTC_RESEARCH_DEFAULTS).flatMap((section) => [
-      ...Object.keys(ENTC_RESEARCH_DEFAULTS[section] || {}),
-      ...Object.keys(storedResearch?.[section] && typeof storedResearch[section] === "object" ? storedResearch[section] : {}),
-      ...Object.keys(storedResearchMarkdown?.[section] && typeof storedResearchMarkdown[section] === "object" ? storedResearchMarkdown[section] : {}),
-    ]);
+    const discoveredYears = Object.keys(ENTC_RESEARCH_DEFAULTS).flatMap(
+      (section) => [
+        ...Object.keys(ENTC_RESEARCH_DEFAULTS[section] || {}),
+        ...Object.keys(
+          storedResearch?.[section] &&
+            typeof storedResearch[section] === "object"
+            ? storedResearch[section]
+            : {},
+        ),
+        ...Object.keys(
+          storedResearchMarkdown?.[section] &&
+            typeof storedResearchMarkdown[section] === "object"
+            ? storedResearchMarkdown[section]
+            : {},
+        ),
+      ],
+    );
     const years = normalizePlacementYears([
       ...defaultResearchYears,
       ...configuredYears,
@@ -1138,18 +1386,56 @@ const EnTC = () => {
   const addEntcResearchRowOnTop = (section = patentSubTab) => {
     const researchItems = getEntcResearchItems(section, researchYear);
     const blankRows = {
-      patents: { title: "Add invention title", status: "Published", id: "Add application no.", inventors: "Add inventors", link: "" },
-      publications: { title: "Add paper title", authors: "Add authors", journal: "Add journal details", link: "" },
-      conferences: { title: "Add paper title", authors: "Add authors", journal: "Add conference details", link: "" },
-      copyrights: { name: "Add faculty name", title: "Add title of work", status: "Published", link: "" },
-      books: { name: "Add author names", coAuthors: "", title: "Add title", details: "Add publisher", isbn: "Add ISBN", link: "" },
+      patents: {
+        title: "Add invention title",
+        status: "Published",
+        id: "Add application no.",
+        inventors: "Add inventors",
+        link: "",
+      },
+      publications: {
+        title: "Add paper title",
+        authors: "Add authors",
+        journal: "Add journal details",
+        link: "",
+      },
+      conferences: {
+        title: "Add paper title",
+        authors: "Add authors",
+        journal: "Add conference details",
+        link: "",
+      },
+      copyrights: {
+        name: "Add faculty name",
+        title: "Add title of work",
+        status: "Published",
+        link: "",
+      },
+      books: {
+        name: "Add author names",
+        coAuthors: "",
+        title: "Add title",
+        details: "Add publisher",
+        isbn: "Add ISBN",
+        link: "",
+      },
     };
-    persistEntcResearchSection(section, [blankRows[section] || {}, ...researchItems], researchYear);
+    persistEntcResearchSection(
+      section,
+      [blankRows[section] || {}, ...researchItems],
+      researchYear,
+    );
   };
 
   const researchYears = getEntcResearchYears();
-  const selectedResearchItems = getEntcResearchItems(patentSubTab, researchYear);
-  const selectedResearchMarkdown = getEntcResearchMarkdownValue(patentSubTab, researchYear);
+  const selectedResearchItems = getEntcResearchItems(
+    patentSubTab,
+    researchYear,
+  );
+  const selectedResearchMarkdown = getEntcResearchMarkdownValue(
+    patentSubTab,
+    researchYear,
+  );
 
   useEffect(() => {
     if (!researchYears.length) return;
@@ -1170,7 +1456,10 @@ const EnTC = () => {
     }
     Object.keys(ENTC_RESEARCH_DEFAULTS).forEach((section) => {
       updateData(`research.${section}.${normalizedYear}`, []);
-      updateData(`researchMarkdown.${section}.${normalizedYear}`, createEmptyEntcResearchMarkdown(section, normalizedYear));
+      updateData(
+        `researchMarkdown.${section}.${normalizedYear}`,
+        createEmptyEntcResearchMarkdown(section, normalizedYear),
+      );
     });
     updateData("researchYears", [normalizedYear, ...researchYears]);
     setResearchYear(normalizedYear);
@@ -1197,9 +1486,13 @@ const EnTC = () => {
       formData.append("file", file);
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/file", formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
-      if (!response.data.fileUrl) throw new Error("Upload did not return a file URL.");
+      if (!response.data.fileUrl)
+        throw new Error("Upload did not return a file URL.");
       updateData(`researchReports.${year}`, response.data.fileUrl);
     } catch (error) {
       console.error("EnTC research report upload failed:", error);
@@ -1224,7 +1517,10 @@ const EnTC = () => {
       .split("|")
       .map((cell) => cell.trim());
 
-  const entcUgProjectsToMarkdown = (projectsByYear = {}, preferredYears = []) => {
+  const entcUgProjectsToMarkdown = (
+    projectsByYear = {},
+    preferredYears = [],
+  ) => {
     const yearOrder = [
       ...preferredYears,
       ...Object.keys(projectsByYear || {}).filter(
@@ -1257,7 +1553,10 @@ const EnTC = () => {
       .join("\n\n");
   };
 
-  const parseEntcUgProjectsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+  const parseEntcUgProjectsMarkdown = (
+    markdown = "",
+    fallbackYear = "2024-25",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) {
       return { years: [fallbackYear], records: { [fallbackYear]: [] } };
@@ -1341,7 +1640,9 @@ const EnTC = () => {
     const markdownByYear = orderedYears.reduce((acc, year) => {
       acc[year] =
         existingMarkdownByYear?.[year] ||
-        entcUgProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [year]);
+        entcUgProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [
+          year,
+        ]);
       return acc;
     }, {});
 
@@ -1670,7 +1971,9 @@ const EnTC = () => {
 
     if (typeof stored === "string" && stored.trim()) {
       const lines = stored.split("\n").map((line) => line.trim());
-      const tableStart = lines.findIndex((line) => line.startsWith("| Sr. No."));
+      const tableStart = lines.findIndex((line) =>
+        line.startsWith("| Sr. No."),
+      );
       if (tableStart !== -1) {
         return lines
           .slice(tableStart + 2)
@@ -1715,7 +2018,9 @@ const EnTC = () => {
         {isEditing ? (
           <MarkdownEditor
             value={markdown}
-            onSave={(value) => updateData(`placements.details.${placementYear}`, value)}
+            onSave={(value) =>
+              updateData(`placements.details.${placementYear}`, value)
+            }
             showDocImport
             docTemplateUrl="/uploads/documents/pride_templates/cse_placement_details_template.docx"
             docTemplateLabel="Download Placement Template"
@@ -1989,7 +2294,6 @@ const EnTC = () => {
     updateData(`studentProjects.${year}`, newProjects);
   };
 
-
   const updateNewsletter = (section, index, field, value) => {
     if (section === "latest") {
       updateData(`newsletters.latest.${field}`, value);
@@ -2207,7 +2511,10 @@ const EnTC = () => {
     if (section === "latest") {
       updateData(`magazines.latest.${field}`, value);
     } else {
-      const currentArchives = t("magazines.archives", defaultMagazines.archives);
+      const currentArchives = t(
+        "magazines.archives",
+        defaultMagazines.archives,
+      );
       const newArchives = [...currentArchives];
       newArchives[index] = { ...newArchives[index], [field]: value };
       updateData("magazines.archives", newArchives);
@@ -2493,7 +2800,7 @@ const EnTC = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/image", formData, {
@@ -2573,7 +2880,9 @@ const EnTC = () => {
     t("activities.list", defaultEntcActivityCards) || defaultEntcActivityCards
   ).map(normalizeEntcActivity);
   const storedActivitiesMarkdown = t("activities.markdown", "");
-  const parsedActivities = parseEntcActivitiesMarkdown(storedActivitiesMarkdown);
+  const parsedActivities = parseEntcActivitiesMarkdown(
+    storedActivitiesMarkdown,
+  );
   const activitiesData = parsedActivities.length
     ? parsedActivities
     : legacyActivities;
@@ -2633,7 +2942,9 @@ const EnTC = () => {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -2729,9 +3040,7 @@ const EnTC = () => {
       typeof facultyMember?.vidwanId === "string"
         ? facultyMember.vidwanId.trim()
         : "";
-    return vidwanId
-      ? `https://vidwan.inflibnet.ac.in/profile/${vidwanId}`
-      : "";
+    return vidwanId ? `https://vidwan.inflibnet.ac.in/profile/${vidwanId}` : "";
   };
 
   const academicsLinks = [
@@ -5591,7 +5900,9 @@ On completion of the course, the students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -5748,7 +6059,9 @@ On completion of the course, the students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -6214,9 +6527,7 @@ On completion of the course, the students will be able to:
                   "templateData.staff.subtitle",
                   "Non-teaching staff members of the Electronics & Telecommunication Engineering Department.",
                 )}
-                onSave={(val) =>
-                  updateData("templateData.staff.subtitle", val)
-                }
+                onSave={(val) => updateData("templateData.staff.subtitle", val)}
               />
             </p>
           </div>
@@ -6580,57 +6891,131 @@ On completion of the course, the students will be able to:
                       <span className="inline-block px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold uppercase rounded-full">
                         Latest
                       </span>
-                        <span className="font-bold text-gray-800">
-                          <EditableText
-                            value={
-                              latestMagazineData.title ||
-                              defaultMagazines.latest.title ||
-                              "Srujjan Magazine 2024-25"
-                            }
-                            onSave={(val) =>
-                              updateMagazine("latest", 0, "title", val)
+                      <span className="font-bold text-gray-800">
+                        <EditableText
+                          value={
+                            latestMagazineData.title ||
+                            defaultMagazines.latest.title ||
+                            "Srujjan Magazine 2024-25"
+                          }
+                          onSave={(val) =>
+                            updateMagazine("latest", 0, "title", val)
+                          }
+                        />
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    {isEditing ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-orange-50 px-4 py-2 text-xs font-medium text-ssgmce-orange transition-all hover:border-orange-400 hover:bg-orange-100">
+                          <FaUpload className="text-xs" />
+                          {magazineUploading["latest-0"]
+                            ? "Uploading..."
+                            : "Upload PDF"}
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            className="hidden"
+                            disabled={magazineUploading["latest-0"]}
+                            onChange={(event) =>
+                              handleMagazineFileChange("latest", 0, event)
                             }
                           />
-                        </span>
+                        </label>
+                        {(latestMagazineData.link ||
+                          latestMagazineData.sourceUrl) && (
+                          <a
+                            href={resolveMagazineHref(latestMagazineData)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-ssgmce-orange underline underline-offset-2"
+                          >
+                            {getMagazineFileName(latestMagazineData)}
+                          </a>
+                        )}
+                        {magazineUploadErrors["latest-0"] && (
+                          <span className="text-center text-[11px] text-red-500">
+                            {magazineUploadErrors["latest-0"]}
+                          </span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => deleteMagazine("latest", 0)}
+                          className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
+                        >
+                          <FaTrash className="text-xs" />
+                          Delete
+                        </button>
                       </div>
+                    ) : (
+                      <a
+                        href={resolveMagazineHref(latestMagazineData)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-ssgmce-blue hover:text-ssgmce-orange font-medium text-xs border border-gray-200 hover:border-orange-400 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-all"
+                      >
+                        <FaDownload className="text-xs" /> Click for Details
+                      </a>
+                    )}
+                  </td>
+                </tr>
+
+                {/* Archive Rows */}
+                {magazineArchivesData.map((issue, i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-orange-50/30 transition-colors"
+                  >
+                    <td className="px-6 py-4 text-center font-mono text-gray-400">
+                      {i + 2}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="font-bold text-gray-700">
+                        <EditableText
+                          value={issue.title}
+                          onSave={(val) =>
+                            updateMagazine("archives", i, "title", val)
+                          }
+                        />
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-center">
                       {isEditing ? (
                         <div className="flex flex-col items-center gap-2">
                           <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-orange-50 px-4 py-2 text-xs font-medium text-ssgmce-orange transition-all hover:border-orange-400 hover:bg-orange-100">
                             <FaUpload className="text-xs" />
-                            {magazineUploading["latest-0"]
+                            {magazineUploading[`archives-${i}`]
                               ? "Uploading..."
                               : "Upload PDF"}
                             <input
                               type="file"
                               accept="application/pdf"
                               className="hidden"
-                              disabled={magazineUploading["latest-0"]}
+                              disabled={magazineUploading[`archives-${i}`]}
                               onChange={(event) =>
-                                handleMagazineFileChange("latest", 0, event)
+                                handleMagazineFileChange("archives", i, event)
                               }
                             />
                           </label>
-                          {(latestMagazineData.link ||
-                            latestMagazineData.sourceUrl) && (
+                          {(issue.link || issue.sourceUrl) && (
                             <a
-                              href={resolveMagazineHref(latestMagazineData)}
+                              href={resolveMagazineHref(issue)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-orange underline underline-offset-2"
                             >
-                              {getMagazineFileName(latestMagazineData)}
+                              {getMagazineFileName(issue)}
                             </a>
                           )}
-                          {magazineUploadErrors["latest-0"] && (
+                          {magazineUploadErrors[`archives-${i}`] && (
                             <span className="text-center text-[11px] text-red-500">
-                              {magazineUploadErrors["latest-0"]}
+                              {magazineUploadErrors[`archives-${i}`]}
                             </span>
                           )}
                           <button
                             type="button"
-                            onClick={() => deleteMagazine("latest", 0)}
+                            onClick={() => deleteMagazine("archives", i)}
                             className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
                           >
                             <FaTrash className="text-xs" />
@@ -6639,7 +7024,7 @@ On completion of the course, the students will be able to:
                         </div>
                       ) : (
                         <a
-                          href={resolveMagazineHref(latestMagazineData)}
+                          href={resolveMagazineHref(issue)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 text-ssgmce-blue hover:text-ssgmce-orange font-medium text-xs border border-gray-200 hover:border-orange-400 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-all"
@@ -6649,82 +7034,7 @@ On completion of the course, the students will be able to:
                       )}
                     </td>
                   </tr>
-
-                  {/* Archive Rows */}
-                {magazineArchivesData.map((issue, i) => (
-                    <tr
-                      key={i}
-                      className="hover:bg-orange-50/30 transition-colors"
-                    >
-                      <td className="px-6 py-4 text-center font-mono text-gray-400">
-                        {i + 2}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="font-bold text-gray-700">
-                          <EditableText
-                            value={issue.title}
-                            onSave={(val) =>
-                              updateMagazine("archives", i, "title", val)
-                            }
-                          />
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {isEditing ? (
-                          <div className="flex flex-col items-center gap-2">
-                            <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-orange-50 px-4 py-2 text-xs font-medium text-ssgmce-orange transition-all hover:border-orange-400 hover:bg-orange-100">
-                              <FaUpload className="text-xs" />
-                              {magazineUploading[`archives-${i}`]
-                                ? "Uploading..."
-                                : "Upload PDF"}
-                              <input
-                                type="file"
-                                accept="application/pdf"
-                                className="hidden"
-                                disabled={magazineUploading[`archives-${i}`]}
-                                onChange={(event) =>
-                                  handleMagazineFileChange("archives", i, event)
-                                }
-                              />
-                            </label>
-                            {(issue.link || issue.sourceUrl) && (
-                              <a
-                                href={resolveMagazineHref(issue)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs font-medium text-ssgmce-orange underline underline-offset-2"
-                              >
-                                {getMagazineFileName(issue)}
-                              </a>
-                            )}
-                            {magazineUploadErrors[`archives-${i}`] && (
-                              <span className="text-center text-[11px] text-red-500">
-                                {magazineUploadErrors[`archives-${i}`]}
-                              </span>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => deleteMagazine("archives", i)}
-                              className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
-                            >
-                              <FaTrash className="text-xs" />
-                              Delete
-                            </button>
-                          </div>
-                        ) : (
-                          <a
-                            href={resolveMagazineHref(issue)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-ssgmce-blue hover:text-ssgmce-orange font-medium text-xs border border-gray-200 hover:border-orange-400 bg-orange-50 hover:bg-orange-100 px-4 py-2 rounded-full transition-all"
-                          >
-                            <FaDownload className="text-xs" /> Click for Details
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  ),
-                )}
+                ))}
               </tbody>
             </table>
           </div>
@@ -6766,7 +7076,7 @@ On completion of the course, the students will be able to:
             parsedPractices && parsedPractices.length > 0
               ? parsedPractices
               : defaultPractices;
-          
+
           return (
             <motion.div
               initial={{ opacity: 0 }}
@@ -6801,7 +7111,10 @@ On completion of the course, the students will be able to:
                           "templateData.innovativePractices.items",
                           nextPractices,
                         );
-                        updateData("innovativePractices.markdown", nextMarkdown);
+                        updateData(
+                          "innovativePractices.markdown",
+                          nextMarkdown,
+                        );
                         updateData("innovativePractices", nextPractices);
                       }}
                       className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
@@ -6814,8 +7127,14 @@ On completion of the course, the students will be able to:
                     value={md}
                     onSave={(v) => {
                       const parsed = entcMarkdownToInnovativePractices(v);
-                      updateData("templateData.innovativePractices.markdown", v);
-                      updateData("templateData.innovativePractices.items", parsed);
+                      updateData(
+                        "templateData.innovativePractices.markdown",
+                        v,
+                      );
+                      updateData(
+                        "templateData.innovativePractices.items",
+                        parsed,
+                      );
                       updateData("innovativePractices.markdown", v);
                       updateData("innovativePractices", parsed);
                     }}
@@ -6864,7 +7183,9 @@ On completion of the course, the students will be able to:
                               className="px-6 py-4 text-center whitespace-nowrap"
                               style={{ color: "#003366" }}
                             >
-                              <span className="font-medium">{item.faculty}</span>
+                              <span className="font-medium">
+                                {item.faculty}
+                              </span>
                             </td>
                             <td className="px-6 py-4 text-gray-700">
                               {item.subject}
@@ -6978,7 +7299,9 @@ On completion of the course, the students will be able to:
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -7199,7 +7522,10 @@ On completion of the course, the students will be able to:
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -7491,196 +7817,199 @@ On completion of the course, the students will be able to:
 
           return (
             <>
-        <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-ssgmce-orange pl-4">
-          <EditableText
-            value={t("ugProjectsTitle", "UG Projects")}
-            onSave={(val) => updateField("ugProjectsTitle", val)}
-          />
-        </h3>
+              <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-ssgmce-orange pl-4">
+                <EditableText
+                  value={t("ugProjectsTitle", "UG Projects")}
+                  onSave={(val) => updateField("ugProjectsTitle", val)}
+                />
+              </h3>
 
-        {/* Year Tabs */}
-        <div className="flex flex-wrap gap-2 items-center">
-          {ugProjectYears.map((year) => (
-            <button
-              key={year}
-              onClick={() => setUgProjectYear(year)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                ugProjectYear === year
-                  ? "bg-ssgmce-blue text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {year}
-            </button>
-          ))}
-          {isEditing && (
-            <button
-              type="button"
-              onClick={() => {
-                setNewUgProjectYear("");
-                setUgProjectYearError("");
-                setShowAddUgProjectYear(true);
-              }}
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-xs font-semibold text-white transition-all hover:shadow-lg"
-            >
-              <FaPlus className="text-xs" />
-              Add Session
-            </button>
-          )}
-        </div>
-
-        {/* Project Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white p-4">
-            <h4 className="text-lg font-bold flex items-center gap-2">
-              <FaBook className="text-ssgmce-orange" />
-              UG Projects – {ugProjectYear}
-            </h4>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-16">
-                    Sr. No.
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200">
-                    Project Title
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {currentUgProjects.map((project, i) => (
-                  <tr
-                    key={i}
-                    className="hover:bg-blue-50/30 transition-colors"
+              {/* Year Tabs */}
+              <div className="flex flex-wrap gap-2 items-center">
+                {ugProjectYears.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setUgProjectYear(year)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      ugProjectYear === year
+                        ? "bg-ssgmce-blue text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
                   >
-                    <td className="px-4 py-3 text-sm text-gray-500 font-medium border border-gray-200 text-center">
-                      {project.id || i + 1}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-700 border border-gray-200">
-                      {project.title}
-                    </td>
-                  </tr>
+                    {year}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {isEditing && (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <div className="mb-4">
-                <h4 className="text-lg font-bold text-gray-800">
-                  Edit {ugProjectYear} in Markdown
-                </h4>
-                <p className="text-sm text-gray-500 mt-1">
-                  Import a DOCX or edit this session in markdown. Saving here
-                  updates the UG Projects table above without changing the
-                  current frontend layout.
-                </p>
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewUgProjectYear("");
+                      setUgProjectYearError("");
+                      setShowAddUgProjectYear(true);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-xs font-semibold text-white transition-all hover:shadow-lg"
+                  >
+                    <FaPlus className="text-xs" />
+                    Add Session
+                  </button>
+                )}
               </div>
-              <MarkdownEditor
-                key={ugProjectYear}
-                value={selectedUgProjectsMarkdown}
-                onSave={handleUgProjectMarkdownSave}
-                showDocImport
-                docTemplateUrl="/uploads/documents/pride_templates/entc_ug_projects_template.docx"
-                docTemplateLabel="Download UG Projects Template"
-                placeholder={`UG projects for ${ugProjectYear} (GFM Markdown)...`}
-              />
-            </div>
-          </div>
-        )}
-        <AnimatePresence>
-          {showAddUgProjectYear && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
-              onClick={() => setShowAddUgProjectYear(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaPlus className="text-ssgmce-blue" /> Add UG Project Session
-                  </h3>
-                  <button
-                    onClick={() => {
-                      setUgProjectYearError("");
-                      setShowAddUgProjectYear(false);
-                    }}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <FaTimes className="text-xl" />
-                  </button>
-                </div>
 
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Academic Year <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g., 2025-26"
-                      value={newUgProjectYear}
-                      onChange={(e) => {
-                        setNewUgProjectYear(e.target.value);
-                        if (ugProjectYearError) setUgProjectYearError("");
-                      }}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Enter the academic year in format YYYY-YY.
-                    </p>
-                    {ugProjectYearError ? (
-                      <p className="text-xs text-red-600 mt-2">
-                        {ugProjectYearError}
+              {/* Project Table */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white p-4">
+                  <h4 className="text-lg font-bold flex items-center gap-2">
+                    <FaBook className="text-ssgmce-orange" />
+                    UG Projects – {ugProjectYear}
+                  </h4>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-16">
+                          Sr. No.
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200">
+                          Project Title
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {currentUgProjects.map((project, i) => (
+                        <tr
+                          key={i}
+                          className="hover:bg-blue-50/30 transition-colors"
+                        >
+                          <td className="px-4 py-3 text-sm text-gray-500 font-medium border border-gray-200 text-center">
+                            {project.id || i + 1}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-700 border border-gray-200">
+                            {project.title}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {isEditing && (
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <div className="mb-4">
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Edit {ugProjectYear} in Markdown
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Import a DOCX or edit this session in markdown. Saving
+                        here updates the UG Projects table above without
+                        changing the current frontend layout.
                       </p>
-                    ) : null}
-                  </div>
-
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> After adding the session, you will
-                      get an empty markdown editor with the same UG Projects
-                      table structure and DOCX import support for that session.
-                    </p>
+                    </div>
+                    <MarkdownEditor
+                      key={ugProjectYear}
+                      value={selectedUgProjectsMarkdown}
+                      onSave={handleUgProjectMarkdownSave}
+                      showDocImport
+                      docTemplateUrl="/uploads/documents/pride_templates/entc_ug_projects_template.docx"
+                      docTemplateLabel="Download UG Projects Template"
+                      placeholder={`UG projects for ${ugProjectYear} (GFM Markdown)...`}
+                    />
                   </div>
                 </div>
+              )}
+              <AnimatePresence>
+                {showAddUgProjectYear && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+                    onClick={() => setShowAddUgProjectYear(false)}
+                  >
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.95, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                          <FaPlus className="text-ssgmce-blue" /> Add UG Project
+                          Session
+                        </h3>
+                        <button
+                          onClick={() => {
+                            setUgProjectYearError("");
+                            setShowAddUgProjectYear(false);
+                          }}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <FaTimes className="text-xl" />
+                        </button>
+                      </div>
 
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setUgProjectYearError("");
-                      setShowAddUgProjectYear(false);
-                    }}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddUgProjectYear}
-                    disabled={!newUgProjectYear.trim()}
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <FaPlus /> Add Session
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                      <div className="space-y-4 mb-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Academic Year{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g., 2025-26"
+                            value={newUgProjectYear}
+                            onChange={(e) => {
+                              setNewUgProjectYear(e.target.value);
+                              if (ugProjectYearError) setUgProjectYearError("");
+                            }}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Enter the academic year in format YYYY-YY.
+                          </p>
+                          {ugProjectYearError ? (
+                            <p className="text-xs text-red-600 mt-2">
+                              {ugProjectYearError}
+                            </p>
+                          ) : null}
+                        </div>
+
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                          <p className="text-sm text-blue-800">
+                            <strong>Note:</strong> After adding the session, you
+                            will get an empty markdown editor with the same UG
+                            Projects table structure and DOCX import support for
+                            that session.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            setUgProjectYearError("");
+                            setShowAddUgProjectYear(false);
+                          }}
+                          className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleAddUgProjectYear}
+                          disabled={!newUgProjectYear.trim()}
+                          className="flex-1 px-4 py-2 bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          <FaPlus /> Add Session
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </>
           );
         })()}
@@ -7702,9 +8031,10 @@ On completion of the course, the students will be able to:
                   Industrial Visits
                 </h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  The department regularly organizes industrial visits and training
-                  programs to provide students hands-on exposure to industry
-                  practices, cutting-edge technologies, and professional work culture.
+                  The department regularly organizes industrial visits and
+                  training programs to provide students hands-on exposure to
+                  industry practices, cutting-edge technologies, and
+                  professional work culture.
                 </p>
               </div>
 
@@ -7730,7 +8060,10 @@ On completion of the course, the students will be able to:
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {industrialVisits.map((visit, idx) => (
-                        <tr key={visit.id || idx} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={visit.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
                           <td className="px-6 py-4 font-medium text-gray-900">
                             {String(idx + 1).padStart(2, "0")}
                           </td>
@@ -7754,7 +8087,9 @@ On completion of the course, the students will be able to:
                               ) : null}
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-gray-700">{visit.class}</td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {visit.class}
+                          </td>
                           <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
                             {visit.date}
                           </td>
@@ -7778,7 +8113,8 @@ On completion of the course, the students will be able to:
                             Edit Industrial Visits in Markdown
                           </h4>
                           <p className="text-sm text-gray-500 mt-1">
-                            Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual visit details.
                           </p>
                         </div>
                         <button
@@ -7804,7 +8140,8 @@ On completion of the course, the students will be able to:
                         Optional Detailed Reports
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
-                        Upload a detailed report only for the visit rows that need one.
+                        Upload a detailed report only for the visit rows that
+                        need one.
                       </p>
                     </div>
                     <div className="space-y-3">
@@ -7818,10 +8155,13 @@ On completion of the course, the students will be able to:
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                               <div>
                                 <p className="text-sm font-semibold text-gray-800">
-                                  {idx + 1}. {(visit.industries || []).join(", ") || "Industrial Visit"}
+                                  {idx + 1}.{" "}
+                                  {(visit.industries || []).join(", ") ||
+                                    "Industrial Visit"}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  {visit.class || "Class not set"} | {visit.date || "Date not set"}
+                                  {visit.class || "Class not set"} |{" "}
+                                  {visit.date || "Date not set"}
                                 </p>
                               </div>
                               <div className="flex items-center gap-3">
@@ -7849,11 +8189,16 @@ On completion of the course, the students will be able to:
                                     type="file"
                                     accept=".pdf,.doc,.docx"
                                     className="hidden"
-                                    disabled={industrialVisitReportUploading[uploadKey]}
+                                    disabled={
+                                      industrialVisitReportUploading[uploadKey]
+                                    }
                                     onChange={(e) => {
                                       const file = e.target.files?.[0];
                                       if (file) {
-                                        uploadEntcIndustrialVisitReport(visit.id, file);
+                                        uploadEntcIndustrialVisitReport(
+                                          visit.id,
+                                          file,
+                                        );
                                       }
                                       e.target.value = "";
                                     }}
@@ -7890,8 +8235,8 @@ On completion of the course, the students will be able to:
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Strategic partnerships with industry leaders and academic
-                  institutions to enhance learning outcomes and provide students with
-                  real-world exposure.
+                  institutions to enhance learning outcomes and provide students
+                  with real-world exposure.
                 </p>
               </div>
               <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
@@ -7899,21 +8244,41 @@ On completion of the course, the students will be able to:
                   <table className="w-full text-sm">
                     <thead className="bg-ssgmce-blue text-white">
                       <tr>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">Sr. No.</th>
-                        <th className="px-6 py-4 text-left font-bold">Name of the Organization</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Signing Date</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Copy / Report</th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          Sr. No.
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">
+                          Name of the Organization
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Signing Date
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Copy / Report
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {mous.map((mou, idx) => (
-                        <tr key={mou.id || idx} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-gray-900">{idx + 1}.</td>
+                        <tr
+                          key={mou.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {idx + 1}.
+                          </td>
                           <td className="px-6 py-4 text-gray-700">{mou.org}</td>
-                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{mou.date}</td>
+                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                            {mou.date}
+                          </td>
                           <td className="px-6 py-4">
                             {mou.report ? (
-                              <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors">
+                              <a
+                                href={mou.report}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors"
+                              >
                                 <FaFileAlt className="mr-1.5" />
                                 View Document
                               </a>
@@ -7933,53 +8298,98 @@ On completion of the course, the students will be able to:
                     <div className="mb-4">
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-800">Edit MoUs in Markdown</h4>
-                          <p className="text-sm text-gray-500 mt-1">Serial numbers are automatic now. Add a new blank row on top, then edit only the actual MoU details.</p>
+                          <h4 className="text-lg font-bold text-gray-800">
+                            Edit MoUs in Markdown
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual MoU details.
+                          </p>
                         </div>
-                        <button type="button" onClick={addEntcMouRowOnTop} className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange">
+                        <button
+                          type="button"
+                          onClick={addEntcMouRowOnTop}
+                          className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
+                        >
                           <FaPlus className="text-xs" />
                           Add New Row On Top
                         </button>
                       </div>
                     </div>
-                    <MarkdownEditor value={mousMarkdown} onSave={handleEntcMousMarkdownSave} placeholder="MoUs table without serial-number column (GFM Markdown)..." />
+                    <MarkdownEditor
+                      value={mousMarkdown}
+                      onSave={handleEntcMousMarkdownSave}
+                      placeholder="MoUs table without serial-number column (GFM Markdown)..."
+                    />
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
                     <div className="mb-4">
-                      <h4 className="text-lg font-bold text-gray-800">Upload MoU PDF / Report</h4>
-                      <p className="text-sm text-gray-500 mt-1">Upload the PDF only for the row you want to attach a document to.</p>
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Upload MoU PDF / Report
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Upload the PDF only for the row you want to attach a
+                        document to.
+                      </p>
                     </div>
                     <div className="space-y-3">
                       {mous.map((mou, idx) => {
                         const uploadKey = `entc-mou-${mou.id}`;
                         return (
-                          <div key={mou.id || idx} className="rounded-lg border border-gray-200 p-4">
+                          <div
+                            key={mou.id || idx}
+                            className="rounded-lg border border-gray-200 p-4"
+                          >
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                               <div>
-                                <p className="text-sm font-semibold text-gray-800">{idx + 1}. {mou.org || "MoU"}</p>
-                                <p className="text-xs text-gray-500">{mou.date || "Signing date not set"}</p>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {idx + 1}. {mou.org || "MoU"}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {mou.date || "Signing date not set"}
+                                </p>
                               </div>
                               <div className="flex items-center gap-3">
                                 {mou.report ? (
-                                  <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange">
+                                  <a
+                                    href={mou.report}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
+                                  >
                                     <FaFileAlt className="text-xs" />
                                     Current Document
                                   </a>
                                 ) : (
-                                  <span className="text-xs text-gray-400">No document uploaded</span>
+                                  <span className="text-xs text-gray-400">
+                                    No document uploaded
+                                  </span>
                                 )}
                                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
                                   <FaUpload className="text-xs" />
-                                  {mouReportUploading[uploadKey] ? "Uploading..." : "Upload PDF"}
-                                  <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={mouReportUploading[uploadKey]} onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) uploadEntcMouReport(mou.id, file);
-                                    e.target.value = "";
-                                  }} />
+                                  {mouReportUploading[uploadKey]
+                                    ? "Uploading..."
+                                    : "Upload PDF"}
+                                  <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    disabled={mouReportUploading[uploadKey]}
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file)
+                                        uploadEntcMouReport(mou.id, file);
+                                      e.target.value = "";
+                                    }}
+                                  />
                                 </label>
                               </div>
                             </div>
-                            {mouReportErrors[uploadKey] ? <p className="mt-2 text-xs text-red-600">{mouReportErrors[uploadKey]}</p> : null}
+                            {mouReportErrors[uploadKey] ? (
+                              <p className="mt-2 text-xs text-red-600">
+                                {mouReportErrors[uploadKey]}
+                              </p>
+                            ) : null}
                           </div>
                         );
                       })}
@@ -8091,32 +8501,30 @@ On completion of the course, the students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pat, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-green-50/30 transition-colors group"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pat.title}
-                                <span
-                                  className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
-                                >
-                                  {pat.status}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
-                                {pat.id}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-right">
-                                {pat.inventors}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pat, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-green-50/30 transition-colors group"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pat.title}
+                              <span
+                                className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+                              >
+                                {pat.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
+                              {pat.id}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-right">
+                              {pat.inventors}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8196,44 +8604,40 @@ On completion of the course, the students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pub, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pub.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {pub.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {pub.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {pub.link ? (
-                                  <a
-                                    href={pub.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pub, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pub.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {pub.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {pub.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {pub.link ? (
+                                <a
+                                  href={pub.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8313,44 +8717,40 @@ On completion of the course, the students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (conf, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {conf.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {conf.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {conf.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {conf.link ? (
-                                  <a
-                                    href={conf.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((conf, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {conf.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {conf.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {conf.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {conf.link ? (
+                                <a
+                                  href={conf.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8427,29 +8827,27 @@ On completion of the course, the students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.title}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((cr, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.title}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8529,31 +8927,29 @@ On completion of the course, the students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (book, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-teal-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {book.name}
-                                {book.coAuthors ? `, ${book.coAuthors}` : ""}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {book.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {book.details}
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
-                                {book.isbn}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((book, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-teal-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {book.name}
+                              {book.coAuthors ? `, ${book.coAuthors}` : ""}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {book.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {book.details}
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
+                              {book.isbn}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -8638,7 +9034,9 @@ On completion of the course, the students will be able to:
                     className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 md:flex-row md:items-center md:justify-between"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-gray-800">{year}</p>
+                      <p className="text-sm font-semibold text-gray-800">
+                        {year}
+                      </p>
                       {reportUrl ? (
                         <a
                           href={reportUrl}
@@ -8658,7 +9056,9 @@ On completion of the course, the students will be able to:
                     <div className="flex flex-col items-start gap-2 md:items-end">
                       <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-r from-[#003366] to-[#004d99] px-4 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:from-[#004d99] hover:to-[#0066cc] hover:shadow-lg">
                         <FaUpload className="text-yellow-300" />
-                        {researchReportUploading[uploadKey] ? "Uploading..." : "Upload Report"}
+                        {researchReportUploading[uploadKey]
+                          ? "Uploading..."
+                          : "Upload Report"}
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx"
@@ -8757,7 +9157,9 @@ On completion of the course, the students will be able to:
                       Name of Company
                     </th>
                     {internshipYear === "2024-25" && (
-                      <th className="px-4 py-4 text-left font-bold">Duration</th>
+                      <th className="px-4 py-4 text-left font-bold">
+                        Duration
+                      </th>
                     )}
                     <th className="px-4 py-4 text-left font-bold whitespace-nowrap">
                       Start Date
@@ -8769,7 +9171,10 @@ On completion of the course, the students will be able to:
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {currentInternships.map((intern, idx) => (
-                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       <td className="px-4 py-3 font-medium text-gray-900">
                         {idx + 1}
                       </td>
@@ -9164,7 +9569,9 @@ On completion of the course, the students will be able to:
                       Enter the academic year in format YYYY-YY.
                     </p>
                     {researchYearError ? (
-                      <p className="text-xs text-red-600 mt-2">{researchYearError}</p>
+                      <p className="text-xs text-red-600 mt-2">
+                        {researchYearError}
+                      </p>
                     ) : null}
                   </div>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">

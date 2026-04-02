@@ -269,10 +269,7 @@ const defaultItIndustrialVisits = [
   },
   {
     sn: "08",
-    industries: [
-      "I-Medita (Cisco Networking Labs), Pune",
-      "Mindscripts, Pune",
-    ],
+    industries: ["I-Medita (Cisco Networking Labs), Pune", "Mindscripts, Pune"],
     report: "/uploads/documents/it/industrial-visits/it_iv_2016_17.pdf",
     class: "3rd Year IT",
     date: "15/03/2017 to 18/03/2017",
@@ -434,11 +431,21 @@ const createItIndustrialVisitId = () =>
 const getItIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
     industries: (Array.isArray(visit?.industries) ? visit.industries : [])
-      .map((item) => String(item || "").trim().toLowerCase())
+      .map((item) =>
+        String(item || "")
+          .trim()
+          .toLowerCase(),
+      )
       .filter(Boolean),
-    class: String(visit?.class || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
-    students: String(visit?.students || "").trim().toLowerCase(),
+    class: String(visit?.class || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
+    students: String(visit?.students || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const defaultItMous = [
@@ -543,8 +550,12 @@ const createItMouId = () =>
 
 const getItMouSignature = (mou = {}) =>
   JSON.stringify({
-    org: String(mou?.org || "").trim().toLowerCase(),
-    date: String(mou?.date || "").trim().toLowerCase(),
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const itPatentsToMarkdown = (items = [], year = "2024-25") => {
@@ -662,7 +673,9 @@ const parseItPublicationsMarkdown = (
         journal: cells[2] || "",
         link: itExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -675,7 +688,9 @@ const itConferencesToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add conference details | - |");
+    lines.push(
+      "| Add paper title | Add authors | Add conference details | - |",
+    );
     return lines.join("\n");
   }
 
@@ -719,7 +734,9 @@ const parseItConferencesMarkdown = (
         journal: cells[2] || "",
         link: itExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
       }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+      .filter(
+        (item) => item.title || item.authors || item.journal || item.link,
+      ),
   };
 };
 
@@ -746,10 +763,7 @@ const itCopyrightsToMarkdown = (items = [], year = "2024-25") => {
   return lines.join("\n");
 };
 
-const parseItCopyrightsMarkdown = (
-  markdown = "",
-  fallbackYear = "2024-25",
-) => {
+const parseItCopyrightsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
   const text = String(markdown || "").trim();
   if (!text) return { year: fallbackYear, items: [] };
 
@@ -789,7 +803,9 @@ const itBooksToMarkdown = (items = [], year = "2024-25") => {
   ];
 
   if (!items.length) {
-    lines.push("| Add author names | - | Add title | Add publisher | Add ISBN | - |");
+    lines.push(
+      "| Add author names | - | Add title | Add publisher | Add ISBN | - |",
+    );
     return lines.join("\n");
   }
 
@@ -877,8 +893,7 @@ const IT_RESEARCH_TEMPLATE_URLS = {
   conferences:
     "/uploads/documents/pride_templates/it_conferences_template.docx",
   books: "/uploads/documents/pride_templates/it_books_template.docx",
-  copyrights:
-    "/uploads/documents/pride_templates/it_copyrights_template.docx",
+  copyrights: "/uploads/documents/pride_templates/it_copyrights_template.docx",
 };
 
 const defaultCourseMaterials = [
@@ -902,7 +917,7 @@ const defaultCourseMaterials = [
 const IT = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [vmTab, setVmTab] = useState("vision");
   const [poTab, setPoTab] = useState("peo");
@@ -958,7 +973,7 @@ const IT = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
   const latestCourseMaterialRef = useRef(null);
@@ -1005,7 +1020,9 @@ const IT = () => {
     ];
 
     if (!records.length) {
-      lines.push("| Add SIS ID | Add intern name | Add organization | Add class | Add duration | Add stipend |");
+      lines.push(
+        "| Add SIS ID | Add intern name | Add organization | Add class | Add duration | Add stipend |",
+      );
       return lines.join("\n");
     }
 
@@ -1018,7 +1035,10 @@ const IT = () => {
     return lines.join("\n");
   };
 
-  const parseItInternshipsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+  const parseItInternshipsMarkdown = (
+    markdown = "",
+    fallbackYear = "2024-25",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) return { year: fallbackYear, records: [] };
 
@@ -1064,7 +1084,9 @@ const IT = () => {
   };
 
   const getItIndustrialVisits = () =>
-    JSON.parse(JSON.stringify(t("industrialVisits.items", defaultItIndustrialVisits))).map((visit) => ({
+    JSON.parse(
+      JSON.stringify(t("industrialVisits.items", defaultItIndustrialVisits)),
+    ).map((visit) => ({
       ...visit,
       id: String(visit?.id || createItIndustrialVisitId()),
     }));
@@ -1073,16 +1095,20 @@ const IT = () => {
     itIndustrialVisitsToMarkdown(visits);
 
   const persistItIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createItIndustrialVisitId()).trim(),
-      industries: Array.isArray(visit?.industries)
-        ? visit.industries.map((item) => String(item || "").trim()).filter(Boolean)
-        : [],
-      class: String(visit?.class || "").trim(),
-      date: String(visit?.date || "").trim(),
-      students: String(visit?.students || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
+      (visit) => ({
+        id: String(visit?.id || createItIndustrialVisitId()).trim(),
+        industries: Array.isArray(visit?.industries)
+          ? visit.industries
+              .map((item) => String(item || "").trim())
+              .filter(Boolean)
+          : [],
+        class: String(visit?.class || "").trim(),
+        date: String(visit?.date || "").trim(),
+        students: String(visit?.students || "").trim(),
+        report: String(visit?.report || "").trim(),
+      }),
+    );
 
     updateData("industrialVisits.items", normalizedVisits);
     updateData(
@@ -1148,7 +1174,10 @@ const IT = () => {
     if (!file) return;
 
     const uploadKey = `it-industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1198,16 +1227,20 @@ const IT = () => {
 
   const getItIndustrialVisitGallery = () =>
     JSON.parse(
-      JSON.stringify(t("industrialVisits.gallery", defaultItIndustrialVisitGallery)),
+      JSON.stringify(
+        t("industrialVisits.gallery", defaultItIndustrialVisitGallery),
+      ),
     );
 
   const persistItIndustrialVisitGallery = (photos) => {
-    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map((photo) => ({
-      image: String(photo?.image || "").trim(),
-      caption: String(photo?.caption || "").trim(),
-      location: String(photo?.location || "").trim(),
-      date: String(photo?.date || "").trim(),
-    }));
+    const normalizedPhotos = (Array.isArray(photos) ? photos : []).map(
+      (photo) => ({
+        image: String(photo?.image || "").trim(),
+        caption: String(photo?.caption || "").trim(),
+        location: String(photo?.location || "").trim(),
+        date: String(photo?.date || "").trim(),
+      }),
+    );
 
     updateData("industrialVisits.gallery", normalizedPhotos);
   };
@@ -1243,7 +1276,10 @@ const IT = () => {
     if (!file) return;
 
     const uploadKey = `it-gallery-${index}`;
-    setIndustrialVisitGalleryUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitGalleryUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitGalleryErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -1334,7 +1370,12 @@ const IT = () => {
   const addItMouRowOnTop = () => {
     const mous = getItMous();
     persistItMous([
-      { id: createItMouId(), org: "New organization", date: "Add signing date", report: "" },
+      {
+        id: createItMouId(),
+        org: "New organization",
+        date: "Add signing date",
+        report: "",
+      },
       ...mous,
     ]);
   };
@@ -1364,7 +1405,10 @@ const IT = () => {
       }
     } catch (error) {
       console.error("IT MOU upload failed:", error);
-      setMouReportErrors((prev) => ({ ...prev, [uploadKey]: "Failed to upload report." }));
+      setMouReportErrors((prev) => ({
+        ...prev,
+        [uploadKey]: "Failed to upload report.",
+      }));
     } finally {
       setMouReportUploading((prev) => ({ ...prev, [uploadKey]: false }));
     }
@@ -1410,7 +1454,10 @@ const IT = () => {
   const getItResearchItems = (section, year = researchYear) =>
     JSON.parse(
       JSON.stringify(
-        t(`research.${section}.${year}`, IT_RESEARCH_DEFAULTS[section]?.[year] || []),
+        t(
+          `research.${section}.${year}`,
+          IT_RESEARCH_DEFAULTS[section]?.[year] || [],
+        ),
       ),
     );
 
@@ -1420,7 +1467,10 @@ const IT = () => {
       return storedMarkdown;
     }
 
-    return IT_RESEARCH_TO_MARKDOWN[section](getItResearchItems(section, year), year);
+    return IT_RESEARCH_TO_MARKDOWN[section](
+      getItResearchItems(section, year),
+      year,
+    );
   };
 
   const getItResearchYears = () => {
@@ -1430,20 +1480,23 @@ const IT = () => {
     const storedResearch = t("research", {});
     const storedResearchMarkdown = t("researchMarkdown", {});
 
-    const discoveredYears = Object.keys(IT_RESEARCH_DEFAULTS).flatMap((section) => [
-      ...Object.keys(IT_RESEARCH_DEFAULTS[section] || {}),
-      ...Object.keys(
-        storedResearch?.[section] && typeof storedResearch[section] === "object"
-          ? storedResearch[section]
-          : {},
-      ),
-      ...Object.keys(
-        storedResearchMarkdown?.[section] &&
-          typeof storedResearchMarkdown[section] === "object"
-          ? storedResearchMarkdown[section]
-          : {},
-      ),
-    ]);
+    const discoveredYears = Object.keys(IT_RESEARCH_DEFAULTS).flatMap(
+      (section) => [
+        ...Object.keys(IT_RESEARCH_DEFAULTS[section] || {}),
+        ...Object.keys(
+          storedResearch?.[section] &&
+            typeof storedResearch[section] === "object"
+            ? storedResearch[section]
+            : {},
+        ),
+        ...Object.keys(
+          storedResearchMarkdown?.[section] &&
+            typeof storedResearchMarkdown[section] === "object"
+            ? storedResearchMarkdown[section]
+            : {},
+        ),
+      ],
+    );
 
     const years = normalizePlacementYears([
       ...defaultResearchYears,
@@ -1615,7 +1668,9 @@ const IT = () => {
       .map((cell) => cell.trim());
 
   const extractUgProjectLinkHref = (value = "") => {
-    const markdownLinkMatch = String(value || "").match(/\[[^\]]+\]\(([^)]+)\)/);
+    const markdownLinkMatch = String(value || "").match(
+      /\[[^\]]+\]\(([^)]+)\)/,
+    );
     if (markdownLinkMatch?.[1]) return markdownLinkMatch[1].trim();
     const trimmed = String(value || "").trim();
     return /^https?:\/\//i.test(trimmed) || trimmed.startsWith("/uploads/")
@@ -1624,7 +1679,9 @@ const IT = () => {
   };
 
   const extractUgProjectLinkLabel = (value = "") => {
-    const markdownLinkMatch = String(value || "").match(/\[([^\]]+)\]\(([^)]+)\)/);
+    const markdownLinkMatch = String(value || "").match(
+      /\[([^\]]+)\]\(([^)]+)\)/,
+    );
     return markdownLinkMatch?.[1]?.trim() || "";
   };
 
@@ -1657,7 +1714,11 @@ const IT = () => {
         const rows = projects.map((project) => {
           const label =
             String(project?.fileName || "").trim() ||
-            String(project?.report || "").trim().split("/").pop()?.split("?")[0] ||
+            String(project?.report || "")
+              .trim()
+              .split("/")
+              .pop()
+              ?.split("?")[0] ||
             "Project Report";
           const reportCell = project?.report
             ? `[${label}](${project.report})`
@@ -1670,7 +1731,10 @@ const IT = () => {
       .join("\n\n");
   };
 
-  const parseItUgProjectsMarkdown = (markdown = "", fallbackYear = "2024-25") => {
+  const parseItUgProjectsMarkdown = (
+    markdown = "",
+    fallbackYear = "2024-25",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) {
       return { years: [fallbackYear], records: { [fallbackYear]: [] } };
@@ -1702,8 +1766,7 @@ const IT = () => {
       const tableLines = lines.filter((line) => line.startsWith("|"));
       const dataLines = tableLines.filter(
         (line, index) =>
-          index > 1 &&
-          !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+          index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
       );
 
       records[normalizedYear] = dataLines
@@ -1760,7 +1823,9 @@ const IT = () => {
     const markdownByYear = orderedYears.reduce((acc, year) => {
       acc[year] =
         existingMarkdownByYear?.[year] ||
-        itUgProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [year]);
+        itUgProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [
+          year,
+        ]);
       return acc;
     }, {});
 
@@ -2089,7 +2154,9 @@ const IT = () => {
 
     if (typeof stored === "string" && stored.trim()) {
       const lines = stored.split("\n").map((line) => line.trim());
-      const tableStart = lines.findIndex((line) => line.startsWith("| Sr. No."));
+      const tableStart = lines.findIndex((line) =>
+        line.startsWith("| Sr. No."),
+      );
       if (tableStart !== -1) {
         return lines
           .slice(tableStart + 2)
@@ -2134,7 +2201,9 @@ const IT = () => {
         {isEditing ? (
           <MarkdownEditor
             value={markdown}
-            onSave={(value) => updateData(`placements.details.${placementYear}`, value)}
+            onSave={(value) =>
+              updateData(`placements.details.${placementYear}`, value)
+            }
             showDocImport
             placeholder="Paste or import placement data (Markdown) here..."
           />
@@ -2170,7 +2239,9 @@ const IT = () => {
 
   const updateActivity = (idx, field, value) => {
     const storedActivitiesMarkdown = t("activitiesMarkdown", "");
-    const parsedActivities = parseItActivitiesMarkdown(storedActivitiesMarkdown);
+    const parsedActivities = parseItActivitiesMarkdown(
+      storedActivitiesMarkdown,
+    );
     const sourceActivities = (
       parsedActivities.length
         ? parsedActivities
@@ -2427,7 +2498,8 @@ const IT = () => {
     );
   };
 
-  const courseMaterialItems = t("courseMaterials", defaultCourseMaterials) || [];
+  const courseMaterialItems =
+    t("courseMaterials", defaultCourseMaterials) || [];
 
   useEffect(() => {
     if (
@@ -2454,7 +2526,9 @@ const IT = () => {
 
   const getAchievementItems = (section) =>
     JSON.parse(
-      JSON.stringify(t(`achievements.${section}`, defaultAchievements[section] || [])),
+      JSON.stringify(
+        t(`achievements.${section}`, defaultAchievements[section] || []),
+      ),
     );
 
   const achievementsToMarkdown = (section, items = []) =>
@@ -2565,7 +2639,7 @@ const IT = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/image", formData, {
@@ -2679,7 +2753,9 @@ const IT = () => {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -2728,9 +2804,7 @@ const IT = () => {
       typeof facultyMember?.vidwanId === "string"
         ? facultyMember.vidwanId.trim()
         : "";
-    return vidwanId
-      ? `https://vidwan.inflibnet.ac.in/profile/${vidwanId}`
-      : "";
+    return vidwanId ? `https://vidwan.inflibnet.ac.in/profile/${vidwanId}` : "";
   };
 
   // Default curriculum items for Scheme & Syllabus (scraped from source website)
@@ -2918,7 +2992,8 @@ const IT = () => {
     },
     {
       name: "Programming Laboratory",
-      image: "https://www.ssgmce.ac.in/images/it_faculty/IT_Programming_Lab.jpg",
+      image:
+        "https://www.ssgmce.ac.in/images/it_faculty/IT_Programming_Lab.jpg",
       area: "75 Sq.Mtrs",
       systems: "19 PC (12 Lenovo + 7 HP)",
       resources:
@@ -2958,7 +3033,8 @@ const IT = () => {
     },
     {
       name: "Departmental Library",
-      image: "https://www.ssgmce.ac.in/images/cse_faculty/Departmental%20%20Library.jpeg",
+      image:
+        "https://www.ssgmce.ac.in/images/cse_faculty/Departmental%20%20Library.jpeg",
       area: "50 Sq.Mtrs",
       systems: "Reading Area",
       resources:
@@ -3094,54 +3170,57 @@ const IT = () => {
                 </tr>
                 {t("overview.tableBE", defaultOverviewTableBE).map(
                   ([label, val], i) => (
-                  <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                    <td className="px-6 py-3 text-sm font-bold text-gray-500 w-1/3 border border-gray-200 bg-gray-50/30">
-                      <EditableText
-                        value={label}
-                        onSave={(v) =>
-                          updateOverviewTable(
-                            "overview.tableBE",
-                            defaultOverviewTableBE,
-                            i,
-                            0,
-                            v,
-                          )
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-3 text-sm text-gray-700 font-medium border border-gray-200">
-                      <EditableText
-                        value={val}
-                        onSave={(v) =>
-                          updateOverviewTable(
-                            "overview.tableBE",
-                            defaultOverviewTableBE,
-                            i,
-                            1,
-                            v,
-                          )
-                        }
-                        multiline
-                      />
-                    </td>
-                    {isEditing && (
-                      <td className="px-6 py-3 text-center border border-gray-200">
-                        <button
-                          onClick={() => {
-                            const updated = t(
+                    <tr
+                      key={i}
+                      className="hover:bg-gray-50/50 transition-colors"
+                    >
+                      <td className="px-6 py-3 text-sm font-bold text-gray-500 w-1/3 border border-gray-200 bg-gray-50/30">
+                        <EditableText
+                          value={label}
+                          onSave={(v) =>
+                            updateOverviewTable(
                               "overview.tableBE",
                               defaultOverviewTableBE,
-                            ).filter((_, idx) => idx !== i);
-                            updateData("overview.tableBE", updated);
-                          }}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-sm transition-colors"
-                          title="Delete row"
-                        >
-                          Delete
-                        </button>
+                              i,
+                              0,
+                              v,
+                            )
+                          }
+                        />
                       </td>
-                    )}
-                  </tr>
+                      <td className="px-6 py-3 text-sm text-gray-700 font-medium border border-gray-200">
+                        <EditableText
+                          value={val}
+                          onSave={(v) =>
+                            updateOverviewTable(
+                              "overview.tableBE",
+                              defaultOverviewTableBE,
+                              i,
+                              1,
+                              v,
+                            )
+                          }
+                          multiline
+                        />
+                      </td>
+                      {isEditing && (
+                        <td className="px-6 py-3 text-center border border-gray-200">
+                          <button
+                            onClick={() => {
+                              const updated = t(
+                                "overview.tableBE",
+                                defaultOverviewTableBE,
+                              ).filter((_, idx) => idx !== i);
+                              updateData("overview.tableBE", updated);
+                            }}
+                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-sm transition-colors"
+                            title="Delete row"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      )}
+                    </tr>
                   ),
                 )}
 
@@ -4981,7 +5060,9 @@ After successful completion of the course, students will be able to:
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -5292,7 +5373,9 @@ After successful completion of the course, students will be able to:
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               <div className="w-32 sm:w-40 bg-gray-50 flex-shrink-0 relative overflow-hidden border-r border-gray-100">
@@ -5432,7 +5515,11 @@ After successful completion of the course, students will be able to:
                             <EditableText
                               value={fac.id || createFacultySlug(fac.name)}
                               onSave={(val) =>
-                                updateFacultyMember(i, "id", createFacultySlug(val))
+                                updateFacultyMember(
+                                  i,
+                                  "id",
+                                  createFacultySlug(val),
+                                )
                               }
                             />
                           </div>
@@ -5442,7 +5529,9 @@ After successful completion of the course, students will be able to:
                             </div>
                             <EditableText
                               value={fac.vidwanId || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanId", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanId", val)
+                              }
                             />
                           </div>
                           <div className="md:col-span-2">
@@ -5451,7 +5540,9 @@ After successful completion of the course, students will be able to:
                             </div>
                             <EditableText
                               value={fac.vidwanLink || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanLink", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanLink", val)
+                              }
                             />
                           </div>
                           {[
@@ -5615,7 +5706,9 @@ After successful completion of the course, students will be able to:
                       </span>
                       <span className="font-bold text-gray-800">
                         <EditableText
-                          value={latestNewsletterData.title || "Newsletter 2024-25"}
+                          value={
+                            latestNewsletterData.title || "Newsletter 2024-25"
+                          }
                           onSave={(val) =>
                             updateNewsletter("latest", 0, "title", val)
                           }
@@ -5722,7 +5815,10 @@ After successful completion of the course, students will be able to:
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -5963,7 +6059,9 @@ After successful completion of the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -6120,7 +6218,9 @@ After successful completion of the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -6401,7 +6501,7 @@ After successful completion of the course, students will be able to:
             parsedPractices && parsedPractices.length > 0
               ? parsedPractices
               : defaultPractices;
-          
+
           return (
             <motion.div
               initial={{ opacity: 0 }}
@@ -6436,7 +6536,10 @@ After successful completion of the course, students will be able to:
                           "templateData.innovativePractices.items",
                           nextPractices,
                         );
-                        updateData("innovativePractices.markdown", nextMarkdown);
+                        updateData(
+                          "innovativePractices.markdown",
+                          nextMarkdown,
+                        );
                         updateData("innovativePractices", nextPractices);
                       }}
                       className="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
@@ -6449,8 +6552,14 @@ After successful completion of the course, students will be able to:
                     value={md}
                     onSave={(v) => {
                       const parsed = itMarkdownToInnovativePractices(v);
-                      updateData("templateData.innovativePractices.markdown", v);
-                      updateData("templateData.innovativePractices.items", parsed);
+                      updateData(
+                        "templateData.innovativePractices.markdown",
+                        v,
+                      );
+                      updateData(
+                        "templateData.innovativePractices.items",
+                        parsed,
+                      );
                       updateData("innovativePractices.markdown", v);
                       updateData("innovativePractices", parsed);
                     }}
@@ -6499,7 +6608,9 @@ After successful completion of the course, students will be able to:
                               className="px-6 py-4 text-center whitespace-nowrap"
                               style={{ color: "#003366" }}
                             >
-                              <span className="font-medium">{item.faculty}</span>
+                              <span className="font-medium">
+                                {item.faculty}
+                              </span>
                             </td>
                             <td className="px-6 py-4 text-gray-700">
                               {item.subject}
@@ -6536,9 +6647,8 @@ After successful completion of the course, students will be able to:
     "industrial-visits": (() => {
       const industrialVisitPhotos = getItIndustrialVisitGallery();
       const industrialVisitTable = getItIndustrialVisits();
-      const industrialVisitsMarkdown = getItIndustrialVisitsMarkdown(
-        industrialVisitTable,
-      );
+      const industrialVisitsMarkdown =
+        getItIndustrialVisitsMarkdown(industrialVisitTable);
 
       return (
         <div className="space-y-10">
@@ -6560,7 +6670,9 @@ After successful completion of the course, students will be able to:
               <>
                 <div className="flex items-center gap-3 mb-4">
                   <FaImages className="text-2xl text-ssgmce-blue" />
-                  <h4 className="text-xl font-bold text-gray-800">Visit Gallery</h4>
+                  <h4 className="text-xl font-bold text-gray-800">
+                    Visit Gallery
+                  </h4>
                   <span className="text-sm font-medium text-ssgmce-blue bg-blue-50 px-3 py-1 rounded-full">
                     {industrialVisitPhotos.length} Photos
                   </span>
@@ -6614,7 +6726,8 @@ After successful completion of the course, students will be able to:
                       Manage Visit Gallery
                     </h5>
                     <p className="text-sm text-gray-500 mt-1">
-                      Add new visit photos and update the caption, location, and date for each gallery item.
+                      Add new visit photos and update the caption, location, and
+                      date for each gallery item.
                     </p>
                   </div>
                   <button
@@ -6641,7 +6754,9 @@ After successful completion of the course, students will be able to:
                               {photo.image ? (
                                 <img
                                   src={resolveUploadedAssetUrl(photo.image)}
-                                  alt={photo.caption || `Visit photo ${idx + 1}`}
+                                  alt={
+                                    photo.caption || `Visit photo ${idx + 1}`
+                                  }
                                   className="h-full w-full object-cover"
                                 />
                               ) : (
@@ -6659,11 +6774,14 @@ After successful completion of the course, students will be able to:
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
-                                disabled={industrialVisitGalleryUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitGalleryUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
-                                  if (file) uploadItIndustrialVisitPhoto(idx, file);
+                                  if (file)
+                                    uploadItIndustrialVisitPhoto(idx, file);
                                 }}
                               />
                             </label>
@@ -6789,7 +6907,9 @@ After successful completion of the course, students will be able to:
                   onClick={(e) => e.stopPropagation()}
                 >
                   <img
-                    src={resolveUploadedAssetUrl(industrialVisitPhotos[ivLightbox].image)}
+                    src={resolveUploadedAssetUrl(
+                      industrialVisitPhotos[ivLightbox].image,
+                    )}
                     alt={industrialVisitPhotos[ivLightbox].caption}
                     className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-2xl"
                   />
@@ -6911,7 +7031,8 @@ After successful completion of the course, students will be able to:
                           Edit Industrial Visits in Markdown
                         </h4>
                         <p className="text-sm text-gray-500 mt-1">
-                          Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
+                          Serial numbers are automatic now. Add a new blank row
+                          on top, then edit only the actual visit details.
                         </p>
                       </div>
                       <button
@@ -6937,7 +7058,8 @@ After successful completion of the course, students will be able to:
                       Optional Detailed Reports
                     </h4>
                     <p className="text-sm text-gray-500 mt-1">
-                      Upload a detailed report only for the visit rows that need one.
+                      Upload a detailed report only for the visit rows that need
+                      one.
                     </p>
                   </div>
                   <div className="space-y-3">
@@ -6981,12 +7103,17 @@ After successful completion of the course, students will be able to:
                                 type="file"
                                 accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png"
                                 className="hidden"
-                                disabled={industrialVisitReportUploading[uploadKey]}
+                                disabled={
+                                  industrialVisitReportUploading[uploadKey]
+                                }
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   event.target.value = "";
                                   if (file) {
-                                    uploadItIndustrialVisitReport(visit.id, file);
+                                    uploadItIndustrialVisitReport(
+                                      visit.id,
+                                      file,
+                                    );
                                   }
                                 }}
                               />
@@ -7019,8 +7146,9 @@ After successful completion of the course, students will be able to:
               <div className="text-center mb-8">
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Strategic partnerships with industry leaders to enhance learning
-                  outcomes and provide students with real-world exposure.
+                  Strategic partnerships with industry leaders to enhance
+                  learning outcomes and provide students with real-world
+                  exposure.
                 </p>
               </div>
               <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
@@ -7028,21 +7156,41 @@ After successful completion of the course, students will be able to:
                   <table className="w-full text-sm">
                     <thead className="bg-ssgmce-blue text-white">
                       <tr>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">Sr. No.</th>
-                        <th className="px-6 py-4 text-left font-bold">Name of the Organization</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Signing Date</th>
-                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">MOU Copy / Report</th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          Sr. No.
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold">
+                          Name of the Organization
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Signing Date
+                        </th>
+                        <th className="px-6 py-4 text-left font-bold whitespace-nowrap">
+                          MOU Copy / Report
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {mous.map((mou, idx) => (
-                        <tr key={mou.id || idx} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-6 py-4 font-medium text-gray-900">{idx + 1}.</td>
+                        <tr
+                          key={mou.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 font-medium text-gray-900">
+                            {idx + 1}.
+                          </td>
                           <td className="px-6 py-4 text-gray-700">{mou.org}</td>
-                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{mou.date}</td>
+                          <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                            {mou.date}
+                          </td>
                           <td className="px-6 py-4">
                             {mou.report ? (
-                              <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors">
+                              <a
+                                href={mou.report}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-orange font-semibold text-sm transition-colors"
+                              >
                                 <FaFileAlt className="mr-1.5" />
                                 View Document
                               </a>
@@ -7062,53 +7210,97 @@ After successful completion of the course, students will be able to:
                     <div className="mb-4">
                       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-800">Edit MoUs in Markdown</h4>
-                          <p className="text-sm text-gray-500 mt-1">Serial numbers are automatic now. Add a new blank row on top, then edit only the actual MoU details.</p>
+                          <h4 className="text-lg font-bold text-gray-800">
+                            Edit MoUs in Markdown
+                          </h4>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual MoU details.
+                          </p>
                         </div>
-                        <button type="button" onClick={addItMouRowOnTop} className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange">
+                        <button
+                          type="button"
+                          onClick={addItMouRowOnTop}
+                          className="inline-flex items-center gap-2 rounded-lg bg-ssgmce-blue px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-ssgmce-orange"
+                        >
                           <FaPlus className="text-xs" />
                           Add New Row On Top
                         </button>
                       </div>
                     </div>
-                    <MarkdownEditor value={mousMarkdown} onSave={handleItMousMarkdownSave} placeholder="MoUs table without serial-number column (GFM Markdown)..." />
+                    <MarkdownEditor
+                      value={mousMarkdown}
+                      onSave={handleItMousMarkdownSave}
+                      placeholder="MoUs table without serial-number column (GFM Markdown)..."
+                    />
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
                     <div className="mb-4">
-                      <h4 className="text-lg font-bold text-gray-800">Upload MoU PDF / Report</h4>
-                      <p className="text-sm text-gray-500 mt-1">Upload the PDF only for the row you want to attach a document to.</p>
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Upload MoU PDF / Report
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Upload the PDF only for the row you want to attach a
+                        document to.
+                      </p>
                     </div>
                     <div className="space-y-3">
                       {mous.map((mou, idx) => {
                         const uploadKey = `it-mou-${mou.id}`;
                         return (
-                          <div key={mou.id || idx} className="rounded-lg border border-gray-200 p-4">
+                          <div
+                            key={mou.id || idx}
+                            className="rounded-lg border border-gray-200 p-4"
+                          >
                             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                               <div>
-                                <p className="text-sm font-semibold text-gray-800">{idx + 1}. {mou.org || "MoU"}</p>
-                                <p className="text-xs text-gray-500">{mou.date || "Signing date not set"}</p>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {idx + 1}. {mou.org || "MoU"}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  {mou.date || "Signing date not set"}
+                                </p>
                               </div>
                               <div className="flex items-center gap-3">
                                 {mou.report ? (
-                                  <a href={mou.report} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange">
+                                  <a
+                                    href={mou.report}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-ssgmce-blue hover:text-ssgmce-orange"
+                                  >
                                     <FaFileAlt className="text-xs" />
                                     Current Document
                                   </a>
                                 ) : (
-                                  <span className="text-xs text-gray-400">No document uploaded</span>
+                                  <span className="text-xs text-gray-400">
+                                    No document uploaded
+                                  </span>
                                 )}
                                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-ssgmce-blue px-3 py-2 text-xs font-semibold text-white hover:bg-ssgmce-dark-blue">
                                   <FaUpload className="text-xs" />
-                                  {mouReportUploading[uploadKey] ? "Uploading..." : "Upload PDF"}
-                                  <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={mouReportUploading[uploadKey]} onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) uploadItMouReport(mou.id, file);
-                                    e.target.value = "";
-                                  }} />
+                                  {mouReportUploading[uploadKey]
+                                    ? "Uploading..."
+                                    : "Upload PDF"}
+                                  <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="hidden"
+                                    disabled={mouReportUploading[uploadKey]}
+                                    onChange={(e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) uploadItMouReport(mou.id, file);
+                                      e.target.value = "";
+                                    }}
+                                  />
                                 </label>
                               </div>
                             </div>
-                            {mouReportErrors[uploadKey] ? <p className="mt-2 text-xs text-red-600">{mouReportErrors[uploadKey]}</p> : null}
+                            {mouReportErrors[uploadKey] ? (
+                              <p className="mt-2 text-xs text-red-600">
+                                {mouReportErrors[uploadKey]}
+                              </p>
+                            ) : null}
                           </div>
                         );
                       })}
@@ -7220,43 +7412,41 @@ After successful completion of the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pat, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-green-50/30 transition-colors group"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pat.title}
-                                <span
-                                  className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : pat.status === "Registered" ? "bg-blue-100 text-blue-700" : "bg-yellow-100 text-yellow-700"}`}
+                        {selectedResearchItems.map((pat, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-green-50/30 transition-colors group"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pat.title}
+                              <span
+                                className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" ? "bg-green-100 text-green-700" : pat.status === "Registered" ? "bg-blue-100 text-blue-700" : "bg-yellow-100 text-yellow-700"}`}
+                              >
+                                {pat.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
+                              {pat.link ? (
+                                <a
+                                  href={pat.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
                                 >
-                                  {pat.status}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
-                                {pat.link ? (
-                                  <a
-                                    href={pat.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {pat.id}
-                                  </a>
-                                ) : (
-                                  pat.id
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-right">
-                                {pat.inventors}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                                  {pat.id}
+                                </a>
+                              ) : (
+                                pat.id
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-right">
+                              {pat.inventors}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -7336,44 +7526,40 @@ After successful completion of the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pub, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pub.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {pub.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {pub.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {pub.link ? (
-                                  <a
-                                    href={pub.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pub, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pub.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {pub.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {pub.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {pub.link ? (
+                                <a
+                                  href={pub.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -7453,44 +7639,40 @@ After successful completion of the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (conf, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {conf.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {conf.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {conf.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {conf.link ? (
-                                  <a
-                                    href={conf.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((conf, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {conf.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {conf.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {conf.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {conf.link ? (
+                                <a
+                                  href={conf.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -7567,40 +7749,38 @@ After successful completion of the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.link ? (
-                                  <a
-                                    href={cr.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {cr.title}
-                                  </a>
-                                ) : (
-                                  cr.title
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((cr, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.link ? (
+                                <a
+                                  href={cr.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
+                                >
+                                  {cr.title}
+                                </a>
+                              ) : (
+                                cr.title
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -7692,20 +7872,20 @@ After successful completion of the course, students will be able to:
                               {book.name}
                               {book.coAuthors ? `, ${book.coAuthors}` : ""}
                             </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {book.link ? (
-                                  <a
-                                    href={book.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {book.title}
-                                  </a>
-                                ) : (
-                                  book.title
-                                )}
-                              </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {book.link ? (
+                                <a
+                                  href={book.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
+                                >
+                                  {book.title}
+                                </a>
+                              ) : (
+                                book.title
+                              )}
+                            </td>
                             <td className="px-6 py-4 text-gray-500 italic text-xs">
                               {book.details}
                             </td>
@@ -7926,18 +8106,27 @@ After successful completion of the course, students will be able to:
                         Name of Industry / Organization
                       </th>
                       <th className="px-3 py-4 text-left font-bold">Class</th>
-                      <th className="px-3 py-4 text-left font-bold">Duration</th>
+                      <th className="px-3 py-4 text-left font-bold">
+                        Duration
+                      </th>
                       <th className="px-3 py-4 text-left font-bold">Stipend</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {currentInternships.map((intern, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                      <tr
+                        key={idx}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
                         <td className="px-3 py-3 font-medium text-gray-900">
                           {idx + 1}
                         </td>
-                        <td className="px-3 py-3 text-gray-700">{intern.sis}</td>
-                        <td className="px-3 py-3 text-gray-700">{intern.name}</td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.sis}
+                        </td>
+                        <td className="px-3 py-3 text-gray-700">
+                          {intern.name}
+                        </td>
                         <td className="px-3 py-3 text-gray-700 text-xs">
                           {intern.org}
                         </td>
@@ -8095,7 +8284,9 @@ After successful completion of the course, students will be able to:
           const ugProjectYears = getUgProjectYears();
           const ugProjectRecords = t("ugProjects", defaultItUgProjects);
           const ugProjectMarkdownByYear = t("ugProjectsMarkdownByYear", {});
-          const currentUgProjects = Array.isArray(ugProjectRecords?.[ugProjectYear])
+          const currentUgProjects = Array.isArray(
+            ugProjectRecords?.[ugProjectYear],
+          )
             ? ugProjectRecords[ugProjectYear]
             : [];
           const selectedUgProjectsMarkdown =
@@ -8106,212 +8297,218 @@ After successful completion of the course, students will be able to:
 
           return (
             <>
-        <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-ssgmce-orange pl-4">
-          <EditableText
-            value={t("ugProjectsTitle", "UG Projects")}
-            onSave={(val) => updateField("ugProjectsTitle", val)}
-          />
-        </h3>
+              <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-ssgmce-orange pl-4">
+                <EditableText
+                  value={t("ugProjectsTitle", "UG Projects")}
+                  onSave={(val) => updateField("ugProjectsTitle", val)}
+                />
+              </h3>
 
-        {/* Year Tabs */}
-        <div className="flex flex-wrap gap-2 items-center">
-          {ugProjectYears.map((year) => (
-            <button
-              key={year}
-              onClick={() => setUgProjectYear(year)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                ugProjectYear === year
-                  ? "bg-ssgmce-blue text-white shadow-md"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {year}
-            </button>
-          ))}
-          {isEditing && (
-            <button
-              type="button"
-              onClick={() => {
-                setNewUgProjectYear("");
-                setUgProjectYearError("");
-                setShowAddUgProjectYear(true);
-              }}
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-xs font-semibold text-white transition-all hover:shadow-lg"
-            >
-              <FaPlus className="text-xs" />
-              Add Session
-            </button>
-          )}
-        </div>
-
-        {/* Project Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white p-4">
-            <h4 className="text-lg font-bold flex items-center gap-2">
-              <FaBook className="text-ssgmce-orange" />
-              UG Projects – {ugProjectYear}
-            </h4>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-16">
-                    Sr. No.
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200">
-                    Project Title
-                  </th>
-                  {currentUgProjects.some((p) => p.report) && (
-                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-32">
-                      Project Report
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {currentUgProjects.map((project, i) => (
-                  <tr key={i} className="hover:bg-blue-50/30 transition-colors">
-                    <td className="px-4 py-3 text-sm text-gray-500 font-medium border border-gray-200 text-center">
-                      {project.id || i + 1}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-700 border border-gray-200">
-                      {project.title}
-                    </td>
-                    {currentUgProjects.some((p) => p.report) && (
-                      <td className="px-4 py-3 text-sm border border-gray-200 text-center">
-                        {project.report ? (
-                          <a
-                            href={project.report}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-ssgmce-blue hover:text-ssgmce-orange font-medium text-xs"
-                          >
-                            <FaExternalLinkAlt className="text-xs" /> View
-                          </a>
-                        ) : (
-                          <span className="text-gray-400 text-xs">—</span>
-                        )}
-                      </td>
-                    )}
-                  </tr>
+              {/* Year Tabs */}
+              <div className="flex flex-wrap gap-2 items-center">
+                {ugProjectYears.map((year) => (
+                  <button
+                    key={year}
+                    onClick={() => setUgProjectYear(year)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      ugProjectYear === year
+                        ? "bg-ssgmce-blue text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    {year}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {isEditing && (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-              <div className="mb-4">
-                <h4 className="text-lg font-bold text-gray-800">
-                  Edit {ugProjectYear} in Markdown
-                </h4>
-                <p className="text-sm text-gray-500 mt-1">
-                  Import a DOCX or edit this session in markdown. Saving here
-                  updates the UG Projects table above without changing the
-                  current frontend layout or using row-by-row project editing.
-                </p>
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewUgProjectYear("");
+                      setUgProjectYearError("");
+                      setShowAddUgProjectYear(true);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-xs font-semibold text-white transition-all hover:shadow-lg"
+                  >
+                    <FaPlus className="text-xs" />
+                    Add Session
+                  </button>
+                )}
               </div>
-              <MarkdownEditor
-                key={ugProjectYear}
-                value={selectedUgProjectsMarkdown}
-                onSave={handleUgProjectMarkdownSave}
-                showDocImport
-                docTemplateUrl="/uploads/documents/pride_templates/cse_ug_projects_template.docx"
-                docTemplateLabel="Download UG Projects Template"
-                placeholder={`UG projects for ${ugProjectYear} (GFM Markdown)...`}
-              />
-            </div>
-          </div>
-        )}
-        <AnimatePresence>
-          {showAddUgProjectYear && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
-              onClick={() => setShowAddUgProjectYear(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaPlus className="text-ssgmce-blue" /> Add UG Project Session
-                  </h3>
-                  <button
-                    onClick={() => {
-                      setUgProjectYearError("");
-                      setShowAddUgProjectYear(false);
-                    }}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <FaTimes className="text-xl" />
-                  </button>
+
+              {/* Project Table */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white p-4">
+                  <h4 className="text-lg font-bold flex items-center gap-2">
+                    <FaBook className="text-ssgmce-orange" />
+                    UG Projects – {ugProjectYear}
+                  </h4>
                 </div>
-                <div className="space-y-4 mb-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Academic Year <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g., 2025-26"
-                      value={newUgProjectYear}
-                      onChange={(e) => {
-                        setNewUgProjectYear(e.target.value);
-                        if (ugProjectYearError) setUgProjectYearError("");
-                      }}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Enter the academic year in format YYYY-YY.
-                    </p>
-                    {ugProjectYearError ? (
-                      <p className="text-xs text-red-600 mt-2">
-                        {ugProjectYearError}
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-16">
+                          Sr. No.
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200">
+                          Project Title
+                        </th>
+                        {currentUgProjects.some((p) => p.report) && (
+                          <th className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider border border-gray-200 w-32">
+                            Project Report
+                          </th>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {currentUgProjects.map((project, i) => (
+                        <tr
+                          key={i}
+                          className="hover:bg-blue-50/30 transition-colors"
+                        >
+                          <td className="px-4 py-3 text-sm text-gray-500 font-medium border border-gray-200 text-center">
+                            {project.id || i + 1}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-700 border border-gray-200">
+                            {project.title}
+                          </td>
+                          {currentUgProjects.some((p) => p.report) && (
+                            <td className="px-4 py-3 text-sm border border-gray-200 text-center">
+                              {project.report ? (
+                                <a
+                                  href={project.report}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-ssgmce-blue hover:text-ssgmce-orange font-medium text-xs"
+                                >
+                                  <FaExternalLinkAlt className="text-xs" /> View
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">—</span>
+                              )}
+                            </td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {isEditing && (
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                    <div className="mb-4">
+                      <h4 className="text-lg font-bold text-gray-800">
+                        Edit {ugProjectYear} in Markdown
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Import a DOCX or edit this session in markdown. Saving
+                        here updates the UG Projects table above without
+                        changing the current frontend layout or using row-by-row
+                        project editing.
                       </p>
-                    ) : null}
-                  </div>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> After adding the session, you will
-                      get an empty markdown editor with the same UG Projects
-                      table structure, plus DOCX import and template download
-                      support for that session.
-                    </p>
+                    </div>
+                    <MarkdownEditor
+                      key={ugProjectYear}
+                      value={selectedUgProjectsMarkdown}
+                      onSave={handleUgProjectMarkdownSave}
+                      showDocImport
+                      docTemplateUrl="/uploads/documents/pride_templates/cse_ug_projects_template.docx"
+                      docTemplateLabel="Download UG Projects Template"
+                      placeholder={`UG projects for ${ugProjectYear} (GFM Markdown)...`}
+                    />
                   </div>
                 </div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setUgProjectYearError("");
-                      setShowAddUgProjectYear(false);
-                    }}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+              )}
+              <AnimatePresence>
+                {showAddUgProjectYear && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+                    onClick={() => setShowAddUgProjectYear(false)}
                   >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddUgProjectYear}
-                    disabled={!newUgProjectYear.trim()}
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <FaPlus /> Add Session
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                    <motion.div
+                      initial={{ scale: 0.95, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.95, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                          <FaPlus className="text-ssgmce-blue" /> Add UG Project
+                          Session
+                        </h3>
+                        <button
+                          onClick={() => {
+                            setUgProjectYearError("");
+                            setShowAddUgProjectYear(false);
+                          }}
+                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                          <FaTimes className="text-xl" />
+                        </button>
+                      </div>
+                      <div className="space-y-4 mb-6">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Academic Year{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g., 2025-26"
+                            value={newUgProjectYear}
+                            onChange={(e) => {
+                              setNewUgProjectYear(e.target.value);
+                              if (ugProjectYearError) setUgProjectYearError("");
+                            }}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ssgmce-blue focus:border-transparent"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Enter the academic year in format YYYY-YY.
+                          </p>
+                          {ugProjectYearError ? (
+                            <p className="text-xs text-red-600 mt-2">
+                              {ugProjectYearError}
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                          <p className="text-sm text-blue-800">
+                            <strong>Note:</strong> After adding the session, you
+                            will get an empty markdown editor with the same UG
+                            Projects table structure, plus DOCX import and
+                            template download support for that session.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => {
+                            setUgProjectYearError("");
+                            setShowAddUgProjectYear(false);
+                          }}
+                          className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleAddUgProjectYear}
+                          disabled={!newUgProjectYear.trim()}
+                          className="flex-1 px-4 py-2 bg-gradient-to-r from-ssgmce-blue to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                          <FaPlus /> Add Session
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </>
           );
         })()}
@@ -8617,8 +8814,7 @@ After successful completion of the course, students will be able to:
               >
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaPlus className="text-ssgmce-blue" /> Add Research
-                    Session
+                    <FaPlus className="text-ssgmce-blue" /> Add Research Session
                   </h3>
                   <button
                     onClick={() => {
@@ -8658,9 +8854,9 @@ After successful completion of the course, students will be able to:
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-800">
                       <strong>Note:</strong> The new session will be created for
-                      patents, publications, conferences, books, and
-                      copyrights with an empty markdown table plus DOCX import
-                      and template download support.
+                      patents, publications, conferences, books, and copyrights
+                      with an empty markdown table plus DOCX import and template
+                      download support.
                     </p>
                   </div>
                 </div>
@@ -8751,11 +8947,7 @@ const itActivitiesToMarkdown = (activities = []) =>
           activity.participants,
           true,
         ),
-        formatItActivityMarkdownField(
-          "Organized by",
-          activity.organizer,
-          true,
-        ),
+        formatItActivityMarkdownField("Organized by", activity.organizer, true),
         formatItActivityMarkdownField(
           "Resource Person",
           activity.resource,

@@ -644,7 +644,7 @@ function AshPrideMdView({ markdown = "" }) {
 const AppliedSciences = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [vmTab, setVmTab] = useState("vision");
   const [poTab, setPoTab] = useState("peo");
@@ -659,7 +659,7 @@ const AppliedSciences = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
 
@@ -781,9 +781,7 @@ const AppliedSciences = () => {
     p: ({ node, ...props }) => (
       <p className="text-gray-700 text-sm leading-relaxed" {...props} />
     ),
-    ul: ({ node, ...props }) => (
-      <ul className="space-y-3" {...props} />
-    ),
+    ul: ({ node, ...props }) => <ul className="space-y-3" {...props} />,
     li: ({ node, children, ...props }) => (
       <li className="flex items-start group" {...props}>
         <div className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-500 mt-2 mr-4 group-hover:bg-orange-600 transition-colors"></div>
@@ -798,7 +796,9 @@ const AppliedSciences = () => {
   const renderAchievementMarkdown = (value) => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic text-sm">No details added yet.</p>;
+      return (
+        <p className="text-gray-400 italic text-sm">No details added yet.</p>
+      );
     }
 
     return (
@@ -1008,24 +1008,23 @@ const AppliedSciences = () => {
 
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("file", file);
 
       const token = localStorage.getItem("adminToken");
-      const response = await apiClient.post("/upload/image", formData, {
+      const response = await apiClient.post("/upload/file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (response.data.success) {
-        updateCurriculumItem(index, "fileUrl", response.data.data.url);
-        updateCurriculumItem(
-          index,
-          "fileName",
-          response.data.data.originalName,
-        );
-        updateCurriculumItem(index, "link", response.data.data.url);
+      const uploadedUrl = response.data.fileUrl || response.data.url;
+      const uploadedName = response.data.originalName || file.name;
+
+      if (response.data.success && uploadedUrl) {
+        updateCurriculumItem(index, "fileUrl", uploadedUrl);
+        updateCurriculumItem(index, "fileName", uploadedName);
+        updateCurriculumItem(index, "link", uploadedUrl);
       }
     } catch (error) {
       console.error("Upload failed:", error);
@@ -1675,7 +1674,9 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300  flex relative ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               {/* Delete Button */}
@@ -1904,17 +1905,29 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
                         </div>
                         <div className="grid gap-3 md:grid-cols-2">
                           <div>
-                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">Profile ID</div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Profile ID
+                            </div>
                             <EditableText
                               value={fac.id || createFacultySlug(fac.name)}
-                              onSave={(val) => updateFacultyMember(i, "id", createFacultySlug(val))}
+                              onSave={(val) =>
+                                updateFacultyMember(
+                                  i,
+                                  "id",
+                                  createFacultySlug(val),
+                                )
+                              }
                             />
                           </div>
                           <div>
-                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">Vidwan ID</div>
+                            <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                              Vidwan ID
+                            </div>
                             <EditableText
                               value={fac.vidwanId || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanId", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanId", val)
+                              }
                             />
                           </div>
                           {[
@@ -1931,10 +1944,22 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
                             ["achievements", "Other Achievements", true],
                           ].map(([field, label, isList]) => (
                             <div key={field} className="md:col-span-2">
-                              <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">{label}</div>
+                              <div className="text-[11px] font-semibold text-gray-500 uppercase mb-1">
+                                {label}
+                              </div>
                               <EditableText
-                                value={isList ? (fac[field] || []).join("\n") : fac[field] || ""}
-                                onSave={(val) => updateFacultyMember(i, field, isList ? splitFacultyMultiline(val) : val)}
+                                value={
+                                  isList
+                                    ? (fac[field] || []).join("\n")
+                                    : fac[field] || ""
+                                }
+                                onSave={(val) =>
+                                  updateFacultyMember(
+                                    i,
+                                    field,
+                                    isList ? splitFacultyMultiline(val) : val,
+                                  )
+                                }
                                 multiline
                                 richText={false}
                               />
@@ -2759,215 +2784,225 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
       const studentAchievements = getAchievementItems("students");
 
       return (
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900">Achievements</h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mt-2"></div>
-          <p className="text-gray-600 mt-3">2021-22 To 2025-26</p>
-        </div>
-
-        {/* Tab Menu */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex rounded-lg bg-gray-100 p-1">
-            <button
-              onClick={() => setAchievementTab("faculty")}
-              className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
-                achievementTab === "faculty"
-                  ? "bg-[#003366] text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-              }`}
-            >
-              <FaUserTie className="text-lg" />
-              Faculty Achievements
-            </button>
-            <button
-              onClick={() => setAchievementTab("student")}
-              className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
-                achievementTab === "student"
-                  ? "bg-[#003366] text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
-              }`}
-            >
-              <FaAward className="text-lg" />
-              Student Achievements
-            </button>
+        <div className="space-y-8">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">Achievements</h2>
+            <div className="w-24 h-1 bg-orange-500 mx-auto mt-2"></div>
+            <p className="text-gray-600 mt-3">2021-22 To 2025-26</p>
           </div>
-        </div>
 
-        {/* Faculty Achievements Tab Content */}
-        {achievementTab === "faculty" && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-4"
-          >
-            {isEditing && (
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => addAchievement("faculty")}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
-                >
-                  <FaPlus className="text-xs" />
-                  Add Faculty Achievement
-                </button>
-              </div>
-            )}
-            {facultyAchievements.map((person, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
+          {/* Tab Menu */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex rounded-lg bg-gray-100 p-1">
+              <button
+                onClick={() => setAchievementTab("faculty")}
+                className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
+                  achievementTab === "faculty"
+                    ? "bg-[#003366] text-white shadow-md"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
+                }`}
               >
-                {/* Header with Name */}
-                <div className="bg-[#003366] px-6 py-4 flex items-center justify-between gap-4">
-                  <h3 className="text-lg font-bold text-white flex items-center">
-                    <FaTrophy className="mr-3 text-yellow-300" />
-                    <EditableText
-                      value={person.name}
-                      onSave={(val) =>
-                        updateAchievementItem("faculty", index, "name", val)
-                      }
-                    />
-                  </h3>
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={() => deleteAchievement("faculty", index)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
-                    >
-                      <FaTrash className="text-xs" />
-                      Delete
-                    </button>
-                  )}
-                </div>
-
-                {/* Achievement Items */}
-                <div className="p-6">
-                  {isEditing ? (
-                    <MarkdownEditor
-                      value={person.description}
-                      onSave={(val) =>
-                        updateAchievementItem("faculty", index, "description", val)
-                      }
-                      placeholder="Add faculty achievement details in Markdown..."
-                      className="w-full"
-                    />
-                  ) : (
-                    renderAchievementMarkdown(person.description)
-                  )}
-                </div>
-              </motion.div>
-            ))}
-            {facultyAchievements.length === 0 && (
-              <p className="text-center text-gray-400 py-8 text-sm">
-                No faculty achievements recorded yet.
-              </p>
-            )}
-          </motion.div>
-        )}
-
-        {/* Student Achievements Tab Content */}
-        {achievementTab === "student" && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-4"
-          >
-            {isEditing && (
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => addAchievement("students")}
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
-                >
-                  <FaPlus className="text-xs" />
-                  Add Student Achievement
-                </button>
-              </div>
-            )}
-            {studentAchievements.map((student, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
+                <FaUserTie className="text-lg" />
+                Faculty Achievements
+              </button>
+              <button
+                onClick={() => setAchievementTab("student")}
+                className={`px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
+                  achievementTab === "student"
+                    ? "bg-[#003366] text-white shadow-md"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
+                }`}
               >
-                {/* Header with Name */}
-                <div className="bg-[#003366] px-6 py-4 flex items-start justify-between gap-4">
-                  <div>
-                  <h3 className="text-lg font-bold text-white flex items-center">
-                    <FaAward className="mr-3 text-yellow-300" />
-                    <EditableText
-                      value={student.name}
-                      onSave={(val) =>
-                        updateAchievementItem("students", index, "name", val)
-                      }
-                    />
-                  </h3>
-                  <p className="text-blue-200 text-sm mt-1 ml-8">
-                    <EditableText
-                      value={student.subtitle}
-                      onSave={(val) =>
-                        updateAchievementItem(
-                          "students",
-                          index,
-                          "subtitle",
-                          val,
-                        )
-                      }
-                    />
-                  </p>
+                <FaAward className="text-lg" />
+                Student Achievements
+              </button>
+            </div>
+          </div>
+
+          {/* Faculty Achievements Tab Content */}
+          {achievementTab === "faculty" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
+              {isEditing && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => addAchievement("faculty")}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
+                  >
+                    <FaPlus className="text-xs" />
+                    Add Faculty Achievement
+                  </button>
+                </div>
+              )}
+              {facultyAchievements.map((person, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
+                >
+                  {/* Header with Name */}
+                  <div className="bg-[#003366] px-6 py-4 flex items-center justify-between gap-4">
+                    <h3 className="text-lg font-bold text-white flex items-center">
+                      <FaTrophy className="mr-3 text-yellow-300" />
+                      <EditableText
+                        value={person.name}
+                        onSave={(val) =>
+                          updateAchievementItem("faculty", index, "name", val)
+                        }
+                      />
+                    </h3>
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => deleteAchievement("faculty", index)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
+                      >
+                        <FaTrash className="text-xs" />
+                        Delete
+                      </button>
+                    )}
                   </div>
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={() => deleteAchievement("students", index)}
-                      className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
-                    >
-                      <FaTrash className="text-xs" />
-                      Delete
-                    </button>
-                  )}
-                </div>
 
-                {/* Achievement Items */}
-                <div className="p-6">
-                  {isEditing ? (
-                    <MarkdownEditor
-                      value={student.description}
-                      onSave={(val) =>
-                        updateAchievementItem(
-                          "students",
-                          index,
-                          "description",
-                          val,
-                        )
-                      }
-                      placeholder="Add student achievement details in Markdown..."
-                      className="w-full"
-                    />
-                  ) : (
-                    renderAchievementMarkdown(student.description)
-                  )}
+                  {/* Achievement Items */}
+                  <div className="p-6">
+                    {isEditing ? (
+                      <MarkdownEditor
+                        value={person.description}
+                        onSave={(val) =>
+                          updateAchievementItem(
+                            "faculty",
+                            index,
+                            "description",
+                            val,
+                          )
+                        }
+                        placeholder="Add faculty achievement details in Markdown..."
+                        className="w-full"
+                      />
+                    ) : (
+                      renderAchievementMarkdown(person.description)
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+              {facultyAchievements.length === 0 && (
+                <p className="text-center text-gray-400 py-8 text-sm">
+                  No faculty achievements recorded yet.
+                </p>
+              )}
+            </motion.div>
+          )}
+
+          {/* Student Achievements Tab Content */}
+          {achievementTab === "student" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
+              {isEditing && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => addAchievement("students")}
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-ssgmce-blue to-blue-700 px-4 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg"
+                  >
+                    <FaPlus className="text-xs" />
+                    Add Student Achievement
+                  </button>
                 </div>
-              </motion.div>
-            ))}
-            {studentAchievements.length === 0 && (
-              <p className="text-center text-gray-400 py-8 text-sm">
-                No student achievements recorded yet.
-              </p>
-            )}
-          </motion.div>
-        )}
-      </div>
-    );
+              )}
+              {studentAchievements.map((student, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
+                >
+                  {/* Header with Name */}
+                  <div className="bg-[#003366] px-6 py-4 flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white flex items-center">
+                        <FaAward className="mr-3 text-yellow-300" />
+                        <EditableText
+                          value={student.name}
+                          onSave={(val) =>
+                            updateAchievementItem(
+                              "students",
+                              index,
+                              "name",
+                              val,
+                            )
+                          }
+                        />
+                      </h3>
+                      <p className="text-blue-200 text-sm mt-1 ml-8">
+                        <EditableText
+                          value={student.subtitle}
+                          onSave={(val) =>
+                            updateAchievementItem(
+                              "students",
+                              index,
+                              "subtitle",
+                              val,
+                            )
+                          }
+                        />
+                      </p>
+                    </div>
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => deleteAchievement("students", index)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100"
+                      >
+                        <FaTrash className="text-xs" />
+                        Delete
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Achievement Items */}
+                  <div className="p-6">
+                    {isEditing ? (
+                      <MarkdownEditor
+                        value={student.description}
+                        onSave={(val) =>
+                          updateAchievementItem(
+                            "students",
+                            index,
+                            "description",
+                            val,
+                          )
+                        }
+                        placeholder="Add student achievement details in Markdown..."
+                        className="w-full"
+                      />
+                    ) : (
+                      renderAchievementMarkdown(student.description)
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+              {studentAchievements.length === 0 && (
+                <p className="text-center text-gray-400 py-8 text-sm">
+                  No student achievements recorded yet.
+                </p>
+              )}
+            </motion.div>
+          )}
+        </div>
+      );
     })(),
 
     activities: (

@@ -112,8 +112,9 @@ const EditableText = ({
 
   // Edit Interact Mode
   if (localEditing) {
+    const WrapperTag = multiline ? "div" : "span";
     return (
-      <div
+      <WrapperTag
         className="relative group inline-block w-full"
         onClick={(e) => e.stopPropagation()}
       >
@@ -140,7 +141,7 @@ const EditableText = ({
             autoFocus
           />
         )}
-        <div className="absolute right-0 bottom-full mb-1 flex gap-1 z-20">
+        <span className="absolute right-0 bottom-full mb-1 flex gap-1 z-20">
           <button
             onMouseDown={(e) => {
               e.preventDefault();
@@ -159,15 +160,16 @@ const EditableText = ({
           >
             <FaTimes />
           </button>
-        </div>
-      </div>
+        </span>
+      </WrapperTag>
     );
   }
 
   // Edit Trigger Mode
   const Tag = element;
+  const WrapperTag = multiline ? "div" : "span";
   return (
-    <div
+    <WrapperTag
       onClick={(e) => {
         e.stopPropagation();
         setLocalEditing(true);
@@ -182,10 +184,10 @@ const EditableText = ({
           {placeholder}
         </span>
       )}
-      <div className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 bg-blue-500 text-white p-1.5 rounded-full shadow-md transform scale-90 transition-all pointer-events-none">
+      <span className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 bg-blue-500 text-white p-1.5 rounded-full shadow-md transform scale-90 transition-all pointer-events-none">
         <FaPencilAlt size={10} />
-      </div>
-    </div>
+      </span>
+    </WrapperTag>
   );
 };
 

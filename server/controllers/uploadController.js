@@ -32,9 +32,13 @@ const resolveUploadPath = (relativePath = "") => {
   return resolvedPath;
 };
 
-const createStoredFilename = (fieldname, originalname) => {
+const createStoredFilename = (prefix, originalname) => {
+  const safePrefix =
+    String(prefix || "file")
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/g, "") || "file";
   const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  return `${fieldname}-${uniqueSuffix}${path.extname(originalname || "")}`;
+  return `${safePrefix}-${uniqueSuffix}${path.extname(originalname || "")}`;
 };
 
 // File filter - accepts images and PDFs
@@ -100,7 +104,7 @@ const uploadSingleImage = async (req, res) => {
         .json({ success: false, message: "No file uploaded" });
     }
 
-    const filename = createStoredFilename(req.file.fieldname, req.file.originalname);
+    const filename = createStoredFilename("upload", req.file.originalname);
     await uploadBufferToGridFS({
       buffer: req.file.buffer,
       filename,
@@ -121,7 +125,11 @@ const uploadSingleImage = async (req, res) => {
     console.error("Upload error:", error);
     res
       .status(500)
-      .json({ success: false, message: "File upload failed", error: error.message });
+      .json({
+        success: false,
+        message: "File upload failed",
+        error: error.message,
+      });
   }
 };
 
@@ -166,7 +174,7 @@ const uploadSingleDocument = async (req, res) => {
         .json({ success: false, message: "No file uploaded" });
     }
 
-    const filename = createStoredFilename(req.file.fieldname, req.file.originalname);
+    const filename = createStoredFilename("document", req.file.originalname);
     await uploadBufferToGridFS({
       buffer: req.file.buffer,
       filename,
@@ -195,9 +203,12 @@ const uploadSingleDocument = async (req, res) => {
 // Delete file
 const deleteFile = async (req, res) => {
   try {
-    const requestedPath = req.query.path || path.join("uploads/images", req.params.filename || "");
+    const requestedPath =
+      req.query.path || path.join("uploads/images", req.params.filename || "");
     const filePath = resolveUploadPath(requestedPath);
-    const normalizedRequest = String(requestedPath || "").replace(/\\/g, "/").replace(/^\/+/, "");
+    const normalizedRequest = String(requestedPath || "")
+      .replace(/\\/g, "/")
+      .replace(/^\/+/, "");
     const pathParts = normalizedRequest.split("/");
     const category = normalizeCategory(pathParts[1]);
     const filename = pathParts.slice(2).join("/");
@@ -278,7 +289,9 @@ const streamUploadedFile = async (req, res, next) => {
       return next();
     }
 
-    const localFilePath = resolveUploadPath(path.join("uploads", category, filename));
+    const localFilePath = resolveUploadPath(
+      path.join("uploads", category, filename),
+    );
     if (localFilePath && fs.existsSync(localFilePath)) {
       if (path.extname(localFilePath).toLowerCase() === ".pdf") {
         res.setHeader("Content-Type", "application/pdf");

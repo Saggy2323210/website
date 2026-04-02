@@ -204,7 +204,8 @@ const defaultMbaIndustrialVisits = [
     title:
       "Visit to AAVISHKAR Social, Cultural and Specially Abled Organization, Shegaon",
     date: "December 2024",
-    report: "/uploads/documents/mba/industrial-visits/mba_iv_aavishkar_dec2024.pdf",
+    report:
+      "/uploads/documents/mba/industrial-visits/mba_iv_aavishkar_dec2024.pdf",
   },
   {
     sn: "05",
@@ -222,7 +223,8 @@ const defaultMbaIndustrialVisits = [
   },
   {
     sn: "07",
-    title: "Industrial Tour to Super Thermal Power, Chandrapur and Anandwan, Warora",
+    title:
+      "Industrial Tour to Super Thermal Power, Chandrapur and Anandwan, Warora",
     date: "04/02/2019 to 05/02/2019",
     report:
       "/uploads/documents/mba/industrial-visits/mba_iv_chandrapur_warora_feb2019.pdf",
@@ -237,7 +239,8 @@ const defaultMbaIndustrialVisits = [
   },
   {
     sn: "09",
-    title: "Industrial Tour to Adani Port Special Economic Zone, Mundra, Kutch, Gujarat",
+    title:
+      "Industrial Tour to Adani Port Special Economic Zone, Mundra, Kutch, Gujarat",
     date: "15/03/2017 to 18/03/2017",
     report: "",
   },
@@ -290,8 +293,7 @@ const parseMbaIndustrialVisitsMarkdown = (markdown = "") => {
 
   const dataLines = tableLines.filter(
     (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
   );
 
   return dataLines
@@ -310,39 +312,105 @@ const createMbaIndustrialVisitId = () =>
 
 const getMbaIndustrialVisitSignature = (visit = {}) =>
   JSON.stringify({
-    title: String(visit?.title || "").trim().toLowerCase(),
-    date: String(visit?.date || "").trim().toLowerCase(),
+    title: String(visit?.title || "")
+      .trim()
+      .toLowerCase(),
+    date: String(visit?.date || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const defaultMbaMous = [
-  { no: "1.", org: "Bajaj Finance Limited and Bajaj Finserv Limited", date: "16-June-2025", report: "/uploads/documents/mba_mous/MOU_Bajaj_Finance_2025.pdf" },
-  { no: "2.", org: "Kalash Seeds Pvt. Ltd., Mantha Road, Jalna, M.S.", date: "04-Jan-2025", report: "/uploads/documents/mba_mous/MOU_Kalash_Seeds_2025.pdf" },
-  { no: "3.", org: "Saturday Club Global Trust â€” Co-operation in Research and Education", date: "12-Jan-2024", report: "/uploads/documents/mba_mous/MOU_Saturday_Club_Global_Trust_2024.pdf" },
-  { no: "4.", org: "Circular Angel Pvt Ltd., Mumbai â€” Research, Education and Real-time Consultancy", date: "13-Jan-2024", report: "/uploads/documents/mba_mous/MOU_Circular_Angel_2024.pdf" },
-  { no: "5.", org: "Leben Life Sciences, Akola", date: "17-Feb-2023", report: "/uploads/documents/mba_mous/MOU_Leben_Life_Sciences_2023.pdf" },
-  { no: "6.", org: "Lyceum of the Philippines University â€” Laguna", date: "14-July-2022", report: "/uploads/documents/mba_mous/MOU_LPU_Laguna_Philippines_2022.pdf" },
+  {
+    no: "1.",
+    org: "Bajaj Finance Limited and Bajaj Finserv Limited",
+    date: "16-June-2025",
+    report: "/uploads/documents/mba_mous/MOU_Bajaj_Finance_2025.pdf",
+  },
+  {
+    no: "2.",
+    org: "Kalash Seeds Pvt. Ltd., Mantha Road, Jalna, M.S.",
+    date: "04-Jan-2025",
+    report: "/uploads/documents/mba_mous/MOU_Kalash_Seeds_2025.pdf",
+  },
+  {
+    no: "3.",
+    org: "Saturday Club Global Trust â€” Co-operation in Research and Education",
+    date: "12-Jan-2024",
+    report:
+      "/uploads/documents/mba_mous/MOU_Saturday_Club_Global_Trust_2024.pdf",
+  },
+  {
+    no: "4.",
+    org: "Circular Angel Pvt Ltd., Mumbai â€” Research, Education and Real-time Consultancy",
+    date: "13-Jan-2024",
+    report: "/uploads/documents/mba_mous/MOU_Circular_Angel_2024.pdf",
+  },
+  {
+    no: "5.",
+    org: "Leben Life Sciences, Akola",
+    date: "17-Feb-2023",
+    report: "/uploads/documents/mba_mous/MOU_Leben_Life_Sciences_2023.pdf",
+  },
+  {
+    no: "6.",
+    org: "Lyceum of the Philippines University â€” Laguna",
+    date: "14-July-2022",
+    report: "/uploads/documents/mba_mous/MOU_LPU_Laguna_Philippines_2022.pdf",
+  },
 ];
 
 const mbaMousToMarkdown = (mous = []) => {
-  const lines = ["## MoUs", "", "| Name of the Organization | MOU Signing Date | MOU Copy / Report |", "|--------------------------|------------------|-------------------|"];
-  if (!mous.length) return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
-  mous.forEach((mou) => lines.push(`| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`));
+  const lines = [
+    "## MoUs",
+    "",
+    "| Name of the Organization | MOU Signing Date | MOU Copy / Report |",
+    "|--------------------------|------------------|-------------------|",
+  ];
+  if (!mous.length)
+    return [...lines, "| No MoUs added yet. | - | - |"].join("\n");
+  mous.forEach((mou) =>
+    lines.push(
+      `| ${mou?.org || "-"} | ${mou?.date || "-"} | ${mou?.report ? `[View Document](${mou.report})` : "-"} |`,
+    ),
+  );
   return lines.join("\n");
 };
 
 const parseMbaMousMarkdown = (markdown = "") => {
   const text = String(markdown || "").trim();
   if (!text) return [];
-  const tableLines = text.split("\n").map((line) => line.trim()).filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter((line, index) => index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line));
-  return dataLines.map((line) => mbaParseMarkdownTableRow(line)).filter((cells) => cells.length >= 3).map((cells) => ({ org: cells[0] || "", date: cells[1] || "", report: mbaExtractMarkdownLinkHref(cells.slice(2).join(" | ")) })).filter((mou) => mou.org || mou.date || mou.report);
+  const tableLines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("|"));
+  const dataLines = tableLines.filter(
+    (line, index) =>
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+  );
+  return dataLines
+    .map((line) => mbaParseMarkdownTableRow(line))
+    .filter((cells) => cells.length >= 3)
+    .map((cells) => ({
+      org: cells[0] || "",
+      date: cells[1] || "",
+      report: mbaExtractMarkdownLinkHref(cells.slice(2).join(" | ")),
+    }))
+    .filter((mou) => mou.org || mou.date || mou.report);
 };
 
 const createMbaMouId = () =>
   `mba-mou-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 const getMbaMouSignature = (mou = {}) =>
-  JSON.stringify({ org: String(mou?.org || "").trim().toLowerCase(), date: String(mou?.date || "").trim().toLowerCase() });
+  JSON.stringify({
+    org: String(mou?.org || "")
+      .trim()
+      .toLowerCase(),
+    date: String(mou?.date || "")
+      .trim()
+      .toLowerCase(),
+  });
 
 const defaultMbaRankings = [
   {
@@ -411,7 +479,8 @@ const defaultMbaRankings = [
   },
   {
     year: "2018",
-    survey: "Business Today ranks Shegaon MBA amongst top 100 B-Schools in India",
+    survey:
+      "Business Today ranks Shegaon MBA amongst top 100 B-Schools in India",
     linkLabel: "Click here for Details",
     linkUrl: "/uploads/documents/mba_ranking/Business_Today_Ranking_2018.pdf",
     ranking: "Ranked 80th",
@@ -421,8 +490,7 @@ const defaultMbaRankings = [
     survey:
       "HONOURED AS MANAGEMENT COLLEGE OF THE YEAR 2017 -Program Efficacy by Higher Education Review Magazine, Nov. 2017",
     linkLabel: "Click here for Details",
-    linkUrl:
-      "/uploads/documents/mba_ranking/Higher_Education_Review_2017.pdf",
+    linkUrl: "/uploads/documents/mba_ranking/Higher_Education_Review_2017.pdf",
     ranking: "",
   },
   {
@@ -647,8 +715,7 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "Nutan Udyog, Shegaon",
-      faculty:
-        'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
+      faculty: 'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
       remarks: "Marketing Assistance",
     },
     {
@@ -697,8 +764,7 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "Nutan Udyog, Shegaon",
-      faculty:
-        'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
+      faculty: 'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
       remarks: "Marketing Assistance",
     },
     {
@@ -770,8 +836,7 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "M. M. Industries, Akola",
-      faculty:
-        "Prof. M. A. Dande, Prof. P. M. Kuchar and Prof. S. M. Mishra",
+      faculty: "Prof. M. A. Dande, Prof. P. M. Kuchar and Prof. S. M. Mishra",
       remarks: "HR Consultancy",
     },
     {
@@ -781,14 +846,12 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "Saraswati College, Shegaon",
-      faculty:
-        "Prof. L. B. Deshmukh, Prof. S. M. Mishra and Prof. V. V. Patil",
+      faculty: "Prof. L. B. Deshmukh, Prof. S. M. Mishra and Prof. V. V. Patil",
       remarks: "Regular classes of BBA",
     },
     {
       org: "Saraswati College, Shegaon",
-      faculty:
-        "Prof. M. A. Dande, Prof. P. M. Kuchar and Prof. S. M. Mishra",
+      faculty: "Prof. M. A. Dande, Prof. P. M. Kuchar and Prof. S. M. Mishra",
       remarks: "MBA Coaching classes",
     },
     {
@@ -831,8 +894,7 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "Havells - Jagadamba Services And Care",
-      faculty:
-        'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
+      faculty: 'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. V.V. Patil',
       remarks: "Marketing Assistance",
     },
     {
@@ -842,14 +904,12 @@ const defaultMbaConsultancyByYear = {
     },
     {
       org: "KFC",
-      faculty:
-        'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. P.M. Kuchar',
+      faculty: 'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. P.M. Kuchar',
       remarks: "Marketing Assistance",
     },
     {
       org: "Hend Suzuki",
-      faculty:
-        'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. P.M. Kuchar',
+      faculty: 'Dr. H. M. Jha "Bidyarthi", Prof. M.A. Dande, Prof. P.M. Kuchar',
       remarks: "Marketing Assistance",
     },
     {
@@ -899,8 +959,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Gaurav Date, Training Manager, Maharashtra EBSCO India",
+      speaker: "Mr. Gaurav Date, Training Manager, Maharashtra EBSCO India",
       topic: "Expanding Horizons with true knowledge",
       report: "",
     },
@@ -916,8 +975,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. K. K. Dave, Dean Academics, Pacific University, Rajasthan",
+      speaker: "Mr. K. K. Dave, Dean Academics, Pacific University, Rajasthan",
       topic: "Leadership",
       report: "",
     },
@@ -954,8 +1012,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Prasanna Dharmadhikari, Chembond Chemicals Ltd., Mumbai",
+      speaker: "Mr. Prasanna Dharmadhikari, Chembond Chemicals Ltd., Mumbai",
       topic:
         "Opportunities in HR, Skills required for HR personnel and the advanced HR software",
       report: "",
@@ -966,8 +1023,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Vaibhav Nichit, Talent Acquisition Partner, HDFC, Nagpur",
+      speaker: "Mr. Vaibhav Nichit, Talent Acquisition Partner, HDFC, Nagpur",
       topic: "Pre-requisite for a good job",
       report: "",
     },
@@ -992,8 +1048,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Vinod Dubey, Branch Head, SBI Life Insurance, Khamgaon",
+      speaker: "Mr. Vinod Dubey, Branch Head, SBI Life Insurance, Khamgaon",
       topic: "Career Opportunities - Seminar with SBI Life Insurance",
       report: "",
     },
@@ -1003,8 +1058,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Subhash Gore, Saturday Club Global Trust, Akola Chapter",
+      speaker: "Mr. Subhash Gore, Saturday Club Global Trust, Akola Chapter",
       topic: "Entrepreneurship - Prerequisite",
       report: "",
     },
@@ -1077,8 +1131,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Ms. Mohini Modak, Training Division, Webmaster Key, Akola",
+      speaker: "Ms. Mohini Modak, Training Division, Webmaster Key, Akola",
       topic: "Digital Marketing - II",
       report: "",
     },
@@ -1095,14 +1148,12 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Uday Patil, Business Head, Bajaj Finserve Ltd., Pune",
+      speaker: "Mr. Uday Patil, Business Head, Bajaj Finserve Ltd., Pune",
       topic: "General Management & Motivation - I",
       report: "",
     },
     {
-      speaker:
-        "Mr. Pankaj Yadav, HR Manager, Bajaj Finserve Ltd., Pune",
+      speaker: "Mr. Pankaj Yadav, HR Manager, Bajaj Finserve Ltd., Pune",
       topic: "General Management & Motivation - II",
       report: "",
     },
@@ -1119,8 +1170,7 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
       report: "",
     },
     {
-      speaker:
-        "Mr. Mayur Kalore, Assist. Sales Manager, Cybernetix, Gujarat",
+      speaker: "Mr. Mayur Kalore, Assist. Sales Manager, Cybernetix, Gujarat",
       topic: "Motivation and expectation of corporate world",
       report: "",
     },
@@ -1143,13 +1193,11 @@ const defaultMbaCorporateLeaderSpeaksBySession = {
     },
     {
       speaker: "Mr. Rajiv Jawale, Proprietor, BeBraaand, Jalna",
-      topic:
-        "Branding Concepts; Need of single roof of branding (Umbrella)",
+      topic: "Branding Concepts; Need of single roof of branding (Umbrella)",
       report: "",
     },
     {
-      speaker:
-        "Mr. Samadhan Damdhar, Marketing Manager, BeBraaand, Jalna",
+      speaker: "Mr. Samadhan Damdhar, Marketing Manager, BeBraaand, Jalna",
       topic: "Promotional means and their uses",
       report: "",
     },
@@ -1161,8 +1209,12 @@ const createMbaRankingId = () =>
 
 const getMbaRankingSignature = (item = {}) =>
   JSON.stringify({
-    year: String(item?.year || "").trim().toLowerCase(),
-    survey: String(item?.survey || "").trim().toLowerCase(),
+    year: String(item?.year || "")
+      .trim()
+      .toLowerCase(),
+    survey: String(item?.survey || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const createMbaAccreditationId = () =>
@@ -1170,8 +1222,12 @@ const createMbaAccreditationId = () =>
 
 const getMbaAccreditationSignature = (item = {}) =>
   JSON.stringify({
-    year: String(item?.year || "").trim().toLowerCase(),
-    recognition: String(item?.recognition || "").trim().toLowerCase(),
+    year: String(item?.year || "")
+      .trim()
+      .toLowerCase(),
+    recognition: String(item?.recognition || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const createMbaWorkshopSectionId = (prefix) =>
@@ -1179,12 +1235,18 @@ const createMbaWorkshopSectionId = (prefix) =>
 
 const getMbaProgramSignature = (item = {}) =>
   JSON.stringify({
-    title: String(item?.title || "").trim().toLowerCase(),
-    coordinator: String(item?.coordinator || "").trim().toLowerCase(),
+    title: String(item?.title || "")
+      .trim()
+      .toLowerCase(),
+    coordinator: String(item?.coordinator || "")
+      .trim()
+      .toLowerCase(),
   });
 
 const mbaEscapeMarkdownTableCell = (value = "") =>
-  String(value || "").replace(/\|/g, "\\|").trim();
+  String(value || "")
+    .replace(/\|/g, "\\|")
+    .trim();
 
 const mbaExtractMarkdownLinkText = (value = "") => {
   const match = String(value || "").match(/\[(.*?)\]\((.*?)\)/);
@@ -1310,7 +1372,12 @@ const parseMbaRankingsMarkdown = (markdown = "") => {
       };
     })
     .filter(
-      (item) => item.year || item.survey || item.linkLabel || item.linkUrl || item.ranking,
+      (item) =>
+        item.year ||
+        item.survey ||
+        item.linkLabel ||
+        item.linkUrl ||
+        item.ranking,
     );
 };
 
@@ -1355,8 +1422,7 @@ const parseMbaThreeColumnProgramsMarkdown = (markdown = "") => {
 
   const dataLines = tableLines.filter(
     (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
   );
 
   return dataLines
@@ -1395,7 +1461,8 @@ const parseMbaWorkshopProgramsMarkdown = (markdown = "") => {
       report: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
     }))
     .filter(
-      (item) => item.title || item.coordinator || item.participants || item.report,
+      (item) =>
+        item.title || item.coordinator || item.participants || item.report,
     );
 };
 
@@ -1430,8 +1497,7 @@ const parseMbaConsultancyMarkdown = (markdown = "") => {
 
   const dataLines = tableLines.filter(
     (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
   );
 
   return dataLines
@@ -1477,8 +1543,7 @@ const parseMbaCorporateLeaderSpeaksMarkdown = (markdown = "") => {
 
   const dataLines = tableLines.filter(
     (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+      index > 1 && !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
   );
 
   return dataLines
@@ -1618,7 +1683,8 @@ const defaultMbaProjects = {
     },
     {
       no: 23,
-      title: "A Study and design of training programs for employees in SBI, Akot",
+      title:
+        "A Study and design of training programs for employees in SBI, Akot",
     },
     {
       no: 24,
@@ -1737,7 +1803,8 @@ const defaultMbaProjects = {
     },
     {
       no: 48,
-      title: "A Study on the Customer Perception towards Electric Bike In Buldhana District",
+      title:
+        "A Study on the Customer Perception towards Electric Bike In Buldhana District",
     },
     {
       no: 49,
@@ -1773,7 +1840,7 @@ const defaultMbaProjects = {
 const MBA = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
-    getRequestedTab(location, "overview")
+    getRequestedTab(location, "overview"),
   );
   const [vmTab, setVmTab] = useState("vision");
   const [poTab, setPoTab] = useState("peo");
@@ -1836,7 +1903,7 @@ const MBA = () => {
     const requestedTab = getRequestedTab(location, "overview");
 
     setActiveTab((currentTab) =>
-      currentTab === requestedTab ? currentTab : requestedTab
+      currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
   const latestCourseMaterialRef = useRef(null);
@@ -1866,26 +1933,31 @@ const MBA = () => {
   };
 
   const getMbaIndustrialVisits = () =>
-    JSON.parse(JSON.stringify(t("industrialVisits.items", defaultMbaIndustrialVisits))).map(
-      (visit) => ({
-        ...visit,
-        id: String(visit?.id || createMbaIndustrialVisitId()),
-      }),
-    );
+    JSON.parse(
+      JSON.stringify(t("industrialVisits.items", defaultMbaIndustrialVisits)),
+    ).map((visit) => ({
+      ...visit,
+      id: String(visit?.id || createMbaIndustrialVisitId()),
+    }));
 
   const getMbaIndustrialVisitsMarkdown = (visits = getMbaIndustrialVisits()) =>
     mbaIndustrialVisitsToMarkdown(visits);
 
   const persistMbaIndustrialVisits = (visits) => {
-    const normalizedVisits = (Array.isArray(visits) ? visits : []).map((visit) => ({
-      id: String(visit?.id || createMbaIndustrialVisitId()).trim(),
-      title: String(visit?.title || "").trim(),
-      date: String(visit?.date || "").trim(),
-      report: String(visit?.report || "").trim(),
-    }));
+    const normalizedVisits = (Array.isArray(visits) ? visits : []).map(
+      (visit) => ({
+        id: String(visit?.id || createMbaIndustrialVisitId()).trim(),
+        title: String(visit?.title || "").trim(),
+        date: String(visit?.date || "").trim(),
+        report: String(visit?.report || "").trim(),
+      }),
+    );
 
     updateData("industrialVisits.items", normalizedVisits);
-    updateData("industrialVisits.markdown", mbaIndustrialVisitsToMarkdown(normalizedVisits));
+    updateData(
+      "industrialVisits.markdown",
+      mbaIndustrialVisitsToMarkdown(normalizedVisits),
+    );
   };
 
   const handleMbaIndustrialVisitsMarkdownSave = (markdown) => {
@@ -1941,7 +2013,10 @@ const MBA = () => {
     if (!file) return;
 
     const uploadKey = `mba-industrial-visit-${visitId}`;
-    setIndustrialVisitReportUploading((prev) => ({ ...prev, [uploadKey]: true }));
+    setIndustrialVisitReportUploading((prev) => ({
+      ...prev,
+      [uploadKey]: true,
+    }));
     setIndustrialVisitReportErrors((prev) => ({ ...prev, [uploadKey]: "" }));
 
     try {
@@ -2114,12 +2189,14 @@ const MBA = () => {
   };
 
   const getMbaRankings = () =>
-    JSON.parse(JSON.stringify(t("ranking.items", defaultMbaRankings))).map((item) => ({
-      ...item,
-      id: String(item?.id || createMbaRankingId()),
-      linkLabel: String(item?.linkLabel || item?.link || "more details"),
-      linkUrl: String(item?.linkUrl || ""),
-    }));
+    JSON.parse(JSON.stringify(t("ranking.items", defaultMbaRankings))).map(
+      (item) => ({
+        ...item,
+        id: String(item?.id || createMbaRankingId()),
+        linkLabel: String(item?.linkLabel || item?.link || "more details"),
+        linkUrl: String(item?.linkUrl || ""),
+      }),
+    );
 
   const getMbaRankingsMarkdown = (items = getMbaRankings()) =>
     String(t("ranking.markdown", mbaRankingsToMarkdown(items)) || "").trim() ||
@@ -2130,7 +2207,8 @@ const MBA = () => {
       id: String(item?.id || createMbaRankingId()).trim(),
       year: String(item?.year || "").trim(),
       survey: String(item?.survey || "").trim(),
-      linkLabel: String(item?.linkLabel || "more details").trim() || "more details",
+      linkLabel:
+        String(item?.linkLabel || "more details").trim() || "more details",
       linkUrl: String(item?.linkUrl || "").trim(),
       ranking: String(item?.ranking || "").trim(),
     }));
@@ -2464,9 +2542,7 @@ const MBA = () => {
 
   const getMbaWorkshopPrograms = () =>
     JSON.parse(
-      JSON.stringify(
-        t("workshops.workshopItems", defaultMbaWorkshopPrograms),
-      ),
+      JSON.stringify(t("workshops.workshopItems", defaultMbaWorkshopPrograms)),
     ).map((item) => ({
       ...item,
       id: String(item?.id || createMbaWorkshopSectionId("mba-workshop")),
@@ -2474,10 +2550,8 @@ const MBA = () => {
 
   const getMbaWorkshopMarkdown = (items = getMbaWorkshopPrograms()) =>
     String(
-      t(
-        "workshops.workshopMarkdown",
-        mbaWorkshopProgramsToMarkdown(items),
-      ) || "",
+      t("workshops.workshopMarkdown", mbaWorkshopProgramsToMarkdown(items)) ||
+        "",
     ).trim() || mbaWorkshopProgramsToMarkdown(items);
 
   const persistMbaWorkshopPrograms = (items) => {
@@ -2605,16 +2679,22 @@ const MBA = () => {
       : [];
     const markdownByYear = t("consultancy.markdownByYear", {});
     const recordYears = Object.keys(
-      markdownByYear && typeof markdownByYear === "object" ? markdownByYear : {},
+      markdownByYear && typeof markdownByYear === "object"
+        ? markdownByYear
+        : {},
     );
 
-    return [...new Set([...storedYears, ...recordYears, ...defaultConsultancyYears])];
+    return [
+      ...new Set([...storedYears, ...recordYears, ...defaultConsultancyYears]),
+    ];
   };
 
   const getMbaConsultancyMarkdownByYear = () => {
     const storedMarkdown = t("consultancy.markdownByYear", {});
     const normalizedStored =
-      storedMarkdown && typeof storedMarkdown === "object" ? storedMarkdown : {};
+      storedMarkdown && typeof storedMarkdown === "object"
+        ? storedMarkdown
+        : {};
 
     const defaults = Object.fromEntries(
       defaultConsultancyYears.map((year) => [
@@ -2630,7 +2710,9 @@ const MBA = () => {
   };
 
   const persistMbaConsultancyMarkdownByYear = (markdownByYear, years) => {
-    const normalizedYears = Array.isArray(years) ? years : getMbaConsultancyYears();
+    const normalizedYears = Array.isArray(years)
+      ? years
+      : getMbaConsultancyYears();
     updateData("consultancy.years", normalizedYears);
     updateData("consultancy.markdownByYear", markdownByYear);
   };
@@ -2676,7 +2758,9 @@ const MBA = () => {
     setShowAddConsultancyYear(false);
   };
 
-  const defaultLeaderSessions = Object.keys(defaultMbaCorporateLeaderSpeaksBySession);
+  const defaultLeaderSessions = Object.keys(
+    defaultMbaCorporateLeaderSpeaksBySession,
+  );
 
   const getMbaLeaderSessions = () => {
     const storedSessions = Array.isArray(t("leaderSpeaks.sessions", null))
@@ -2689,13 +2773,21 @@ const MBA = () => {
         : {},
     );
 
-    return [...new Set([...storedSessions, ...recordSessions, ...defaultLeaderSessions])];
+    return [
+      ...new Set([
+        ...storedSessions,
+        ...recordSessions,
+        ...defaultLeaderSessions,
+      ]),
+    ];
   };
 
   const getMbaLeaderMarkdownBySession = () => {
     const storedMarkdown = t("leaderSpeaks.markdownBySession", {});
     const normalizedStored =
-      storedMarkdown && typeof storedMarkdown === "object" ? storedMarkdown : {};
+      storedMarkdown && typeof storedMarkdown === "object"
+        ? storedMarkdown
+        : {};
 
     const defaults = Object.fromEntries(
       defaultLeaderSessions.map((session) => [
@@ -2789,7 +2881,9 @@ const MBA = () => {
         markdownBySession[session] || "",
       );
       const nextEntries = entries.map((entry, idx) =>
-        idx === entryIndex ? { ...entry, report: response.data.fileUrl } : entry,
+        idx === entryIndex
+          ? { ...entry, report: response.data.fileUrl }
+          : entry,
       );
 
       persistMbaLeaderMarkdownBySession(
@@ -2956,7 +3050,10 @@ const MBA = () => {
       .join("\n\n");
   };
 
-const parseMbaProjectsMarkdown = (markdown = "", fallbackYear = "2023-24") => {
+  const parseMbaProjectsMarkdown = (
+    markdown = "",
+    fallbackYear = "2023-24",
+  ) => {
     const text = String(markdown || "").trim();
     if (!text) {
       return { years: [fallbackYear], records: { [fallbackYear]: [] } };
@@ -3002,362 +3099,370 @@ const parseMbaProjectsMarkdown = (markdown = "", fallbackYear = "2023-24") => {
       if (!years.includes(normalizedYear)) years.push(normalizedYear);
     });
 
-  return { years, records };
-};
-
-const mbaExtractMarkdownLinkHref = (value = "") => {
-  const text = String(value || "").trim();
-  if (!text) return "";
-
-  const markdownMatch = text.match(/\[[^\]]*\]\(([^)]+)\)/);
-  if (markdownMatch?.[1]) return markdownMatch[1].trim();
-
-  if (/^https?:\/\//i.test(text)) return text;
-
-  return "";
-};
-
-const mbaParseMarkdownTableRow = (line = "") =>
-  String(line || "")
-    .trim()
-    .replace(/^\|/, "")
-    .replace(/\|$/, "")
-    .split("|")
-    .map((cell) => cell.trim());
-
-const mbaPatentsToMarkdown = (items = [], year = "2023-24") => {
-  const lines = [
-    `## ${year}`,
-    "",
-    "| Title of Invention | Status | Application No. | Inventors | Link |",
-    "|--------------------|--------|-----------------|-----------|------|",
-  ];
-
-  if (!items.length) {
-    lines.push(
-      "| Add invention title | Published | Add application no. | Add inventors | - |",
-    );
-    return lines.join("\n");
-  }
-
-  items.forEach((item) => {
-    const linkCell = item?.link ? `[Open](${item.link})` : "-";
-    lines.push(
-      `| ${item?.title || "-"} | ${item?.status || "-"} | ${item?.id || "-"} | ${item?.inventors || "-"} | ${linkCell} |`,
-    );
-  });
-
-  return lines.join("\n");
-};
-
-const parseMbaPatentsMarkdown = (markdown = "", fallbackYear = "2023-24") => {
-  const text = String(markdown || "").trim();
-  if (!text) return { year: fallbackYear, items: [] };
-
-  const headingMatch = text.match(/^##\s+(.+)$/m);
-  const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter(
-    (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
-        line,
-      ),
-  );
-
-  return {
-    year,
-    items: dataLines
-      .map((line) => mbaParseMarkdownTableRow(line))
-      .filter((cells) => cells.length >= 5)
-      .map((cells) => ({
-        title: cells[0] || "",
-        status: cells[1] || "",
-        id: cells[2] || "",
-        inventors: cells[3] || "",
-        link: mbaExtractMarkdownLinkHref(cells.slice(4).join(" | ")),
-      }))
-      .filter(
-        (item) =>
-          item.title || item.status || item.id || item.inventors || item.link,
-      ),
+    return { years, records };
   };
-};
 
-const mbaPublicationsToMarkdown = (items = [], year = "2023-24") => {
-  const lines = [
-    `## ${year}`,
-    "",
-    "| Title of Paper | Authors | Journal Details | Link |",
-    "|----------------|---------|-----------------|------|",
-  ];
+  const mbaExtractMarkdownLinkHref = (value = "") => {
+    const text = String(value || "").trim();
+    if (!text) return "";
 
-  if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add journal details | - |");
-    return lines.join("\n");
-  }
+    const markdownMatch = text.match(/\[[^\]]*\]\(([^)]+)\)/);
+    if (markdownMatch?.[1]) return markdownMatch[1].trim();
 
-  items.forEach((item) => {
-    const linkCell = item?.link ? `[View](${item.link})` : "-";
-    lines.push(
-      `| ${item?.title || "-"} | ${item?.authors || "-"} | ${item?.journal || "-"} | ${linkCell} |`,
-    );
-  });
+    if (/^https?:\/\//i.test(text)) return text;
 
-  return lines.join("\n");
-};
-
-const parseMbaPublicationsMarkdown = (
-  markdown = "",
-  fallbackYear = "2023-24",
-) => {
-  const text = String(markdown || "").trim();
-  if (!text) return { year: fallbackYear, items: [] };
-
-  const headingMatch = text.match(/^##\s+(.+)$/m);
-  const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter(
-    (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
-  );
-
-  return {
-    year,
-    items: dataLines
-      .map((line) => mbaParseMarkdownTableRow(line))
-      .filter((cells) => cells.length >= 4)
-      .map((cells) => ({
-        title: cells[0] || "",
-        authors: cells[1] || "",
-        journal: cells[2] || "",
-        link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
-      }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
+    return "";
   };
-};
 
-const mbaConferencesToMarkdown = (items = [], year = "2023-24") => {
-  const lines = [
-    `## ${year}`,
-    "",
-    "| Title of Paper | Authors | Conference Details | Link |",
-    "|----------------|---------|--------------------|------|",
-  ];
+  const mbaParseMarkdownTableRow = (line = "") =>
+    String(line || "")
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((cell) => cell.trim());
 
-  if (!items.length) {
-    lines.push("| Add paper title | Add authors | Add conference details | - |");
+  const mbaPatentsToMarkdown = (items = [], year = "2023-24") => {
+    const lines = [
+      `## ${year}`,
+      "",
+      "| Title of Invention | Status | Application No. | Inventors | Link |",
+      "|--------------------|--------|-----------------|-----------|------|",
+    ];
+
+    if (!items.length) {
+      lines.push(
+        "| Add invention title | Published | Add application no. | Add inventors | - |",
+      );
+      return lines.join("\n");
+    }
+
+    items.forEach((item) => {
+      const linkCell = item?.link ? `[Open](${item.link})` : "-";
+      lines.push(
+        `| ${item?.title || "-"} | ${item?.status || "-"} | ${item?.id || "-"} | ${item?.inventors || "-"} | ${linkCell} |`,
+      );
+    });
+
     return lines.join("\n");
-  }
-
-  items.forEach((item) => {
-    const linkCell = item?.link ? `[View](${item.link})` : "-";
-    lines.push(
-      `| ${item?.title || "-"} | ${item?.authors || "-"} | ${item?.journal || "-"} | ${linkCell} |`,
-    );
-  });
-
-  return lines.join("\n");
-};
-
-const parseMbaConferencesMarkdown = (
-  markdown = "",
-  fallbackYear = "2023-24",
-) => {
-  const text = String(markdown || "").trim();
-  if (!text) return { year: fallbackYear, items: [] };
-
-  const headingMatch = text.match(/^##\s+(.+)$/m);
-  const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter(
-    (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
-  );
-
-  return {
-    year,
-    items: dataLines
-      .map((line) => mbaParseMarkdownTableRow(line))
-      .filter((cells) => cells.length >= 4)
-      .map((cells) => ({
-        title: cells[0] || "",
-        authors: cells[1] || "",
-        journal: cells[2] || "",
-        link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
-      }))
-      .filter((item) => item.title || item.authors || item.journal || item.link),
   };
-};
 
-const mbaCopyrightsToMarkdown = (items = [], year = "2023-24") => {
-  const lines = [
-    `## ${year}`,
-    "",
-    "| Name of Faculty | Title of Work | Status | Link |",
-    "|-----------------|---------------|--------|------|",
-  ];
+  const parseMbaPatentsMarkdown = (markdown = "", fallbackYear = "2023-24") => {
+    const text = String(markdown || "").trim();
+    if (!text) return { year: fallbackYear, items: [] };
 
-  if (!items.length) {
-    lines.push("| Add faculty name | Add title of work | Published | - |");
+    const headingMatch = text.match(/^##\s+(.+)$/m);
+    const year = headingMatch?.[1]?.trim() || fallbackYear;
+    const tableLines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"));
+    const dataLines = tableLines.filter(
+      (line, index) =>
+        index > 1 &&
+        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+          line,
+        ),
+    );
+
+    return {
+      year,
+      items: dataLines
+        .map((line) => mbaParseMarkdownTableRow(line))
+        .filter((cells) => cells.length >= 5)
+        .map((cells) => ({
+          title: cells[0] || "",
+          status: cells[1] || "",
+          id: cells[2] || "",
+          inventors: cells[3] || "",
+          link: mbaExtractMarkdownLinkHref(cells.slice(4).join(" | ")),
+        }))
+        .filter(
+          (item) =>
+            item.title || item.status || item.id || item.inventors || item.link,
+        ),
+    };
+  };
+
+  const mbaPublicationsToMarkdown = (items = [], year = "2023-24") => {
+    const lines = [
+      `## ${year}`,
+      "",
+      "| Title of Paper | Authors | Journal Details | Link |",
+      "|----------------|---------|-----------------|------|",
+    ];
+
+    if (!items.length) {
+      lines.push("| Add paper title | Add authors | Add journal details | - |");
+      return lines.join("\n");
+    }
+
+    items.forEach((item) => {
+      const linkCell = item?.link ? `[View](${item.link})` : "-";
+      lines.push(
+        `| ${item?.title || "-"} | ${item?.authors || "-"} | ${item?.journal || "-"} | ${linkCell} |`,
+      );
+    });
+
     return lines.join("\n");
-  }
-
-  items.forEach((item) => {
-    const linkCell = item?.link ? `[Open](${item.link})` : "-";
-    lines.push(
-      `| ${item?.name || "-"} | ${item?.title || "-"} | ${item?.status || "-"} | ${linkCell} |`,
-    );
-  });
-
-  return lines.join("\n");
-};
-
-const parseMbaCopyrightsMarkdown = (
-  markdown = "",
-  fallbackYear = "2023-24",
-) => {
-  const text = String(markdown || "").trim();
-  if (!text) return { year: fallbackYear, items: [] };
-
-  const headingMatch = text.match(/^##\s+(.+)$/m);
-  const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter(
-    (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
-  );
-
-  return {
-    year,
-    items: dataLines
-      .map((line) => mbaParseMarkdownTableRow(line))
-      .filter((cells) => cells.length >= 4)
-      .map((cells) => ({
-        name: cells[0] || "",
-        title: cells[1] || "",
-        status: cells[2] || "",
-        link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
-      }))
-      .filter((item) => item.name || item.title || item.status || item.link),
   };
-};
 
-const mbaBooksToMarkdown = (items = [], year = "2023-24") => {
-  const lines = [
-    `## ${year}`,
-    "",
-    "| Author(s) | Co-Authors | Title | Publisher | ISBN | Link |",
-    "|-----------|------------|-------|-----------|------|------|",
-  ];
+  const parseMbaPublicationsMarkdown = (
+    markdown = "",
+    fallbackYear = "2023-24",
+  ) => {
+    const text = String(markdown || "").trim();
+    if (!text) return { year: fallbackYear, items: [] };
 
-  if (!items.length) {
-    lines.push("| Add author names | - | Add title | Add publisher | Add ISBN | - |");
+    const headingMatch = text.match(/^##\s+(.+)$/m);
+    const year = headingMatch?.[1]?.trim() || fallbackYear;
+    const tableLines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"));
+    const dataLines = tableLines.filter(
+      (line, index) =>
+        index > 1 &&
+        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+    );
+
+    return {
+      year,
+      items: dataLines
+        .map((line) => mbaParseMarkdownTableRow(line))
+        .filter((cells) => cells.length >= 4)
+        .map((cells) => ({
+          title: cells[0] || "",
+          authors: cells[1] || "",
+          journal: cells[2] || "",
+          link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
+        }))
+        .filter(
+          (item) => item.title || item.authors || item.journal || item.link,
+        ),
+    };
+  };
+
+  const mbaConferencesToMarkdown = (items = [], year = "2023-24") => {
+    const lines = [
+      `## ${year}`,
+      "",
+      "| Title of Paper | Authors | Conference Details | Link |",
+      "|----------------|---------|--------------------|------|",
+    ];
+
+    if (!items.length) {
+      lines.push(
+        "| Add paper title | Add authors | Add conference details | - |",
+      );
+      return lines.join("\n");
+    }
+
+    items.forEach((item) => {
+      const linkCell = item?.link ? `[View](${item.link})` : "-";
+      lines.push(
+        `| ${item?.title || "-"} | ${item?.authors || "-"} | ${item?.journal || "-"} | ${linkCell} |`,
+      );
+    });
+
     return lines.join("\n");
-  }
-
-  items.forEach((item) => {
-    const linkCell = item?.link ? `[Open](${item.link})` : "-";
-    lines.push(
-      `| ${item?.name || "-"} | ${item?.coAuthors || "-"} | ${item?.title || "-"} | ${item?.details || "-"} | ${item?.isbn || "-"} | ${linkCell} |`,
-    );
-  });
-
-  return lines.join("\n");
-};
-
-const parseMbaBooksMarkdown = (markdown = "", fallbackYear = "2023-24") => {
-  const text = String(markdown || "").trim();
-  if (!text) return { year: fallbackYear, items: [] };
-
-  const headingMatch = text.match(/^##\s+(.+)$/m);
-  const year = headingMatch?.[1]?.trim() || fallbackYear;
-  const tableLines = text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("|"));
-  const dataLines = tableLines.filter(
-    (line, index) =>
-      index > 1 &&
-      !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
-        line,
-      ),
-  );
-
-  return {
-    year,
-    items: dataLines
-      .map((line) => mbaParseMarkdownTableRow(line))
-      .filter((cells) => cells.length >= 6)
-      .map((cells) => ({
-        name: cells[0] || "",
-        coAuthors: cells[1] || "",
-        title: cells[2] || "",
-        details: cells[3] || "",
-        isbn: cells[4] || "",
-        link: mbaExtractMarkdownLinkHref(cells.slice(5).join(" | ")),
-      }))
-      .filter(
-        (item) =>
-          item.name ||
-          item.coAuthors ||
-          item.title ||
-          item.details ||
-          item.isbn ||
-          item.link,
-      ),
   };
-};
 
-const MBA_RESEARCH_DEFAULTS = {
-  patents: defaultMbaPatents,
-  publications: defaultMbaPublications,
-  conferences: defaultMbaConferences,
-  books: defaultMbaBooks,
-  copyrights: defaultMbaCopyrights,
-};
+  const parseMbaConferencesMarkdown = (
+    markdown = "",
+    fallbackYear = "2023-24",
+  ) => {
+    const text = String(markdown || "").trim();
+    if (!text) return { year: fallbackYear, items: [] };
 
-const MBA_RESEARCH_TO_MARKDOWN = {
-  patents: mbaPatentsToMarkdown,
-  publications: mbaPublicationsToMarkdown,
-  conferences: mbaConferencesToMarkdown,
-  books: mbaBooksToMarkdown,
-  copyrights: mbaCopyrightsToMarkdown,
-};
+    const headingMatch = text.match(/^##\s+(.+)$/m);
+    const year = headingMatch?.[1]?.trim() || fallbackYear;
+    const tableLines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"));
+    const dataLines = tableLines.filter(
+      (line, index) =>
+        index > 1 &&
+        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+    );
 
-const MBA_RESEARCH_FROM_MARKDOWN = {
-  patents: parseMbaPatentsMarkdown,
-  publications: parseMbaPublicationsMarkdown,
-  conferences: parseMbaConferencesMarkdown,
-  books: parseMbaBooksMarkdown,
-  copyrights: parseMbaCopyrightsMarkdown,
-};
+    return {
+      year,
+      items: dataLines
+        .map((line) => mbaParseMarkdownTableRow(line))
+        .filter((cells) => cells.length >= 4)
+        .map((cells) => ({
+          title: cells[0] || "",
+          authors: cells[1] || "",
+          journal: cells[2] || "",
+          link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
+        }))
+        .filter(
+          (item) => item.title || item.authors || item.journal || item.link,
+        ),
+    };
+  };
 
-const MBA_RESEARCH_TEMPLATE_URLS = {
-  patents: "/uploads/documents/pride_templates/mba_patents_template.docx",
-  publications:
-    "/uploads/documents/pride_templates/mba_publications_template.docx",
-  conferences:
-    "/uploads/documents/pride_templates/mba_conferences_template.docx",
-  books: "/uploads/documents/pride_templates/mba_books_template.docx",
-  copyrights:
-    "/uploads/documents/pride_templates/mba_copyrights_template.docx",
-};
+  const mbaCopyrightsToMarkdown = (items = [], year = "2023-24") => {
+    const lines = [
+      `## ${year}`,
+      "",
+      "| Name of Faculty | Title of Work | Status | Link |",
+      "|-----------------|---------------|--------|------|",
+    ];
+
+    if (!items.length) {
+      lines.push("| Add faculty name | Add title of work | Published | - |");
+      return lines.join("\n");
+    }
+
+    items.forEach((item) => {
+      const linkCell = item?.link ? `[Open](${item.link})` : "-";
+      lines.push(
+        `| ${item?.name || "-"} | ${item?.title || "-"} | ${item?.status || "-"} | ${linkCell} |`,
+      );
+    });
+
+    return lines.join("\n");
+  };
+
+  const parseMbaCopyrightsMarkdown = (
+    markdown = "",
+    fallbackYear = "2023-24",
+  ) => {
+    const text = String(markdown || "").trim();
+    if (!text) return { year: fallbackYear, items: [] };
+
+    const headingMatch = text.match(/^##\s+(.+)$/m);
+    const year = headingMatch?.[1]?.trim() || fallbackYear;
+    const tableLines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"));
+    const dataLines = tableLines.filter(
+      (line, index) =>
+        index > 1 &&
+        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(line),
+    );
+
+    return {
+      year,
+      items: dataLines
+        .map((line) => mbaParseMarkdownTableRow(line))
+        .filter((cells) => cells.length >= 4)
+        .map((cells) => ({
+          name: cells[0] || "",
+          title: cells[1] || "",
+          status: cells[2] || "",
+          link: mbaExtractMarkdownLinkHref(cells.slice(3).join(" | ")),
+        }))
+        .filter((item) => item.name || item.title || item.status || item.link),
+    };
+  };
+
+  const mbaBooksToMarkdown = (items = [], year = "2023-24") => {
+    const lines = [
+      `## ${year}`,
+      "",
+      "| Author(s) | Co-Authors | Title | Publisher | ISBN | Link |",
+      "|-----------|------------|-------|-----------|------|------|",
+    ];
+
+    if (!items.length) {
+      lines.push(
+        "| Add author names | - | Add title | Add publisher | Add ISBN | - |",
+      );
+      return lines.join("\n");
+    }
+
+    items.forEach((item) => {
+      const linkCell = item?.link ? `[Open](${item.link})` : "-";
+      lines.push(
+        `| ${item?.name || "-"} | ${item?.coAuthors || "-"} | ${item?.title || "-"} | ${item?.details || "-"} | ${item?.isbn || "-"} | ${linkCell} |`,
+      );
+    });
+
+    return lines.join("\n");
+  };
+
+  const parseMbaBooksMarkdown = (markdown = "", fallbackYear = "2023-24") => {
+    const text = String(markdown || "").trim();
+    if (!text) return { year: fallbackYear, items: [] };
+
+    const headingMatch = text.match(/^##\s+(.+)$/m);
+    const year = headingMatch?.[1]?.trim() || fallbackYear;
+    const tableLines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"));
+    const dataLines = tableLines.filter(
+      (line, index) =>
+        index > 1 &&
+        !/^\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|\s*[-: ]+\|?\s*$/.test(
+          line,
+        ),
+    );
+
+    return {
+      year,
+      items: dataLines
+        .map((line) => mbaParseMarkdownTableRow(line))
+        .filter((cells) => cells.length >= 6)
+        .map((cells) => ({
+          name: cells[0] || "",
+          coAuthors: cells[1] || "",
+          title: cells[2] || "",
+          details: cells[3] || "",
+          isbn: cells[4] || "",
+          link: mbaExtractMarkdownLinkHref(cells.slice(5).join(" | ")),
+        }))
+        .filter(
+          (item) =>
+            item.name ||
+            item.coAuthors ||
+            item.title ||
+            item.details ||
+            item.isbn ||
+            item.link,
+        ),
+    };
+  };
+
+  const MBA_RESEARCH_DEFAULTS = {
+    patents: defaultMbaPatents,
+    publications: defaultMbaPublications,
+    conferences: defaultMbaConferences,
+    books: defaultMbaBooks,
+    copyrights: defaultMbaCopyrights,
+  };
+
+  const MBA_RESEARCH_TO_MARKDOWN = {
+    patents: mbaPatentsToMarkdown,
+    publications: mbaPublicationsToMarkdown,
+    conferences: mbaConferencesToMarkdown,
+    books: mbaBooksToMarkdown,
+    copyrights: mbaCopyrightsToMarkdown,
+  };
+
+  const MBA_RESEARCH_FROM_MARKDOWN = {
+    patents: parseMbaPatentsMarkdown,
+    publications: parseMbaPublicationsMarkdown,
+    conferences: parseMbaConferencesMarkdown,
+    books: parseMbaBooksMarkdown,
+    copyrights: parseMbaCopyrightsMarkdown,
+  };
+
+  const MBA_RESEARCH_TEMPLATE_URLS = {
+    patents: "/uploads/documents/pride_templates/mba_patents_template.docx",
+    publications:
+      "/uploads/documents/pride_templates/mba_publications_template.docx",
+    conferences:
+      "/uploads/documents/pride_templates/mba_conferences_template.docx",
+    books: "/uploads/documents/pride_templates/mba_books_template.docx",
+    copyrights:
+      "/uploads/documents/pride_templates/mba_copyrights_template.docx",
+  };
 
   const getProjectRecords = () =>
     JSON.parse(JSON.stringify(t("ugPgProjects", defaultMbaProjects)));
@@ -3394,7 +3499,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
     const markdownByYear = orderedYears.reduce((acc, year) => {
       acc[year] =
         existingMarkdownByYear?.[year] ||
-        mbaProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [year]);
+        mbaProjectsToMarkdown({ [year]: normalizedRecords[year] || [] }, [
+          year,
+        ]);
       return acc;
     }, {});
 
@@ -3443,7 +3550,10 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
   const getMbaResearchItems = (section, year = researchYear) =>
     JSON.parse(
       JSON.stringify(
-        t(`research.${section}.${year}`, MBA_RESEARCH_DEFAULTS[section]?.[year] || []),
+        t(
+          `research.${section}.${year}`,
+          MBA_RESEARCH_DEFAULTS[section]?.[year] || [],
+        ),
       ),
     );
 
@@ -3470,7 +3580,8 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
       (section) => [
         ...Object.keys(MBA_RESEARCH_DEFAULTS[section] || {}),
         ...Object.keys(
-          storedResearch?.[section] && typeof storedResearch[section] === "object"
+          storedResearch?.[section] &&
+            typeof storedResearch[section] === "object"
             ? storedResearch[section]
             : {},
         ),
@@ -3817,7 +3928,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
 
     if (typeof stored === "string" && stored.trim()) {
       const lines = stored.split("\n").map((line) => line.trim());
-      const tableStart = lines.findIndex((line) => line.startsWith("| Sr. No."));
+      const tableStart = lines.findIndex((line) =>
+        line.startsWith("| Sr. No."),
+      );
       if (tableStart !== -1) {
         return lines
           .slice(tableStart + 2)
@@ -4140,7 +4253,8 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
     );
   };
 
-  const courseMaterialItems = t("courseMaterials", defaultCourseMaterials) || [];
+  const courseMaterialItems =
+    t("courseMaterials", defaultCourseMaterials) || [];
 
   useEffect(() => {
     if (
@@ -4167,7 +4281,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
 
   const getAchievementItems = (section) =>
     JSON.parse(
-      JSON.stringify(t(`achievements.${section}`, defaultAchievements[section] || [])),
+      JSON.stringify(
+        t(`achievements.${section}`, defaultAchievements[section] || []),
+      ),
     );
 
   const achievementsToMarkdown = (section, items = []) =>
@@ -4278,7 +4394,7 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("image", file);
 
       const token = localStorage.getItem("adminToken");
       const response = await apiClient.post("/upload/image", formData, {
@@ -4392,7 +4508,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
   const renderActivityMarkdown = (value, emptyText = "Not specified") => {
     const trimmedValue = String(value || "").trim();
     if (!trimmedValue) {
-      return <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>;
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
     }
 
     return (
@@ -5453,7 +5571,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className={`group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex ${
-                isEditing && expandedFacultyEditorIndex === i ? "lg:col-span-2" : ""
+                isEditing && expandedFacultyEditorIndex === i
+                  ? "lg:col-span-2"
+                  : ""
               }`}
             >
               {/* Image Area - Fixed Width */}
@@ -5576,7 +5696,11 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
                             <EditableText
                               value={fac.id || createFacultySlug(fac.name)}
                               onSave={(val) =>
-                                updateFacultyMember(i, "id", createFacultySlug(val))
+                                updateFacultyMember(
+                                  i,
+                                  "id",
+                                  createFacultySlug(val),
+                                )
                               }
                             />
                           </div>
@@ -5586,7 +5710,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
                             </div>
                             <EditableText
                               value={fac.vidwanId || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanId", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanId", val)
+                              }
                             />
                           </div>
                           <div className="md:col-span-2">
@@ -5595,7 +5721,9 @@ const MBA_RESEARCH_TEMPLATE_URLS = {
                             </div>
                             <EditableText
                               value={fac.vidwanLink || ""}
-                              onSave={(val) => updateFacultyMember(i, "vidwanLink", val)}
+                              onSave={(val) =>
+                                updateFacultyMember(i, "vidwanLink", val)
+                              }
                             />
                           </div>
                           <div className="md:col-span-2">
@@ -6291,8 +6419,8 @@ After successfully completing the course, students will be able to:
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="bg-gray-50 border-b border-gray-200 p-4">
                   <h4 className="text-base font-semibold text-gray-700 text-center">
-                    Ranking by different independent national level best B-Schools
-                    Surveys
+                    Ranking by different independent national level best
+                    B-Schools Surveys
                   </h4>
                 </div>
 
@@ -6335,9 +6463,13 @@ After successfully completing the course, students will be able to:
                     <tbody className="bg-white divide-y divide-gray-200">
                       {rankingItems.map((item) => {
                         const uploadKey = `mba-ranking-${item.id}`;
-                        const isUploading = Boolean(rankingLinkUploading[uploadKey]);
+                        const isUploading = Boolean(
+                          rankingLinkUploading[uploadKey],
+                        );
                         const uploadError = rankingLinkErrors[uploadKey];
-                        const isExternalLink = /^https?:\/\//i.test(item.linkUrl);
+                        const isExternalLink = /^https?:\/\//i.test(
+                          item.linkUrl,
+                        );
 
                         return (
                           <tr
@@ -6350,7 +6482,11 @@ After successfully completing the course, students will be able to:
                                   type="text"
                                   value={item.year}
                                   onChange={(e) =>
-                                    updateMbaRankingRow(item.id, "year", e.target.value)
+                                    updateMbaRankingRow(
+                                      item.id,
+                                      "year",
+                                      e.target.value,
+                                    )
                                   }
                                   className="w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
                                 />
@@ -6363,7 +6499,11 @@ After successfully completing the course, students will be able to:
                                 <textarea
                                   value={item.survey}
                                   onChange={(e) =>
-                                    updateMbaRankingRow(item.id, "survey", e.target.value)
+                                    updateMbaRankingRow(
+                                      item.id,
+                                      "survey",
+                                      e.target.value,
+                                    )
                                   }
                                   rows={3}
                                   className="w-full min-w-[280px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
@@ -6404,14 +6544,19 @@ After successfully completing the course, students will be able to:
                                   <div className="flex flex-wrap items-center gap-2">
                                     <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-ssgmce-blue transition hover:bg-blue-100">
                                       <FaUpload className="text-xs" />
-                                      {isUploading ? "Uploading..." : "Upload Link File"}
+                                      {isUploading
+                                        ? "Uploading..."
+                                        : "Upload Link File"}
                                       <input
                                         type="file"
                                         className="hidden"
                                         onChange={(e) => {
                                           const file = e.target.files?.[0];
                                           if (file) {
-                                            uploadMbaRankingLinkFile(item.id, file);
+                                            uploadMbaRankingLinkFile(
+                                              item.id,
+                                              file,
+                                            );
                                           }
                                           e.target.value = "";
                                         }}
@@ -6430,7 +6575,9 @@ After successfully completing the course, students will be able to:
                                     ) : null}
                                   </div>
                                   {uploadError ? (
-                                    <p className="text-xs text-red-600">{uploadError}</p>
+                                    <p className="text-xs text-red-600">
+                                      {uploadError}
+                                    </p>
                                   ) : null}
                                 </div>
                               ) : item.linkUrl ? (
@@ -6454,7 +6601,11 @@ After successfully completing the course, students will be able to:
                                 <textarea
                                   value={item.ranking}
                                   onChange={(e) =>
-                                    updateMbaRankingRow(item.id, "ranking", e.target.value)
+                                    updateMbaRankingRow(
+                                      item.id,
+                                      "ranking",
+                                      e.target.value,
+                                    )
                                   }
                                   rows={4}
                                   className="w-full min-w-[260px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
@@ -6490,8 +6641,8 @@ After successfully completing the course, students will be able to:
                       Edit Ranking Table in Markdown
                     </h4>
                     <p className="mt-1 text-sm text-gray-500">
-                      This markdown stays synced with the ranking table above, while
-                      the public page keeps the same table structure.
+                      This markdown stays synced with the ranking table above,
+                      while the public page keeps the same table structure.
                     </p>
                   </div>
                   <MarkdownEditor
@@ -7128,7 +7279,9 @@ After successfully completing the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`faculty-${index}`]}
+                              disabled={
+                                achievementUploading[`faculty-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "faculty",
@@ -7285,7 +7438,9 @@ After successfully completing the course, students will be able to:
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              disabled={achievementUploading[`students-${index}`]}
+                              disabled={
+                                achievementUploading[`students-${index}`]
+                              }
                               onChange={(event) =>
                                 handleAchievementFileChange(
                                   "students",
@@ -7350,172 +7505,169 @@ After successfully completing the course, students will be able to:
       );
     })(),
 
-    accreditations: (
-      (() => {
-        const accreditationItems = getMbaAccreditations();
-        const accreditationMarkdown = getMbaAccreditationsMarkdown(
-          accreditationItems,
-        );
+    accreditations: (() => {
+      const accreditationItems = getMbaAccreditations();
+      const accreditationMarkdown =
+        getMbaAccreditationsMarkdown(accreditationItems);
 
-        return (
-          <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-orange-500 pl-4">
-              Recognitions and Accreditations
-            </h3>
+      return (
+        <div className="space-y-8">
+          <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-orange-500 pl-4">
+            Recognitions and Accreditations
+          </h3>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-200">
-                    <tr>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+                      Year
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+                      Recognition
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+                      Effective Period
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+                      Score / Grade
+                    </th>
+                    {isEditing && (
                       <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                        Year
+                        Actions
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                        Recognition
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                        Effective Period
-                      </th>
-                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                        Score / Grade
-                      </th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {accreditationItems.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm text-ssgmce-blue font-semibold align-top">
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            value={item.year}
+                            onChange={(e) =>
+                              updateMbaAccreditationRow(
+                                item.id,
+                                "year",
+                                e.target.value,
+                              )
+                            }
+                            className="w-full min-w-[110px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
+                          />
+                        ) : (
+                          renderMbaTableCellMarkdown(item.year)
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 font-medium align-top">
+                        {isEditing ? (
+                          <textarea
+                            value={item.recognition}
+                            onChange={(e) =>
+                              updateMbaAccreditationRow(
+                                item.id,
+                                "recognition",
+                                e.target.value,
+                              )
+                            }
+                            rows={3}
+                            className="w-full min-w-[280px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
+                          />
+                        ) : (
+                          renderMbaTableCellMarkdown(item.recognition)
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700 align-top">
+                        {isEditing ? (
+                          <textarea
+                            value={item.effectivePeriod}
+                            onChange={(e) =>
+                              updateMbaAccreditationRow(
+                                item.id,
+                                "effectivePeriod",
+                                e.target.value,
+                              )
+                            }
+                            rows={3}
+                            className="w-full min-w-[220px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
+                          />
+                        ) : (
+                          renderMbaTableCellMarkdown(item.effectivePeriod)
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-700 align-top">
+                        {isEditing ? (
+                          <textarea
+                            value={item.score}
+                            onChange={(e) =>
+                              updateMbaAccreditationRow(
+                                item.id,
+                                "score",
+                                e.target.value,
+                              )
+                            }
+                            rows={3}
+                            className="w-full min-w-[180px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
+                          />
+                        ) : (
+                          renderMbaTableCellMarkdown(item.score)
+                        )}
+                      </td>
                       {isEditing && (
-                        <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                          Actions
-                        </th>
+                        <td className="px-6 py-4 text-sm align-top">
+                          <button
+                            type="button"
+                            onClick={() => deleteMbaAccreditationRow(item.id)}
+                            className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
+                          >
+                            <FaTrash className="text-xs" />
+                            Delete
+                          </button>
+                        </td>
                       )}
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {accreditationItems.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-6 py-4 text-sm text-ssgmce-blue font-semibold align-top">
-                          {isEditing ? (
-                            <input
-                              type="text"
-                              value={item.year}
-                              onChange={(e) =>
-                                updateMbaAccreditationRow(
-                                  item.id,
-                                  "year",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full min-w-[110px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
-                            />
-                          ) : (
-                            renderMbaTableCellMarkdown(item.year)
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-900 font-medium align-top">
-                          {isEditing ? (
-                            <textarea
-                              value={item.recognition}
-                              onChange={(e) =>
-                                updateMbaAccreditationRow(
-                                  item.id,
-                                  "recognition",
-                                  e.target.value,
-                                )
-                              }
-                              rows={3}
-                              className="w-full min-w-[280px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
-                            />
-                          ) : (
-                            renderMbaTableCellMarkdown(item.recognition)
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700 align-top">
-                          {isEditing ? (
-                            <textarea
-                              value={item.effectivePeriod}
-                              onChange={(e) =>
-                                updateMbaAccreditationRow(
-                                  item.id,
-                                  "effectivePeriod",
-                                  e.target.value,
-                                )
-                              }
-                              rows={3}
-                              className="w-full min-w-[220px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
-                            />
-                          ) : (
-                            renderMbaTableCellMarkdown(item.effectivePeriod)
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700 align-top">
-                          {isEditing ? (
-                            <textarea
-                              value={item.score}
-                              onChange={(e) =>
-                                updateMbaAccreditationRow(
-                                  item.id,
-                                  "score",
-                                  e.target.value,
-                                )
-                              }
-                              rows={3}
-                              className="w-full min-w-[180px] rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-ssgmce-blue focus:outline-none focus:ring-2 focus:ring-blue-100"
-                            />
-                          ) : (
-                            renderMbaTableCellMarkdown(item.score)
-                          )}
-                        </td>
-                        {isEditing && (
-                          <td className="px-6 py-4 text-sm align-top">
-                            <button
-                              type="button"
-                              onClick={() => deleteMbaAccreditationRow(item.id)}
-                              className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
-                            >
-                              <FaTrash className="text-xs" />
-                              Delete
-                            </button>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
-
-            {isEditing && (
-              <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <h4 className="text-lg font-bold text-gray-800">
-                      Edit Recognitions Table in Markdown
-                    </h4>
-                    <p className="mt-1 text-sm text-gray-500">
-                      This markdown stays synced with the table above, while the
-                      public page keeps the same table structure.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={addMbaAccreditationRowOnTop}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ssgmce-blue text-white font-semibold hover:bg-ssgmce-dark-blue transition-colors"
-                  >
-                    <FaPlus />
-                    Add New Row On Top
-                  </button>
-                </div>
-                <MarkdownEditor
-                  value={accreditationMarkdown}
-                  onSave={handleMbaAccreditationsMarkdownSave}
-                  placeholder="Recognitions and accreditations table (GFM Markdown)..."
-                />
-              </div>
-            )}
           </div>
-        );
-      })()
-    ),
+
+          {isEditing && (
+            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-lg font-bold text-gray-800">
+                    Edit Recognitions Table in Markdown
+                  </h4>
+                  <p className="mt-1 text-sm text-gray-500">
+                    This markdown stays synced with the table above, while the
+                    public page keeps the same table structure.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={addMbaAccreditationRowOnTop}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ssgmce-blue text-white font-semibold hover:bg-ssgmce-dark-blue transition-colors"
+                >
+                  <FaPlus />
+                  Add New Row On Top
+                </button>
+              </div>
+              <MarkdownEditor
+                value={accreditationMarkdown}
+                onSave={handleMbaAccreditationsMarkdownSave}
+                placeholder="Recognitions and accreditations table (GFM Markdown)..."
+              />
+            </div>
+          )}
+        </div>
+      );
+    })(),
 
     placements: (
       <div className="space-y-8">
@@ -7597,7 +7749,9 @@ After successfully completing the course, students will be able to:
                             </button>
                             {isEditing && (
                               <button
-                                onClick={() => handleDeletePlacementYear(row.id)}
+                                onClick={() =>
+                                  handleDeletePlacementYear(row.id)
+                                }
                                 className="text-red-600 hover:text-red-700 font-medium text-xs border border-red-200 hover:border-red-300 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-full transition-all"
                                 title={`Delete ${row.year}`}
                               >
@@ -7818,7 +7972,10 @@ After successfully completing the course, students will be able to:
                               rel="noopener noreferrer"
                               className="text-xs font-medium text-ssgmce-blue underline underline-offset-2"
                             >
-                              {getNewsletterFileName(issue.link, issue.fileName)}
+                              {getNewsletterFileName(
+                                issue.link,
+                                issue.fileName,
+                              )}
                             </a>
                           )}
                           {newsletterUploadErrors[`archives-${i}`] && (
@@ -7869,7 +8026,9 @@ After successfully completing the course, students will be able to:
             : [];
           const selectedProjectsMarkdown =
             projectMarkdownByYear?.[projectYear] ||
-            mbaProjectsToMarkdown({ [projectYear]: currentProjects }, [projectYear]);
+            mbaProjectsToMarkdown({ [projectYear]: currentProjects }, [
+              projectYear,
+            ]);
 
           return (
             <>
@@ -7922,7 +8081,10 @@ After successfully completing the course, students will be able to:
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {currentProjects.map((project, i) => (
-                        <tr key={i} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={i}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
                           <td className="px-6 py-4 text-sm text-ssgmce-blue font-semibold text-center">
                             {project.no || i + 1}
                           </td>
@@ -7981,7 +8143,8 @@ After successfully completing the course, students will be able to:
                     >
                       <div className="flex items-center justify-between mb-6">
                         <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                          <FaPlus className="text-ssgmce-blue" /> Add Project Session
+                          <FaPlus className="text-ssgmce-blue" /> Add Project
+                          Session
                         </h3>
                         <button
                           onClick={() => {
@@ -7997,7 +8160,8 @@ After successfully completing the course, students will be able to:
                       <div className="space-y-4 mb-6">
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Academic Year <span className="text-red-500">*</span>
+                            Academic Year{" "}
+                            <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -8570,9 +8734,10 @@ After successfully completing the course, students will be able to:
                   Industry Interaction and Tours
                 </h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  Industrial tours organized by the department for students of MBA
-                  first and final years along with faculty members to provide
-                  practical exposure to business operations and management practices.
+                  Industrial tours organized by the department for students of
+                  MBA first and final years along with faculty members to
+                  provide practical exposure to business operations and
+                  management practices.
                 </p>
               </div>
 
@@ -8597,11 +8762,16 @@ After successfully completing the course, students will be able to:
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {industrialVisits.map((visit, idx) => (
-                        <tr key={visit.id || idx} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={visit.id || idx}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
                           <td className="px-6 py-4 font-medium text-gray-900">
                             {String(idx + 1).padStart(2, "0")}
                           </td>
-                          <td className="px-6 py-4 text-gray-700">{visit.title}</td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {visit.title}
+                          </td>
                           <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
                             {visit.date}
                           </td>
@@ -8637,7 +8807,8 @@ After successfully completing the course, students will be able to:
                             Edit Industry Interaction and Tours in Markdown
                           </h4>
                           <p className="text-sm text-gray-500 mt-1">
-                            Serial numbers are automatic now. Add a new blank row on top, then edit only the actual visit details.
+                            Serial numbers are automatic now. Add a new blank
+                            row on top, then edit only the actual visit details.
                           </p>
                         </div>
                         <button
@@ -8663,7 +8834,8 @@ After successfully completing the course, students will be able to:
                         Optional Detailed Reports
                       </h4>
                       <p className="text-sm text-gray-500 mt-1">
-                        Upload a detailed report only for the visit rows that need one.
+                        Upload a detailed report only for the visit rows that
+                        need one.
                       </p>
                     </div>
                     <div className="space-y-3">
@@ -8708,11 +8880,16 @@ After successfully completing the course, students will be able to:
                                     type="file"
                                     accept=".pdf,.doc,.docx"
                                     className="hidden"
-                                    disabled={industrialVisitReportUploading[uploadKey]}
+                                    disabled={
+                                      industrialVisitReportUploading[uploadKey]
+                                    }
                                     onChange={(e) => {
                                       const file = e.target.files?.[0];
                                       if (file) {
-                                        uploadMbaIndustrialVisitReport(visit.id, file);
+                                        uploadMbaIndustrialVisitReport(
+                                          visit.id,
+                                          file,
+                                        );
                                       }
                                       e.target.value = "";
                                     }}
@@ -8924,8 +9101,8 @@ After successfully completing the course, students will be able to:
                 <h3 className="text-3xl font-bold text-gray-800 mb-3">MoUs</h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   Strategic partnerships with industry leaders and academic
-                  institutions to enhance learning outcomes and provide
-                  students with real-world exposure.
+                  institutions to enhance learning outcomes and provide students
+                  with real-world exposure.
                 </p>
               </div>
 
@@ -8957,9 +9134,7 @@ After successfully completing the course, students will be able to:
                           <td className="px-6 py-4 font-medium text-gray-900">
                             {idx + 1}.
                           </td>
-                          <td className="px-6 py-4 text-gray-700">
-                            {mou.org}
-                          </td>
+                          <td className="px-6 py-4 text-gray-700">{mou.org}</td>
                           <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
                             {mou.date}
                           </td>
@@ -9377,7 +9552,8 @@ After successfully completing the course, students will be able to:
                     </h4>
                     <p className="text-sm text-gray-500">
                       Use the upload button on each workshop row to attach that
-                      entry&apos;s PDF report while keeping this markdown synced.
+                      entry&apos;s PDF report while keeping this markdown
+                      synced.
                     </p>
                   </div>
                   <button
@@ -9428,7 +9604,8 @@ After successfully completing the course, students will be able to:
           </div>
 
           {consultancyYears.map((year) => {
-            const markdown = consultancyMarkdownByYear[year] || mbaConsultancyToMarkdown([]);
+            const markdown =
+              consultancyMarkdownByYear[year] || mbaConsultancyToMarkdown([]);
             const entries = parseMbaConsultancyMarkdown(markdown);
 
             return (
@@ -9608,43 +9785,41 @@ After successfully completing the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pat, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-green-50/30 transition-colors group"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pat.title}
-                                <span
-                                  className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" || pat.status === "Copyright Awarded" ? "bg-green-100 text-green-700" : pat.status === "Registered" ? "bg-blue-100 text-blue-700" : "bg-yellow-100 text-yellow-700"}`}
+                        {selectedResearchItems.map((pat, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-green-50/30 transition-colors group"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400 group-hover:text-green-600">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pat.title}
+                              <span
+                                className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${pat.status === "Granted" || pat.status === "Copyright Awarded" ? "bg-green-100 text-green-700" : pat.status === "Registered" ? "bg-blue-100 text-blue-700" : "bg-yellow-100 text-yellow-700"}`}
+                              >
+                                {pat.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
+                              {pat.link ? (
+                                <a
+                                  href={pat.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
                                 >
-                                  {pat.status}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 whitespace-nowrap text-right">
-                                {pat.link ? (
-                                  <a
-                                    href={pat.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {pat.id}
-                                  </a>
-                                ) : (
-                                  pat.id
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-right">
-                                {pat.inventors}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                                  {pat.id}
+                                </a>
+                              ) : (
+                                pat.id
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-right">
+                              {pat.inventors}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -9724,44 +9899,40 @@ After successfully completing the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (pub, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {pub.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {pub.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {pub.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {pub.link ? (
-                                  <a
-                                    href={pub.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((pub, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {pub.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {pub.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {pub.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {pub.link ? (
+                                <a
+                                  href={pub.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -9841,44 +10012,40 @@ After successfully completing the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (conf, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-indigo-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {conf.title}
-                              </td>
-                              <td className="px-6 py-4 text-gray-600">
-                                {conf.authors}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {conf.journal}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {conf.link ? (
-                                  <a
-                                    href={conf.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
-                                  >
-                                    View{" "}
-                                    <FaExternalLinkAlt className="ml-2 text-[10px]" />
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-400 text-xs">
-                                    -
-                                  </span>
-                                )}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((conf, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-indigo-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {conf.title}
+                            </td>
+                            <td className="px-6 py-4 text-gray-600">
+                              {conf.authors}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {conf.journal}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {conf.link ? (
+                                <a
+                                  href={conf.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center text-ssgmce-blue hover:text-ssgmce-dark-blue font-bold px-3 py-1 bg-blue-50 rounded-lg transition-colors border border-blue-100"
+                                >
+                                  View{" "}
+                                  <FaExternalLinkAlt className="ml-2 text-[10px]" />
+                                </a>
+                              ) : (
+                                <span className="text-gray-400 text-xs">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -9955,40 +10122,38 @@ After successfully completing the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (cr, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-purple-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {cr.name}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {cr.link ? (
-                                  <a
-                                    href={cr.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {cr.title}
-                                  </a>
-                                ) : (
-                                  cr.title
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
-                                  {cr.status}
-                                </span>
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((cr, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-purple-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {cr.name}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {cr.link ? (
+                                <a
+                                  href={cr.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
+                                >
+                                  {cr.title}
+                                </a>
+                              ) : (
+                                cr.title
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">
+                                {cr.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -10068,42 +10233,40 @@ After successfully completing the course, students will be able to:
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
-                        {selectedResearchItems.map(
-                          (book, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-teal-50/30 transition-colors"
-                            >
-                              <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
-                                {i + 1}
-                              </td>
-                              <td className="px-6 py-4 font-medium text-gray-800">
-                                {book.name}
-                                {book.coAuthors ? `, ${book.coAuthors}` : ""}
-                              </td>
-                              <td className="px-6 py-4 text-gray-700">
-                                {book.link ? (
-                                  <a
-                                    href={book.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
-                                  >
-                                    {book.title}
-                                  </a>
-                                ) : (
-                                  book.title
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-gray-500 italic text-xs">
-                                {book.details}
-                              </td>
-                              <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
-                                {book.isbn}
-                              </td>
-                            </tr>
-                          ),
-                        )}
+                        {selectedResearchItems.map((book, i) => (
+                          <tr
+                            key={i}
+                            className="hover:bg-teal-50/30 transition-colors"
+                          >
+                            <td className="px-6 py-4 text-center font-mono text-xs text-gray-400">
+                              {i + 1}
+                            </td>
+                            <td className="px-6 py-4 font-medium text-gray-800">
+                              {book.name}
+                              {book.coAuthors ? `, ${book.coAuthors}` : ""}
+                            </td>
+                            <td className="px-6 py-4 text-gray-700">
+                              {book.link ? (
+                                <a
+                                  href={book.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-ssgmce-blue hover:text-ssgmce-dark-blue underline underline-offset-2"
+                                >
+                                  {book.title}
+                                </a>
+                              ) : (
+                                book.title
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-gray-500 italic text-xs">
+                              {book.details}
+                            </td>
+                            <td className="px-6 py-4 font-mono text-xs text-gray-500 text-right">
+                              {book.isbn}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -10640,8 +10803,7 @@ After successfully completing the course, students will be able to:
               >
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaPlus className="text-ssgmce-blue" /> Add Research
-                    Session
+                    <FaPlus className="text-ssgmce-blue" /> Add Research Session
                   </h3>
                   <button
                     onClick={() => {
@@ -10684,9 +10846,9 @@ After successfully completing the course, students will be able to:
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-800">
                       <strong>Note:</strong> The new session will be created for
-                      patents, publications, conferences, books, and
-                      copyrights with an empty markdown table plus DOCX import
-                      and template download support.
+                      patents, publications, conferences, books, and copyrights
+                      with an empty markdown table plus DOCX import and template
+                      download support.
                     </p>
                   </div>
                 </div>

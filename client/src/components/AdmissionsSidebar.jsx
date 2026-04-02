@@ -41,7 +41,7 @@ const AdmissionsSidebar = () => {
                 to={to}
                 className={`flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm leading-snug transition-colors ${
                   isActive
-                    ? "border-l-2 border-ssgmce-orange bg-orange-50 font-semibold text-ssgmce-blue"
+                    ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
                     : "text-gray-700 hover:bg-gray-100"
                 }`}
               >

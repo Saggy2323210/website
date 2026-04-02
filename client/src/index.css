@@ -114,6 +114,126 @@ html {
   scroll-behavior: smooth;
 }
 
+.ssgmce-header-shell {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(122deg, #3a74aa 0%, #2d5f93 30%, #244e7c 60%, #3b78af 100%);
+}
+
+.ssgmce-header-shell::before,
+.ssgmce-header-shell::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  pointer-events: none;
+}
+
+.ssgmce-header-shell::before {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(228, 242, 255, 0.4), transparent 30%),
+    radial-gradient(circle at 80% 18%, rgba(111, 188, 255, 0.42), transparent 34%),
+    radial-gradient(circle at 56% 82%, rgba(155, 216, 255, 0.35), transparent 36%);
+  filter: blur(4px);
+  animation: ssgmceHeaderFlow 12s ease-in-out infinite alternate;
+}
+
+.ssgmce-header-shell::after {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 255, 255, 0.14),
+    rgba(85, 176, 255, 0.16),
+    rgba(255, 255, 255, 0.14)
+  );
+  mix-blend-mode: soft-light;
+  animation: ssgmceHeaderRotate 18s linear infinite;
+}
+
+.ssgmce-header-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.82;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 62% 44%, rgba(255, 255, 255, 0.28) 2.2px, transparent 3.6px),
+    radial-gradient(circle at 30% 68%, rgba(255, 255, 255, 0.18) 1.6px, transparent 3px);
+  background-size: 43px 43px, 43px 43px, 82px 82px, 66px 66px;
+  animation: ssgmcePatternDrift 14s linear infinite;
+  mix-blend-mode: soft-light;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.18));
+}
+
+@keyframes ssgmceHeaderFlow {
+  0% {
+    transform: translate3d(-4%, -2%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(-2%, 4%, 0) scale(1.03);
+  }
+}
+
+@keyframes ssgmceHeaderRotate {
+  0% {
+    transform: rotate(0deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
+
+@keyframes ssgmcePatternDrift {
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 43px 21px, 21px 43px, 82px 41px, 66px 33px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ssgmce-header-shell::before,
+  .ssgmce-header-shell::after,
+  .ssgmce-header-pattern {
+    animation: none;
+  }
+}
+
+.ssgmce-quick-pill {
+  border-radius: 9999px;
+  padding: 0.42rem 0.88rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.675rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 6px 14px rgba(3, 6, 30, 0.28);
+}
+
+.ssgmce-quick-pill:hover {
+  transform: translateY(-1px);
+  border-color: #f97316;
+  background: #f97316;
+  box-shadow: 0 10px 20px rgba(2, 10, 36, 0.32);
+}
+
+@media (min-width: 768px) {
+  .ssgmce-quick-pill {
+    font-size: 0.75rem;
+    padding: 0.48rem 1rem;
+  }
+}
+
 /* Shared CMS/Rich Text tables */
 .page-section .prose table {
   width: 100%;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaInfoCircle } from 'react-icons/fa';
 import { useEdit } from '../contexts/EditContext';
 import MobileSidebarToggle from './MobileSidebarToggle';
 
@@ -67,10 +68,10 @@ const AboutSidebar = ({ sections }) => {
             <Link
               to={isEditing ? `/admin/visual/${pathToPageId(link.path)}` : link.path}
               onClick={(e) => handleLinkClick(e, link.path)}
-              className={`block px-4 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
+              className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-ssgmce-blue text-white shadow-md transform translate-x-1'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-ssgmce-blue'
+                  ? 'bg-ssgmce-blue/10 font-semibold text-ssgmce-blue'
+                  : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               {link.name}
@@ -86,7 +87,7 @@ const AboutSidebar = ({ sections }) => {
                       <a
                         href={`#${section.sectionId}`}
                         onClick={(e) => handleScroll(e, section.sectionId)}
-                        className="block px-3 py-1.5 text-xs text-gray-500 hover:text-ssgmce-blue hover:bg-blue-50 rounded transition-colors"
+                        className="block rounded px-3 py-1.5 text-xs text-gray-500 transition-colors hover:bg-blue-50 hover:text-ssgmce-blue"
                       >
                         {section.title}
                       </a>
@@ -102,16 +103,25 @@ const AboutSidebar = ({ sections }) => {
 
   return (
     <>
-      <MobileSidebarToggle title="About Links">
+      <MobileSidebarToggle title="About" icon={FaInfoCircle}>
         {navContent}
       </MobileSidebarToggle>
-      <div className="hidden rounded-xl border border-gray-200 bg-white p-5 shadow-sm lg:block">
-      <h3 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100 flex items-center">
-        <span className="w-1.5 h-6 bg-ssgmce-orange rounded-full mr-2"></span>
-        Quick Links
-      </h3>
-      {navContent}
-    </div>
+
+      <div className="hidden overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:sticky lg:top-24 lg:block">
+        <div className="bg-gradient-to-r from-ssgmce-blue to-ssgmce-dark-blue p-4">
+          <h3 className="flex items-center text-lg font-bold text-white">
+            <FaInfoCircle className="mr-2" /> About
+          </h3>
+        </div>
+
+        <div className="p-3">{navContent}</div>
+
+        <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+          <p className="mb-1 text-xs font-semibold text-gray-500">Need Help?</p>
+          <p className="text-xs text-ssgmce-blue">+91-7265-252274</p>
+          <p className="text-xs text-ssgmce-blue">info@ssgmce.ac.in</p>
+        </div>
+      </div>
     </>
   );
 };

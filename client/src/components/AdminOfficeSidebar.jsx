@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaBuilding, FaChevronRight, FaArrowLeft } from "react-icons/fa";
+import MobileSidebarToggle from "./MobileSidebarToggle";
 
 const AdminOfficeSidebar = () => {
   const location = useLocation();
@@ -48,7 +49,7 @@ const AdminOfficeSidebar = () => {
         to={item.path}
         className={`flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm leading-snug transition-colors ${
           isActive(item.path)
-            ? "border-l-2 border-ssgmce-orange bg-orange-50 font-semibold text-ssgmce-blue"
+            ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
             : "text-gray-700 hover:bg-gray-100"
         }`}
       >
@@ -58,8 +59,21 @@ const AdminOfficeSidebar = () => {
     </li>
   );
 
+  const navContent = (
+    <nav>
+      <ul className="max-h-[500px] space-y-1.5 overflow-y-auto">
+        {menuItems.map(renderMenuItem)}
+      </ul>
+    </nav>
+  );
+
   return (
-    <div className="sticky top-24 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <>
+      <MobileSidebarToggle title="Administrative Office" icon={FaBuilding}>
+        {navContent}
+      </MobileSidebarToggle>
+
+      <div className="hidden overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:sticky lg:top-24 lg:block">
       <div className="bg-gradient-to-r from-ssgmce-blue to-ssgmce-dark-blue p-4">
         <Link
           to="/facilities"
@@ -73,13 +87,7 @@ const AdminOfficeSidebar = () => {
         </h3>
       </div>
 
-      <div className="p-3">
-        <nav>
-          <ul className="max-h-[500px] space-y-1.5 overflow-y-auto">
-            {menuItems.map(renderMenuItem)}
-          </ul>
-        </nav>
-      </div>
+      <div className="p-3">{navContent}</div>
 
       <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
         <p className="mb-1 text-xs font-semibold text-gray-500">
@@ -88,7 +96,8 @@ const AdminOfficeSidebar = () => {
         <p className="text-xs text-ssgmce-blue">📧 admin@ssgmce.ac.in</p>
         <p className="text-xs text-ssgmce-blue">📞 07152-241602</p>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

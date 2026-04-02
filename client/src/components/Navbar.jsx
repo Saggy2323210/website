@@ -7,7 +7,16 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import logo from "../assets/images/common/logo.png";
-import uppernavbar from "../assets/images/common/uppernavbar.png";
+import aboutNavbarImage from "../assets/images/navbar/about.jpg";
+import academicsNavbarImage from "../assets/images/navbar/Academics.JPG";
+import admissionsNavbarImage from "../assets/images/navbar/admissions.jpg";
+import researchNavbarImage from "../assets/images/navbar/research.jpg";
+import facilitiesNavbarImage from "../assets/images/navbar/Facilities.jpeg";
+import iqacNavbarImage from "../assets/images/navbar/IQAC.png";
+import placementsNavbarImage from "../assets/images/navbar/placements.png";
+import nirfNavbarImage from "../assets/images/navbar/nirf.png";
+import documentsNavbarImage from "../assets/images/navbar/documents.jpg";
+import activitiesNavbarImage from "../assets/images/navbar/activities.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +25,29 @@ const Navbar = () => {
   const subDropdownTimeout = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const quickLinksLeft = [
+    { name: "FRA Fee Structure", to: "/admissions/fees" },
+    { name: "Best Practices", to: "/iqac/practices" },
+    { name: "SSGMCE Blog", to: "/news" },
+    { name: "Grievance Form", to: "/contact" },
+  ];
+
+  const quickLinksRight = [
+    { name: "Institute Brochure", to: "/admissions/brochure" },
+    {
+      name: "Academic Calendar",
+      to: "/academics/planner",
+    },
+    {
+      name: "Alumni Registration",
+      href: "https://alumni.ssgmce.ac.in/",
+    },
+    {
+      name: "ERP Login",
+      href: "https://erp.ssgmce.ac.in/login.aspx",
+    },
+  ];
 
   const isActive = (path) => location.pathname === path;
 
@@ -33,8 +65,7 @@ const Navbar = () => {
     {
       name: "About",
       path: "/about",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=600&fit=crop",
+      megaMenuImage: aboutNavbarImage,
       megaMenuTitle: "About SSGMCE",
       dropdown: [
         { name: "SSGMCE At Glance", path: "/about" },
@@ -54,8 +85,7 @@ const Navbar = () => {
     {
       name: "Academics",
       topLevelPath: "/academics/planner",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop",
+      megaMenuImage: academicsNavbarImage,
       megaMenuTitle: "Academic Excellence",
       dropdown: [
         {
@@ -112,8 +142,7 @@ const Navbar = () => {
     {
       name: "Admissions",
       path: "/admissions",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=800&h=600&fit=crop",
+      megaMenuImage: admissionsNavbarImage,
       megaMenuTitle: "Join SSGMCE",
       dropdown: [
         { name: "Institute Brochure", path: "/admissions/brochure" },
@@ -131,8 +160,7 @@ const Navbar = () => {
     {
       name: "Research & Innovation",
       path: "/research",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop",
+      megaMenuImage: researchNavbarImage,
       megaMenuTitle: "Innovation & Research",
       dropdown: [
         { name: "Research and Development Cell (RDC)", path: "/research/rdc" },
@@ -151,8 +179,7 @@ const Navbar = () => {
     {
       name: "Facilities",
       path: "/gallery",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop",
+      megaMenuImage: facilitiesNavbarImage,
       megaMenuTitle: "World-Class Facilities",
       dropdown: [
         { name: "Administrative Office", path: "/facilities/admin" },
@@ -166,8 +193,7 @@ const Navbar = () => {
     {
       name: "Placements",
       path: "/placements",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=600&fit=crop",
+      megaMenuImage: placementsNavbarImage,
       megaMenuTitle: "Career Opportunities",
       dropdown: [
         { name: "Placement Brochure", path: "/placements/brochure" },
@@ -195,8 +221,7 @@ const Navbar = () => {
     {
       name: "IQAC",
       path: "/iqac",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop",
+      megaMenuImage: iqacNavbarImage,
       megaMenuTitle: "Quality Assurance",
       dropdown: [
         { name: "Vision Mission, Quality Policies", path: "/iqac/vision" },
@@ -230,8 +255,7 @@ const Navbar = () => {
     {
       name: "NIRF Ranking",
       path: "/nirf",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=800&h=600&fit=crop",
+      megaMenuImage: nirfNavbarImage,
       megaMenuTitle: "NIRF Rankings",
       dropdown: [
         { name: "NIRF 2025-26", path: "/nirf?year=2025-26" },
@@ -244,8 +268,7 @@ const Navbar = () => {
     {
       name: "Documents",
       path: "/documents",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1568667256549-094345857637?w=800&h=600&fit=crop",
+      megaMenuImage: documentsNavbarImage,
       megaMenuTitle: "Important Documents",
       dropdown: [
         { name: "Policies and Procedure", path: "/documents/policies" },
@@ -264,8 +287,7 @@ const Navbar = () => {
     {
       name: "Activities",
       path: "/events",
-      megaMenuImage:
-        "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=600&fit=crop",
+      megaMenuImage: activitiesNavbarImage,
       megaMenuTitle: "Student Activities",
       dropdown: [
         { name: "INNOVO 2025", path: "/activities/innovo" },
@@ -296,72 +318,74 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top Buttons and Contact Bar - Above Image */}
-      <div className="bg-[#003366] text-white py-2 md:py-1.5">
-        <div className="container mx-auto px-3 md:px-4">
-          <div className="flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between">
-            {/* Left side - Quick Links */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:justify-start">
-              <button className="bg-ssgmce-orange hover:bg-ssgmce-light-orange px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white">
-                FRA Fee Structure
-              </button>
-              <button className="bg-blue-700 hover:bg-blue-600 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white hidden sm:inline">
-                Best Practices
-              </button>
-              <button className="bg-red-600 hover:bg-red-500 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white hidden md:inline">
-                SSGMCE Blog
-              </button>
-              <button className="bg-ssgmce-orange hover:bg-ssgmce-light-orange px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white hidden lg:inline">
-                Grievance Form
-              </button>
+      <header className="ssgmce-header-shell text-white">
+        <div className="ssgmce-header-pattern" />
+        <div className="container relative mx-auto px-3 py-3 md:px-4 md:py-4">
+          <div className="mb-4 hidden flex-wrap items-center justify-center gap-2 md:flex md:justify-between md:gap-3">
+            <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+              {quickLinksLeft.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.to}
+                  className="ssgmce-quick-pill"
+                >
+                  {link.name}
+                </Link>
+              ))}
             </div>
 
-            {/* Right side - Contact Info moved/removed */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:justify-end text-white">
-              <a
-                href="#"
-                className="bg-red-600 hover:bg-red-500 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white"
-              >
-                Institute Brochure
-              </a>
-              <a
-                href="#"
-                className="bg-ssgmce-orange hover:bg-ssgmce-light-orange px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white"
-              >
-                Academic Calendar
-              </a>
-              <a
-                href="https://alumni.ssgmce.ac.in/"
-                target="_blank"
-                rel="noreferrer"
-                className="bg-red-600 hover:bg-red-500 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white hidden lg:inline"
-              >
-                Alumni Registration
-              </a>
-              <a
-                href="https://erp.ssgmce.ac.in/login.aspx"
-                target="_blank"
-                rel="noreferrer"
-                className="bg-blue-700 hover:bg-blue-600 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold transition-colors shadow-lg text-white hidden lg:inline"
-              >
-                ERP Login
-              </a>
+            <div className="flex flex-wrap items-center justify-center gap-2 md:justify-end">
+              {quickLinksRight.map((link) =>
+                link.href ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ssgmce-quick-pill"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.to}
+                    className="ssgmce-quick-pill"
+                  >
+                    {link.name}
+                  </Link>
+                ),
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-white/20 bg-white/5 px-3 py-3 backdrop-blur-[2px] md:px-5 md:py-4">
+            <div className="flex items-center justify-center gap-3 md:gap-5">
+              <span className="hidden h-px flex-1 bg-gradient-to-r from-transparent via-white/70 to-white/10 lg:block" />
+              <img
+                src="/favicon.svg"
+                alt="SSGMCE Emblem"
+                className="h-12 w-24 rounded-xl border border-white/35 bg-white/95 object-contain p-0.5 shadow-lg md:h-14 md:w-28"
+                onError={(e) => {
+                  e.currentTarget.src = logo;
+                }}
+              />
+              <div className="text-center">
+                <p className="text-[11px] font-semibold tracking-[0.18em] text-orange-200 md:text-xs">
+                  Shri Gajanan Shikshan Sansthan's
+                </p>
+                <p className="mt-1 text-base font-semibold tracking-wide text-white/95 md:text-lg">
+                  Shri Sant Gajanan Maharaj College of Engineering, Shegaon
+                </p>
+                <p className="mt-1 text-[10px] uppercase tracking-[0.24em] text-white/75 md:text-xs">
+                  Autonomous Institute | NAAC Accredited | Estd. 1983
+                </p>
+              </div>
+              <span className="hidden h-px flex-1 bg-gradient-to-l from-transparent via-white/70 to-white/10 lg:block" />
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Upper Navbar Image Banner */}
-      <div className="bg-[#003366] py-1 md:py-1.5">
-        <div className="container mx-auto px-3 md:px-4">
-          <img
-            src={uppernavbar}
-            alt="SSGMCE Header"
-            className="w-full h-14 md:h-16 lg:h-20 object-contain"
-            style={{ display: "block" }}
-          />
-        </div>
-      </div>
+      </header>
 
       {/* Main Navigation Menu - White Background */}
       <nav className="bg-white sticky top-0 z-50 shadow-md border-b border-gray-200">
@@ -370,13 +394,11 @@ const Navbar = () => {
             {/* Logo on Left */}
             <Link to="/" className="flex-shrink-0 py-2 md:py-2.5">
               <img
-                src={logo}
-                alt="SSGMCE"
-                className="h-10 md:h-12 lg:h-14 w-auto object-contain"
+                src="/favicon.svg"
+                alt="SSGMCE Logo"
+                className="h-12 md:h-14 lg:h-16 w-auto object-contain"
                 onError={(e) => {
-                  e.target.style.display = "none";
-                  e.target.parentElement.innerHTML =
-                    '<span class="text-ssgmce-blue font-bold text-lg md:text-xl">SSGMCE</span>';
+                  e.currentTarget.src = logo;
                 }}
               />
             </Link>
@@ -472,13 +494,13 @@ const Navbar = () => {
                       <div className="absolute left-0 right-0 top-full pt-3 z-50">
                         <div className="bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.12)] relative">
                           <div className="px-8 py-8">
-                            <div className="flex gap-8">
+                            <div className="flex min-w-0 items-stretch gap-8">
                               {/* Left Side - Menu Items */}
-                              <div className="flex-1 flex gap-8">
+                              <div className="flex min-w-0 flex-1 gap-8">
                                 {columns.map((col, colIdx) => (
                                   <div
                                     key={`col-${colIdx}`}
-                                    className="flex-1 min-w-[180px]"
+                                    className="min-w-0 flex-1"
                                   >
                                     <ul className="space-y-1.5">
                                       {col.map((subItem, subIndex) => (
@@ -529,11 +551,11 @@ const Navbar = () => {
                               </div>
 
                               {/* Right Side - Promotional Image */}
-                              <div className="w-[350px] relative overflow-hidden rounded-lg shadow-lg flex-shrink-0">
+                              <div className="relative h-[300px] w-[280px] overflow-hidden rounded-lg shadow-lg shrink-0 lg:w-[320px] xl:w-[350px]">
                                 <img
                                   src={activeItem.megaMenuImage}
                                   alt={activeItem.megaMenuTitle}
-                                  className="w-full h-full object-cover min-h-[300px]"
+                                  className="h-full w-full object-cover object-center"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
                                   <h3 className="text-white text-2xl font-bold mb-2">

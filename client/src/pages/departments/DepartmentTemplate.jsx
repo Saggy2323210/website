@@ -168,7 +168,14 @@ const DepartmentTemplate = () => {
                             : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
                         }`}
                      >
-                        {tab}
+                                                <span className="inline-flex items-center gap-2">
+                                                    {tab === 'vision' ? (
+                                                        <FaBullseye className="text-xs" />
+                                                    ) : (
+                                                        <FaAward className="text-xs" />
+                                                    )}
+                                                    <span>{tab}</span>
+                                                </span>
                         {vmTab === tab && <div className="absolute top-0 left-0 w-full h-1 bg-ssgmce-blue"></div>}
                      </button>
                  ))}

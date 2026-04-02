@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { FaChevronDown } from "react-icons/fa";
 
 const MobileSidebarToggle = ({
@@ -8,6 +9,11 @@ const MobileSidebarToggle = ({
   defaultOpen = false,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="mb-5 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:hidden">

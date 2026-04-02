@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import apiClient from "../../utils/apiClient";
 import GenericPage from "../../components/GenericPage";
+import DepartmentTabsSidebar from "../../components/DepartmentTabsSidebar";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
@@ -3453,7 +3454,14 @@ const EnTC = () => {
                     : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 }`}
               >
-                {tab}
+                <span className="inline-flex items-center gap-2">
+                  {tab === "vision" ? (
+                    <FaBullseye className="text-xs" />
+                  ) : (
+                    <FaAward className="text-xs" />
+                  )}
+                  <span>{tab}</span>
+                </span>
                 {vmTab === tab && (
                   <div className="absolute top-0 left-0 w-full h-1 bg-ssgmce-blue"></div>
                 )}
@@ -9374,37 +9382,14 @@ On completion of the course, the students will be able to:
       backgroundImage={electronicsBanner}
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:gap-12">
-        {/* Sidebar Navigation (Left Side) */}
-        <div className="lg:w-1/4 order-1 lg:order-1">
-          <div className="space-y-4 pb-2 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-2 lg:space-y-6 lg:pb-4 scrollbar-thin scrollbar-thumb-ssgmce-blue scrollbar-track-gray-100">
-            {/* Academics Section */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-ssgmce-blue to-ssgmce-dark-blue p-4">
-                <h3 className="text-lg font-bold text-white flex items-center">
-                  <FaUniversity className="text-ssgmce-orange mr-2" /> Academics
-                </h3>
-              </div>
-              <div className="p-4 space-y-2">
-                {academicsLinks.map((link) => (
-                  <SidebarLink key={link.id} {...link} />
-                ))}
-              </div>
-            </div>
-
-            {/* Industry Interaction Section */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-ssgmce-orange to-orange-600 p-4">
-                <h3 className="text-lg font-bold text-white flex items-center">
-                  <FaIndustry className="text-white mr-2" /> Industry Relation
-                </h3>
-              </div>
-              <div className="p-4 space-y-2">
-                {industryLinks.map((link) => (
-                  <SidebarLink key={link.id} {...link} />
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="order-1 lg:order-1 lg:w-1/4">
+          <DepartmentTabsSidebar
+            title="EnTC"
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            academicsLinks={academicsLinks}
+            industryLinks={industryLinks}
+          />
         </div>
 
         {/* Main Content Area (Right Side) */}

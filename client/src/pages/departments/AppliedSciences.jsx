@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import GenericPage from "../../components/GenericPage";
+import DepartmentTabsSidebar from "../../components/DepartmentTabsSidebar";
 import { useDepartmentData } from "../../hooks/useDepartmentData";
 import EditableText from "../../components/admin/EditableText";
 import EditableImage from "../../components/admin/EditableImage";
@@ -1170,7 +1171,10 @@ Head, Dept. of Applied Sciences and Humanities
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            Vision
+            <span className="inline-flex items-center gap-2">
+              <FaBullseye className="text-xs" />
+              <span>Vision</span>
+            </span>
           </button>
           <button
             onClick={() => setVmTab("mission")}
@@ -1180,7 +1184,10 @@ Head, Dept. of Applied Sciences and Humanities
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            Mission
+            <span className="inline-flex items-center gap-2">
+              <FaAward className="text-xs" />
+              <span>Mission</span>
+            </span>
           </button>
           <button
             onClick={() => setVmTab("peo-po")}
@@ -1235,8 +1242,9 @@ Head, Dept. of Applied Sciences and Humanities
               exit={{ opacity: 0, y: -20 }}
               className="bg-gradient-to-r from-orange-50 to-red-50 p-8 rounded-lg border-l-4 border-orange-600"
             >
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Our Mission
+              <h3 className="text-2xl font-bold text-gray-800 mb-4 inline-flex items-center gap-2">
+                <FaAward className="text-orange-600" />
+                <span>Our Mission</span>
               </h3>
               <ul className="space-y-3">
                 {[
@@ -3209,37 +3217,15 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
       backgroundImage={appliedSciencesBanner}
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:gap-12">
-        {/* Sidebar Navigation (Left Side) */}
-        <div className="lg:w-1/4 order-1 lg:order-1">
-          <div className="space-y-4 pb-2 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pr-2 lg:space-y-6 lg:pb-4 scrollbar-thin scrollbar-thumb-ssgmce-blue scrollbar-track-gray-100">
-            {/* Academics Section */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-ssgmce-blue to-ssgmce-dark-blue p-4">
-                <h3 className="text-lg font-bold text-white flex items-center">
-                  <FaUniversity className="text-ssgmce-orange mr-2" /> Academics
-                </h3>
-              </div>
-              <div className="p-4 space-y-2">
-                {academicsLinks.map((link) => (
-                  <SidebarLink key={link.id} {...link} />
-                ))}
-              </div>
-            </div>
-
-            {/* Academic Activities Section */}
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-ssgmce-orange to-orange-600 p-4">
-                <h3 className="text-lg font-bold text-white flex items-center">
-                  <FaIndustry className="text-white mr-2" /> Academic Activities
-                </h3>
-              </div>
-              <div className="p-4 space- y-2">
-                {industryLinks.map((link) => (
-                  <SidebarLink key={link.id} {...link} />
-                ))}
-              </div>
-            </div>
-          </div>
+        <div className="order-1 lg:order-1 lg:w-1/4">
+          <DepartmentTabsSidebar
+            title="Applied Sciences"
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            academicsLinks={academicsLinks}
+            industryLinks={industryLinks}
+            industryTitle="Academic Activities"
+          />
         </div>
 
         {/* Main Content Area (Right Side) */}

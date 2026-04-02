@@ -25,6 +25,7 @@ import {
   logUnexpectedError,
 } from "../utils/apiErrors";
 import {
+  FaBullseye,
   FaGraduationCap,
   FaHandshake,
   FaChartLine,
@@ -1412,6 +1413,17 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const renderAboutVisionPage = () => {
+        const getVisionMissionIcon = (title = "") => {
+          const normalizedTitle = String(title).toLowerCase();
+          if (normalizedTitle.includes("vision")) {
+            return <FaBullseye className="text-ssgmce-orange" aria-hidden="true" />;
+          }
+          if (normalizedTitle.includes("mission")) {
+            return <FaHandshake className="text-ssgmce-orange" aria-hidden="true" />;
+          }
+          return null;
+        };
+
     const visionHeading = String(
       displayPage.pageTitle || "Vision-Mission, Core Values & Goals",
     ).trim();
@@ -1548,9 +1560,10 @@ Constituted By **All India Council for Technical Education, New Delhi**
             className={`rounded-xl border border-gray-200 bg-white p-6 shadow-sm ${sectionClassName}`}
           >
             <h3
-              className={`${headerClassName} mb-4 pb-2 border-b border-gray-100`}
+              className={`${headerClassName} mb-4 pb-2 border-b border-gray-100 inline-flex items-center gap-2`}
             >
-              {section.title || fallbackTitle}
+              {getVisionMissionIcon(section.title || fallbackTitle)}
+              <span>{section.title || fallbackTitle}</span>
             </h3>
             <div className="text-gray-700">
               {renderVisionSectionBody(meta, bodyClassName)}
@@ -1575,8 +1588,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
           <div className={sidebar ? "lg:w-3/4" : "w-full"}>
             <div className="mb-6 border-l-4 border-ssgmce-orange pl-4">
-              <h2 className="text-3xl font-bold text-ssgmce-blue">
-                {visionHeading}
+              <h2 className="text-3xl font-bold text-ssgmce-blue inline-flex items-center gap-2">
+                {getVisionMissionIcon(visionHeading)}
+                <span>{visionHeading}</span>
               </h2>
             </div>
 

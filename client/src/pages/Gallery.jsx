@@ -7,18 +7,41 @@ const Gallery = () => {
   const categories = ['All', 'Campus', 'Events', 'Labs', 'Sports', 'Cultural'];
 
   const galleryImages = [
-    { id: 1, category: 'Campus', title: 'College Main Building', url: 'https://images.unsplash.com/photo-1562774053-701939374585?w=600' },
-    { id: 2, category: 'Campus', title: 'Library', url: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600' },
-    { id: 3, category: 'Labs', title: 'Computer Lab', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600' },
-    { id: 4, category: 'Labs', title: 'Engineering Lab', url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600' },
-    { id: 5, category: 'Events', title: 'Technical Symposium', url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600' },
-    { id: 6, category: 'Events', title: 'Annual Day Celebration', url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600' },
-    { id: 7, category: 'Cultural', title: 'Cultural Fest', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600' },
-    { id: 8, category: 'Cultural', title: 'Music Performance', url: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600' },
-    { id: 9, category: 'Sports', title: 'Sports Ground', url: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600' },
-    { id: 10, category: 'Sports', title: 'Cricket Match', url: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=600' },
-    { id: 11, category: 'Campus', title: 'Auditorium', url: 'https://images.unsplash.com/photo-1503428593586-e225b39bddfe?w=600' },
-    { id: 12, category: 'Campus', title: 'Seminar Hall', url: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600' },
+    { id: 1, category: 'Campus', title: 'College Main Building', url: '/gallery/photos/main-building.jpg' },
+    { id: 2, category: 'Campus', title: 'Central Library', url: '/gallery/photos/central-library.jpg' },
+    { id: 3, category: 'Labs', title: 'Computer Laboratory', url: '/gallery/photos/computer-lab.jpg' },
+    { id: 4, category: 'Labs', title: 'Engineering Workshop', url: '/gallery/photos/engineering-workshop.jpg' },
+    { id: 5, category: 'Events', title: 'Seminar Hall Events', url: '/gallery/photos/seminar-event.jpg' },
+    { id: 6, category: 'Events', title: 'Auditorium Programs', url: '/gallery/photos/auditorium-event.jpg' },
+    { id: 7, category: 'Cultural', title: 'Cultural Venue', url: '/gallery/photos/cultural-venue.jpg' },
+    { id: 8, category: 'Cultural', title: 'Campus Amphitheatre', url: '/gallery/photos/amphitheatre.jpg' },
+    { id: 9, category: 'Sports', title: 'Sports Ground', url: '/gallery/photos/sports-ground.jpg' },
+    { id: 10, category: 'Sports', title: 'Indoor Sports Facility', url: '/gallery/photos/indoor-sports.jpg' },
+    { id: 11, category: 'Campus', title: 'Auditorium', url: '/gallery/photos/auditorium.jpg' },
+    { id: 12, category: 'Campus', title: 'Seminar Hall', url: '/gallery/photos/seminar-hall.jpg' },
+  ];
+
+  const galleryVideos = [
+    {
+      title: 'Campus Tour',
+      src: '/gallery/videos/campus-tour.mp4',
+      poster: '/gallery/posters/campus-tour.jpg',
+    },
+    {
+      title: 'Infrastructure Overview',
+      src: '/gallery/videos/infrastructure-overview.mp4',
+      poster: '/gallery/posters/infrastructure-overview.jpg',
+    },
+    {
+      title: 'Laboratory Tour',
+      src: '/gallery/videos/lab-tour.mp4',
+      poster: '/gallery/posters/lab-tour.jpg',
+    },
+    {
+      title: 'Campus Life Highlights',
+      src: '/gallery/videos/campus-life-highlights.mp4',
+      poster: '/gallery/posters/campus-life-highlights.jpg',
+    },
   ];
 
   const filteredImages = selectedCategory === 'All' 
@@ -88,29 +111,21 @@ const Gallery = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-ssgmce-blue mb-12">Video Gallery</h2>
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {[
-              { title: 'Campus Tour', thumbnail: 'https://images.unsplash.com/photo-1562774053-701939374585?w=600' },
-              { title: 'Technical Symposium 2023', thumbnail: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600' },
-              { title: 'Cultural Fest Highlights', thumbnail: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600' },
-              { title: 'Sports Meet 2023', thumbnail: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600' },
-            ].map((video, index) => (
-              <div key={index} className="relative group cursor-pointer rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <div className="aspect-video">
-                  <img 
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+            {galleryVideos.map((video, index) => (
+              <div key={index} className="rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white">
+                <div className="aspect-video bg-black">
+                  <video
+                    controls
+                    preload="metadata"
+                    poster={video.poster}
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={video.src} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors duration-300">
-                  <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-8 h-8 text-ssgmce-blue ml-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
-                  <h3 className="text-white font-bold text-lg">{video.title}</h3>
+                <div className="p-4 border-t border-gray-100">
+                  <h3 className="text-ssgmce-blue font-bold text-lg">{video.title}</h3>
                 </div>
               </div>
             ))}

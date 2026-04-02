@@ -98,7 +98,6 @@ const EditableImage = ({
       const newUrl = response.data.fileUrl || response.data.url;
 
       if (newUrl) {
-
         // Save the new URL
         if (onSave) {
           onSave(newUrl);
@@ -109,9 +108,7 @@ const EditableImage = ({
         setShowUploadUI(false);
       } else {
         setError(
-          response.data.error ||
-            response.data.message ||
-            "Upload failed",
+          response.data.error || response.data.message || "Upload failed",
         );
       }
     } catch (err) {
@@ -205,7 +202,9 @@ const EditableImage = ({
           {uploading ? (
             <div className="space-y-2">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Uploading...</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Uploading...
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -222,7 +221,9 @@ const EditableImage = ({
                   or drag and drop an image here
                 </p>
               </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500">Maximum file size: 20MB</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                Maximum file size: 20MB
+              </p>
             </div>
           )}
 
@@ -247,7 +248,7 @@ const EditableImage = ({
 
   // Edit Mode - Image Display
   return (
-        <div className="relative group">
+    <div className="relative group">
       {displayImageUrl ? (
         <>
           <img
@@ -281,7 +282,9 @@ const EditableImage = ({
           className={`flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 cursor-pointer transition-colors ${className}`}
         >
           <FaUpload className="text-3xl text-gray-400 dark:text-gray-500 mb-2" />
-          <span className="text-sm text-gray-500 dark:text-gray-400">{placeholder}</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {placeholder}
+          </span>
         </div>
       )}
     </div>

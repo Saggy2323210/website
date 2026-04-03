@@ -1883,6 +1883,19 @@ const iqacPages = [
 // ──────────────────────────────────────────────────────────────
 //  DOCUMENTS
 // ──────────────────────────────────────────────────────────────
+const documentsMarkdownSection = (title, text) => [
+  {
+    sectionId: "main-content",
+    title,
+    type: "markdown",
+    order: 0,
+    isVisible: true,
+    content: {
+      markdown: `### ${title}\n\n${text}\n\n| Sr. No. | Document | Link |\n| --- | --- | --- |\n| 1 | Sample Document | [View](https://example.com) |`,
+    },
+  },
+];
+
 const documentsPages = [
   {
     pageId: "documents-naac",
@@ -1892,7 +1905,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "NAAC Accreditation",
+      "NAAC accreditation records and related reports for SSGMCE.",
+    ),
   },
   {
     pageId: "documents-nba",
@@ -1902,7 +1918,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "NBA Accreditation",
+      "Program-wise NBA accreditation documents and validity details.",
+    ),
   },
   {
     pageId: "documents-iso",
@@ -1912,7 +1931,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "ISO Certification",
+      "ISO quality certification, committee details, and quality manual.",
+    ),
   },
   {
     pageId: "documents-nirf",
@@ -1922,7 +1944,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "NIRF",
+      "Year-wise documents submitted for National Institutional Ranking Framework.",
+    ),
   },
   {
     pageId: "documents-aicte",
@@ -1932,7 +1957,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "AICTE Approval",
+      "AICTE approval letters and extension of approval records.",
+    ),
   },
   {
     pageId: "documents-policies",
@@ -1942,7 +1970,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "Policies and Procedure",
+      "Institutional policies, procedures, and governance guidelines.",
+    ),
   },
   {
     pageId: "documents-mandatory",
@@ -1952,7 +1983,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "Mandatory Disclosure",
+      "Mandatory disclosure documents published for regulatory compliance.",
+    ),
   },
   {
     pageId: "documents-audit",
@@ -1962,7 +1996,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "Sustainable Audit",
+      "Energy, environmental, and green audit reports.",
+    ),
   },
   {
     pageId: "documents-financial",
@@ -1972,7 +2009,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "Financial Statements",
+      "Year-wise audited financial statements and disclosures.",
+    ),
   },
   {
     pageId: "documents-newsletter",
@@ -1982,7 +2022,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "News Letters",
+      "Annual newsletters highlighting institutional updates and achievements.",
+    ),
   },
   {
     pageId: "documents-tattwadarshi",
@@ -1992,7 +2035,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "e-Tattwadarshi",
+      "Archive of the institute's technical magazine issues.",
+    ),
   },
   {
     pageId: "documents-student-forms",
@@ -2002,7 +2048,10 @@ const documentsPages = [
     category: "documents",
     template: "generic",
     isPublished: true,
-    sections: [],
+    sections: documentsMarkdownSection(
+      "Student Forms",
+      "Downloadable forms and applications for students.",
+    ),
   },
 ];
 

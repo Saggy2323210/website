@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 const {
   getAllNotices,
   getNoticeById,
@@ -8,13 +9,11 @@ const {
   deleteNotice
 } = require('../controllers/noticeController');
 
-router.route('/')
-  .get(getAllNotices)
-  .post(createNotice);
+router.get('/', getAllNotices);
+router.get('/:id', getNoticeById);
 
-router.route('/:id')
-  .get(getNoticeById)
-  .put(updateNotice)
-  .delete(deleteNotice);
+router.post('/', protect, adminOnly, createNotice);
+router.put('/:id', protect, adminOnly, updateNotice);
+router.delete('/:id', protect, adminOnly, deleteNotice);
 
 module.exports = router;

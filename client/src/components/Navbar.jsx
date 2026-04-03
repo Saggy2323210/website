@@ -626,8 +626,15 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu */}
-          {isOpen && (
-            <div className="md:hidden border-t border-gray-200 bg-white px-1 py-3 max-h-[70vh] overflow-y-auto shadow-lg">
+          <div
+            aria-hidden={!isOpen}
+            className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+              isOpen
+                ? "max-h-[70vh] opacity-100 translate-y-0"
+                : "max-h-0 opacity-0 -translate-y-1 pointer-events-none"
+            }`}
+          >
+            <div className="border-t border-gray-200 bg-white px-1 py-3 overflow-y-auto shadow-lg">
               <ul className="space-y-1">
                 {menuItems.map((item, index) => (
                   <li key={index}>
@@ -730,7 +737,7 @@ const Navbar = () => {
                 ))}
               </ul>
             </div>
-          )}
+          </div>
         </div>
       </nav>
     </>

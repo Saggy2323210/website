@@ -1,19 +1,22 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FaFileAlt } from "react-icons/fa";
 import MobileSidebarToggle from "./MobileSidebarToggle";
 
 const links = [
   {
     path: "/documents/policies",
+    pageId: "documents-policies",
     label: "Policies and Procedure",
   },
   {
     path: "/documents/disclosure",
+    pageId: "documents-mandatory",
     label: "Mandatory Disclosure",
   },
   {
     path: "/documents/naac",
+    pageId: "documents-naac",
     label: "NAAC",
     subsections: [
       { id: "naac-status", title: "Accreditation Status" },
@@ -22,15 +25,17 @@ const links = [
   },
   {
     path: "/documents/nba",
+    pageId: "documents-nba",
     label: "NBA",
     subsections: [
       { id: "nba-status", title: "Accreditation Status" },
       { id: "nba-table", title: "Accreditation Details" },
     ],
   },
-  { path: "/documents/iso", label: "ISO" },
+  { path: "/documents/iso", pageId: "documents-iso", label: "ISO" },
   {
     path: "/documents/nirf",
+    pageId: "documents-nirf",
     label: "NIRF",
     subsections: [
       { id: "nirf-about", title: "About NIRF" },
@@ -39,6 +44,7 @@ const links = [
   },
   {
     path: "/documents/audit",
+    pageId: "documents-audit",
     label: "Sustainable Audit",
     subsections: [
       { id: "audit-about", title: "About" },
@@ -47,14 +53,23 @@ const links = [
       { id: "audit-green", title: "Green Audit" },
     ],
   },
-  { path: "/documents/aicte", label: "AICTE Approval" },
-  { path: "/documents/financial", label: "Financial Statements" },
-  { path: "/documents/newsletter", label: "News Letters" },
-  { path: "/documents/tattwadarshi", label: "e-Tattwadarshi" },
+  { path: "/documents/aicte", pageId: "documents-aicte", label: "AICTE Approval" },
+  { path: "/documents/financial", pageId: "documents-financial", label: "Financial Statements" },
+  { path: "/documents/newsletter", pageId: "documents-newsletter", label: "News Letters" },
+  { path: "/documents/tattwadarshi", pageId: "documents-tattwadarshi", label: "e-Tattwadarshi" },
 ];
 
 const DocumentsSidebar = () => {
   const location = useLocation();
+  const { pageId: activeAdminPageId } = useParams();
+  const isAdminEditor =
+    location.pathname.startsWith("/admin/pages/editor/") ||
+    location.pathname.startsWith("/admin/visual/");
+
+  const getAdminBasePath = () =>
+    location.pathname.startsWith("/admin/visual/")
+      ? "/admin/visual"
+      : "/admin/pages/editor";
 
   const handleScroll = (e, id) => {
     e.preventDefault();
@@ -70,11 +85,17 @@ const DocumentsSidebar = () => {
   const navContent = (
     <ul className="space-y-1">
       {links.map((link) => {
-        const isActive = location.pathname === link.path;
+        const targetPath =
+          isAdminEditor && link.pageId
+            ? `${getAdminBasePath()}/${link.pageId}`
+            : link.path;
+        const isActive = isAdminEditor
+          ? activeAdminPageId === link.pageId
+          : location.pathname === link.path;
         return (
           <li key={link.path}>
             <Link
-              to={link.path}
+              to={targetPath}
               className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
@@ -84,7 +105,7 @@ const DocumentsSidebar = () => {
               {link.label}
             </Link>
 
-            {isActive && link.subsections && link.subsections.length > 0 && (
+            {!isAdminEditor && isActive && link.subsections && link.subsections.length > 0 && (
               <ul className="mt-1 mb-2 ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
                 {link.subsections.map((sub) => (
                   <li key={sub.id}>

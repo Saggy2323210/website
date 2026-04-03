@@ -1948,16 +1948,82 @@ const {
 } = require("../data/researchMarkdownContent");
 const { IQAC_MARKDOWN_PAGE_IDS } = require("../data/iqacMarkdownContent");
 
+const DOCUMENTS_MARKDOWN_PAGE_IDS = [
+  "documents-naac",
+  "documents-nba",
+  "documents-iso",
+  "documents-nirf",
+  "documents-aicte",
+  "documents-policies",
+  "documents-mandatory",
+  "documents-audit",
+  "documents-financial",
+  "documents-newsletter",
+  "documents-tattwadarshi",
+  "documents-student-forms",
+];
+
 const getDefaultPages = () => defaultPages;
 
 const hasMarkdownSections = (page) =>
   Array.isArray(page?.sections) &&
   page.sections.some((section) => section.type === "markdown");
 
+const isDocumentsMarkdownPageId = (pageId = "") =>
+  DOCUMENTS_MARKDOWN_PAGE_IDS.includes(String(pageId || "").toLowerCase());
+
+const sectionToMarkdownText = (section) => {
+  if (!section) return "";
+  if (typeof section.content === "string") return section.content.trim();
+  return String(
+    section.content?.markdown ||
+      section.content?.text ||
+      section.content?.html ||
+      "",
+  ).trim();
+};
+
+const toSingleMarkdownSection = (sections = [], fallbackTitle = "") => {
+  const mergedMarkdown = sections
+    .filter((section) => section?.isVisible !== false)
+    .sort((a, b) => (a?.order || 0) - (b?.order || 0))
+    .map((section) => sectionToMarkdownText(section))
+    .filter(Boolean)
+    .join("\n\n")
+    .trim();
+
+  const markdown =
+    mergedMarkdown ||
+    `### ${fallbackTitle || "Documents"}\n\nUpdate this page content from admin.`;
+
+  return [
+    {
+      sectionId: "main-content",
+      title: "",
+      type: "markdown",
+      order: 0,
+      isVisible: true,
+      content: { markdown },
+    },
+  ];
+};
+
 const isResearchMarkdownPlaceholderPage = (page) => {
   if (!RESEARCH_MARKDOWN_PAGE_IDS.includes(page?.pageId)) return false;
   if (!Array.isArray(page?.sections) || page.sections.length === 0)
     return false;
+
+  return page.sections.some((section) => {
+    const text = String(section?.content?.text || "").trim();
+    return (
+      text.startsWith("Welcome to the ") &&
+      text.includes("This content can be edited from the admin panel.")
+    );
+  });
+};
+
+const isLegacyPlaceholderPage = (page) => {
+  if (!Array.isArray(page?.sections) || page.sections.length === 0) return false;
 
   return page.sections.some((section) => {
     const text = String(section?.content?.text || "").trim();
@@ -1987,6 +2053,14 @@ const shouldSeedNavPage = (existing, pageData, forceUpdate = false) => {
   if (
     IQAC_MARKDOWN_PAGE_IDS.includes(pageData.pageId) &&
     !hasMarkdownSections(existing)
+  ) {
+    return true;
+  }
+
+  // Documents pages migrated to markdown-only editing flow.
+  if (
+    DOCUMENTS_MARKDOWN_PAGE_IDS.includes(pageData.pageId) &&
+    (!hasMarkdownSections(existing) || isLegacyPlaceholderPage(existing))
   ) {
     return true;
   }
@@ -2074,6 +2148,20 @@ const getPageById = async (req, res) => {
         success: false,
         message: "Page not found",
       });
+    }
+
+    // Documents pages are markdown-only. Convert legacy richtext/text sections
+    // once on read so old DB entries stop showing richtext in admin editor.
+    if (isDocumentsMarkdownPageId(page.pageId)) {
+      const hasNonMarkdownSections = (page.sections || []).some(
+        (section) => section?.type !== "markdown",
+      );
+
+      if (hasNonMarkdownSections || !hasMarkdownSections(page)) {
+        page.sections = toSingleMarkdownSection(page.sections || [], page.pageTitle);
+        page.markModified("sections");
+        await page.save();
+      }
     }
 
     res.json({
@@ -2225,6 +2313,10 @@ const updatePage = async (req, res) => {
       body.sections = body.sections.filter((s) =>
         VALID_SECTION_TYPES.has(s.type),
       );
+
+      if (isDocumentsMarkdownPageId(page.pageId)) {
+        body.sections = toSingleMarkdownSection(body.sections, page.pageTitle);
+      }
     }
 
     Object.entries(body).forEach(([key, value]) => {

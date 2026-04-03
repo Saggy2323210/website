@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaTrophy, FaChevronRight } from "react-icons/fa";
+import { FaTrophy, FaChevronRight, FaArrowLeft } from "react-icons/fa";
 import { useEdit } from "../contexts/EditContext";
+import { buildReturnState } from "../utils/navigation";
 import MobileSidebarToggle from "./MobileSidebarToggle";
 
 const pathToPageId = (path) => path.replace(/^\//, "").replace(/\//g, "-");
@@ -9,6 +10,11 @@ const pathToPageId = (path) => path.replace(/^\//, "").replace(/\//g, "-");
 const SportsSidebar = () => {
   const location = useLocation();
   const { isEditing } = useEdit();
+  const facilitiesRootPath = "/facilities";
+  const facilitiesRootPageId = pathToPageId(facilitiesRootPath);
+  const backToFacilities = isEditing
+    ? `/admin/visual/${facilitiesRootPageId}`
+    : facilitiesRootPath;
 
   const menuItems = [
     { title: "About Sport Department", path: "/facilities/sports/about" },
@@ -34,6 +40,7 @@ const SportsSidebar = () => {
             <li key={item.path}>
               <Link
                 to={to}
+                state={isEditing ? buildReturnState(location) : undefined}
                 className={`flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm leading-snug transition-colors ${
                   isActive
                     ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
@@ -53,11 +60,29 @@ const SportsSidebar = () => {
   return (
     <>
       <MobileSidebarToggle title="Sports" icon={FaTrophy}>
+        <div className="mb-3">
+          <Link
+            to={backToFacilities}
+            state={isEditing ? buildReturnState(location) : undefined}
+            className="inline-flex items-center gap-1.5 rounded-md bg-ssgmce-blue/10 px-2.5 py-1 text-xs font-medium text-ssgmce-blue transition-colors hover:bg-ssgmce-blue/15"
+          >
+            <FaArrowLeft className="text-[10px]" />
+            Back to Facilities
+          </Link>
+        </div>
         {navContent}
       </MobileSidebarToggle>
 
       <div className="hidden overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:sticky lg:top-24 lg:block">
         <div className="bg-gradient-to-r from-ssgmce-blue to-ssgmce-dark-blue p-4">
+          <Link
+            to={backToFacilities}
+            state={isEditing ? buildReturnState(location) : undefined}
+            className="mb-2 inline-flex items-center gap-1.5 rounded-md bg-white/20 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-white/30"
+          >
+            <FaArrowLeft className="text-[10px]" />
+            Back to Facilities
+          </Link>
           <h3 className="flex items-center text-lg font-bold text-white">
             <FaTrophy className="mr-2" /> Sports
           </h3>

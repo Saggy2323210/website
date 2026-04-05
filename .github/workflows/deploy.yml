@@ -1,56 +1,42 @@
-name: Deploy MERN Application
+name: Deploy MERN App
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  test-and-build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Deploy to Ubuntu server via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: "18"
-          cache: "npm"
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script_stop: true
+          script: |
+            set -e
 
-      - name: Install Server Dependencies
-        run: cd server && npm install
+            cd /home/${{ secrets.SERVER_USER }}/website
 
-      - name: Install Client Dependencies
-        run: cd client && npm install
+            # Pull latest code
+            git pull origin main
 
-      - name: Build Client
-        run: cd client && npm run build
-        env:
-          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL || 'https://ssgmce-backend.onrender.com' }}
+            # Update backend
+            cd server
+            npm install --omit=dev
+            pm2 restart server-backend --update-env || pm2 start server.js --name server-backend
+            pm2 save
 
-      - name: Verify Server Configuration
-        run: |
-          cd server
-          npm list --omit=dev
-          echo "✅ Server dependencies verified"
+            # Update and rebuild frontend
+            cd ../client
+            npm install
+            # Empty URL keeps frontend API calls relative (/api) for Nginx proxy.
+            printf "VITE_BACKEND_URL=\n" > .env.production
+            npm run build
 
-      - name: Deploy to Render
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} \
-            -H "Content-Type: application/json" || echo "Deploy hook not configured yet"
-
-      - name: Deploy to Vercel
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          echo "Vercel deploys automatically on push to main"
-
-      - name: Notify Deployment
-        if: success()
-        run: echo "✅ Deployment pipeline completed successfully"
-
-      - name: Notify Failure
-        if: failure()
-        run: echo "❌ Deployment pipeline failed - check logs above"
+            echo "Deployment complete"

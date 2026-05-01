@@ -14,7 +14,7 @@ import researchNavbarImage from "../assets/images/navbar/research.jpg";
 import facilitiesNavbarImage from "../assets/images/navbar/Facilities.jpeg";
 import iqacNavbarImage from "../assets/images/navbar/IQAC.png";
 import placementsNavbarImage from "../assets/images/navbar/placements.png";
-import nirfNavbarImage from "../assets/images/navbar/nirf.png";
+import nirfNavbarImage from "../assets/images/about/NIRF.png";
 import documentsNavbarImage from "../assets/images/navbar/documents.jpg";
 import activitiesNavbarImage from "../assets/images/navbar/activities.png";
 
@@ -256,6 +256,7 @@ const Navbar = () => {
       name: "NIRF Ranking",
       path: "/nirf",
       megaMenuImage: nirfNavbarImage,
+      megaMenuImageFit: "contain",
       megaMenuTitle: "NIRF Rankings",
       dropdown: [
         { name: "NIRF 2025-26", path: "/nirf?year=2025-26" },
@@ -555,7 +556,11 @@ const Navbar = () => {
                                 <img
                                   src={activeItem.megaMenuImage}
                                   alt={activeItem.megaMenuTitle}
-                                  className="h-full w-full object-cover object-center"
+                                  className={`h-full w-full object-center ${
+                                    activeItem.megaMenuImageFit === "contain"
+                                      ? "bg-white object-contain p-6"
+                                      : "object-cover"
+                                  }`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
                                   <h3 className="text-white text-2xl font-bold mb-2">

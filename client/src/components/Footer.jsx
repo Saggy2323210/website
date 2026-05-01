@@ -5,10 +5,10 @@ import logo from '../assets/images/common/logo.png';
 
 const quickLinks = [
   { label: 'About Us', to: '/about' },
-  { label: 'Admissions', to: '/admissions' },
+  { label: 'Admissions', to: '/admissions/brochure' },
   { label: 'Departments', to: '/departments' },
-  { label: 'Placements', to: '/placements' },
-  { label: 'Research', to: '/research' },
+  { label: 'Placements', to: '/placements/brochure' },
+  { label: 'Research', to: '/research/rdc' },
   { label: 'Contact Us', to: '/contact' },
 ];
 
@@ -43,8 +43,6 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-8 md:py-10">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
           <div className={`${sectionClass} relative overflow-hidden lg:col-span-5`}>
-            <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.24),transparent_58%)]" />
-
             <div className="relative">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-center gap-3">

@@ -211,20 +211,83 @@ app.use((err, req, res, next) => {
 // Start Server - Only after MongoDB connection
 const PORT = process.env.PORT || 5000;
 
-// MongoDB Connection
-const mongoConnectStartedAt = Date.now();
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/ssgmce", {
-    family: 4,
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    maxPoolSize: 20,
-    minPoolSize: 2,
-  })
-  .then(() => {
-    const connectMs = Date.now() - mongoConnectStartedAt;
-    console.log(`[OK] MongoDB Connected Successfully in ${connectMs}ms`);
+const mongoConnectOptions = {
+  family: 4,
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 20,
+  minPoolSize: 2,
+};
+
+const getMongoConnectionHints = (error) => {
+  const hints = [];
+  const message = String(error?.message || "");
+
+  if (error?.syscall === "querySrv" || error?.code === "ECONNREFUSED") {
+    hints.push(
+      "Atlas SRV DNS lookup failed. If this machine/network blocks SRV queries, set MONGODB_DIRECT_URI in server/.env using the standard mongodb://host1,host2,host3/... format from Atlas.",
+    );
+  }
+
+  if (
+    message.includes("IP that isn't whitelisted") ||
+    message.includes("not allowed to access this MongoDB Atlas cluster")
+  ) {
+    hints.push(
+      "MongoDB Atlas network access is blocking this machine. Add your current IP in Atlas Network Access, or temporarily allow 0.0.0.0/0 for development.",
+    );
+  }
+
+  if (!process.env.MONGODB_URI && !process.env.MONGODB_DIRECT_URI) {
+    hints.push(
+      "No MongoDB URI is configured. Add MONGODB_URI or MONGODB_DIRECT_URI in server/.env.",
+    );
+  }
+
+  return hints;
+};
+
+const connectToMongo = async () => {
+  const primaryUri =
+    process.env.MONGODB_URI || process.env.MONGODB_DIRECT_URI || "mongodb://localhost:27017/ssgmce";
+  const directUri = process.env.MONGODB_DIRECT_URI;
+  const mongoConnectStartedAt = Date.now();
+
+  try {
+    await mongoose.connect(primaryUri, mongoConnectOptions);
+    return {
+      uriLabel:
+        primaryUri === directUri && directUri ? "MONGODB_DIRECT_URI" : "MONGODB_URI",
+      connectMs: Date.now() - mongoConnectStartedAt,
+    };
+  } catch (error) {
+    const shouldTryDirectFallback =
+      directUri &&
+      primaryUri !== directUri &&
+      (error?.syscall === "querySrv" || error?.code === "ECONNREFUSED");
+
+    if (!shouldTryDirectFallback) {
+      throw error;
+    }
+
+    console.warn(
+      "[WARN] MongoDB SRV lookup failed for MONGODB_URI. Retrying with MONGODB_DIRECT_URI...",
+    );
+
+    await mongoose.connect(directUri, mongoConnectOptions);
+    return {
+      uriLabel: "MONGODB_DIRECT_URI",
+      connectMs: Date.now() - mongoConnectStartedAt,
+    };
+  }
+};
+
+connectToMongo()
+  .then(({ uriLabel, connectMs }) => {
+    console.log(
+      `[OK] MongoDB Connected Successfully in ${connectMs}ms using ${uriLabel}`,
+    );
 
     // Start server as soon as DB socket is ready.
     app.listen(PORT, () => {
@@ -242,6 +305,9 @@ mongoose
   })
   .catch((err) => {
     console.error("[ERROR] MongoDB Connection Error:", err);
+    for (const hint of getMongoConnectionHints(err)) {
+      console.error(`[HINT] ${hint}`);
+    }
     console.error("Server not started. Please check your MongoDB connection.");
     process.exit(1);
   });

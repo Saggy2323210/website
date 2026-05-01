@@ -36,5 +36,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YOUR_USERNAME/ssgmce-website.git"
+  },
+  "dependencies": {
+    "mongodb": "^7.2.0"
   }
 }

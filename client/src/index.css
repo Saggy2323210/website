@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  --app-font-scale: 1.15;
   --app-font-family:
     "Segoe UI", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     Arial, sans-serif;
@@ -10,9 +11,28 @@
 
 /* Base Typography */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    /* ~15% larger type on larger screens, softened on mobile to protect layouts. */
+    font-size: clamp(16px, 0.5vw + 15px, 18.4px);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
   body {
-    @apply text-sm leading-relaxed;
+    @apply text-base;
     font-family: var(--app-font-family);
+    line-height: 1.75;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
 
   h1,
@@ -23,6 +43,10 @@
   h6 {
     font-family: var(--app-font-family);
     @apply font-semibold;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
 
   h1 {
@@ -42,6 +66,64 @@
   }
   h6 {
     @apply text-sm md:text-base;
+  }
+
+  p,
+  li,
+  dt,
+  dd,
+  figcaption,
+  blockquote,
+  td,
+  th,
+  label,
+  input,
+  textarea,
+  select,
+  button,
+  a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  p,
+  li,
+  td,
+  th,
+  label,
+  input,
+  textarea,
+  select,
+  button {
+    line-height: 1.7;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    height: auto;
+  }
+
+  button {
+    min-height: 2.75rem;
+    white-space: normal;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 2.75rem;
+  }
+
+  img,
+  svg,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
   }
 }
 
@@ -107,11 +189,6 @@
 .dark textarea:focus,
 .dark select:focus {
   border-color: #3b82f6;
-}
-
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
 }
 
 .ssgmce-header-shell {
@@ -231,6 +308,32 @@ html {
   .ssgmce-quick-pill {
     font-size: 0.75rem;
     padding: 0.48rem 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: clamp(16px, 0.8vw + 14px, 17.2px);
+  }
+
+  body,
+  p,
+  li,
+  td,
+  th,
+  label,
+  input,
+  textarea,
+  select,
+  button {
+    line-height: 1.75;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    min-height: 2.625rem;
   }
 }
 

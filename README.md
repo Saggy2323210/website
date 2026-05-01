@@ -68,9 +68,12 @@ Create `server/.env`:
 PORT=5000
 NODE_ENV=development
 MONGODB_URI=<your-mongodb-uri>
+MONGODB_DIRECT_URI=<optional-non-srv-mongodb-uri>
 JWT_SECRET=<your-jwt-secret>
 ADMIN_JWT_SECRET=<your-admin-jwt-secret>
 ```
+
+If `mongodb+srv://...` fails locally with a `querySrv ECONNREFUSED` error, use the standard Atlas connection string in `MONGODB_DIRECT_URI` as a fallback. If Atlas says your machine is not allowed to connect, add your current IP address under Atlas Network Access first.
 
 ## Core Features
 

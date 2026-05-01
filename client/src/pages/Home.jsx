@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGraduationCap, FaUsers, FaTrophy, FaBuilding, FaArrowRight, FaClock, FaMapMarkerAlt, FaMicroscope, FaHandshake, FaCheckCircle, FaPlus, FaMinus, FaQuoteLeft, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGraduationCap, FaUsers, FaTrophy, FaBuilding, FaArrowRight, FaClock, FaMapMarkerAlt, FaMicroscope, FaHandshake, FaPlus, FaMinus, FaQuoteLeft, FaExternalLinkAlt } from 'react-icons/fa';
 import StatCard from '../components/StatCard';
 import NewsCard from '../components/NewsCard';
 import NewsTicker from '../components/NewsTicker';
@@ -12,6 +12,12 @@ import droneVideo from '../assets/images/home/drone shot.mp4';
 import mainGateImg from '../assets/images/home/Main-Gate.avif';
 import coCurricularImg from '../assets/images/about/vidyavibhag.jpeg';
 import extraCurricularImg from '../assets/images/about/Library.jpeg';
+import aicteLogo from '../assets/images/about/AICTE.png';
+import aaPlusLogo from '../assets/images/about/AA+.png';
+import naacLogo from '../assets/images/about/NAAC.png';
+import nbaLogo from '../assets/images/about/NBA.png';
+import nirfLogo from '../assets/images/about/NIRF.png';
+import isoLogo from '../assets/images/about/ISO.png';
 import volunteerImg from '../assets/images/departments/it/industrial-visits/valuemomentum_pune_2025.png';
 import sportsImg from '../assets/images/departments/electrical/industrial-visits/tata_power_shahad_2024.png';
 import alumniWaghImg from '../assets/images/home/Alumni/Abhay_Wagh.jpg';
@@ -38,12 +44,12 @@ const Home = () => {
   const newsItems = (newsData && newsData.length > 0) ? newsData : staticNews;
 
   const accreditations = [
-    { label: 'AICTE', desc: 'Approved' },
-    { label: 'NAAC', desc: 'Accredited' },
-    { label: 'NBA', desc: 'Accredited' },
-    { label: 'ISO 9001:2015', desc: 'Certified' },
-    { label: 'NIRF', desc: 'Ranked' },
-    { label: 'AAA', desc: 'Careers360' },
+    { label: 'AICTE', desc: 'Approved', logo: aicteLogo, logoAlt: 'AICTE logo' },
+    { label: 'NAAC', desc: 'Accredited', logo: naacLogo, logoAlt: 'NAAC logo' },
+    { label: 'NBA', desc: 'Accredited', logo: nbaLogo, logoAlt: 'NBA logo' },
+    { label: 'ISO 9001:2015', desc: 'Certified', logo: isoLogo, logoAlt: 'ISO logo' },
+    { label: 'NIRF', desc: 'Ranked', logo: nirfLogo, logoAlt: 'NIRF logo' },
+    { label: 'AAA', desc: 'Careers360', logo: aaPlusLogo, logoAlt: 'AA+ logo' },
   ];
 
   const studentCornerItems = [
@@ -119,14 +125,65 @@ const Home = () => {
   const activeStudentCorner =
     studentCornerItems.find((item) => item.id === activeCorner) || studentCornerItems[0];
   const fallbackRecruiters = [
-    { id: 'tcs', name: 'TCS' },
-    { id: 'infosys', name: 'Infosys' },
-    { id: 'wipro', name: 'Wipro' },
-    { id: 'tech-mahindra', name: 'Tech Mahindra' },
-    { id: 'cognizant', name: 'Cognizant' },
-    { id: 'capgemini', name: 'Capgemini' },
+    {
+      id: 'infosys',
+      name: 'Infosys',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg',
+      website: 'https://www.infosys.com',
+    },
+    {
+      id: 'wipro',
+      name: 'Wipro',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg',
+      website: 'https://www.wipro.com',
+    },
+    {
+      id: 'capgemini',
+      name: 'Capgemini',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Capgemini_201x_logo.svg',
+      website: 'https://www.capgemini.com',
+    },
   ];
-  const homepageRecruiters = recruiters.length > 0 ? recruiters : fallbackRecruiters;
+  const normalizeRecruiterName = (name = '') =>
+    String(name || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '');
+
+  const recruiterDefaultsByName = fallbackRecruiters.reduce((acc, recruiter) => {
+    acc[normalizeRecruiterName(recruiter.name)] = recruiter;
+    return acc;
+  }, {});
+
+  const mergedRecruiters =
+    recruiters.length > 0
+      ? [
+          ...recruiters.map((recruiter) => {
+            const normalizedName = normalizeRecruiterName(recruiter.name);
+            const brandDefaults = recruiterDefaultsByName[normalizedName];
+
+            if (!brandDefaults) {
+              return recruiter;
+            }
+
+            return {
+              ...brandDefaults,
+              ...recruiter,
+              logoUrl: recruiter.logoUrl || recruiter.logo || brandDefaults.logoUrl,
+              website: recruiter.website || brandDefaults.website,
+            };
+          }),
+          ...fallbackRecruiters.filter(
+            (recruiter) =>
+              !recruiters.some(
+                (liveRecruiter) =>
+                  normalizeRecruiterName(liveRecruiter.name) ===
+                  normalizeRecruiterName(recruiter.name),
+              ),
+          ),
+        ]
+      : fallbackRecruiters;
+
+  const homepageRecruiters = mergedRecruiters;
   const marqueeRecruiters = homepageRecruiters.length > 0
     ? [...homepageRecruiters, ...homepageRecruiters]
     : [];
@@ -193,8 +250,15 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 md:gap-4">
             {accreditations.map((item) => (
-              <div key={item.label} className="flex min-h-[104px] flex-col items-center justify-center rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm transition-shadow hover:shadow-md md:px-5 md:py-4">
-                <FaCheckCircle className="text-ssgmce-accent text-base mb-1.5" />
+              <div key={item.label} className="flex min-h-[124px] flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white px-4 py-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md md:min-h-[132px] md:px-5 md:py-5">
+                {item.logo ? (
+                  <img
+                    src={item.logo}
+                    alt={item.logoAlt}
+                    className="mb-3 h-10 w-auto object-contain md:h-11"
+                    loading="lazy"
+                  />
+                ) : null}
                 <span className="text-sm md:text-base font-bold text-gray-800 leading-tight">{item.label}</span>
                 <span className="text-xs text-ssgmce-muted mt-0.5">{item.desc}</span>
               </div>
@@ -204,52 +268,77 @@ const Home = () => {
       </section>
 
       {/* Info Cards Section */}
-      <section className="py-16 md:py-20 bg-ssgmce-surface">
+      <section className="bg-[linear-gradient(180deg,#f8fbff_0%,#f4f7fb_100%)] py-20 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">What We <span className="text-ssgmce-blue">Offer</span></h2>
-            <p className="text-ssgmce-muted mt-3 max-w-xl mx-auto">AICTE approved, NAAC accredited, and NBA accredited programs since 1983</p>
+          <div className="mb-14 text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-ssgmce-blue/70">
+              Core Strengths
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
+              What We <span className="text-ssgmce-blue">Offer</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-500 md:text-lg">
+              AICTE approved, NAAC accredited, and NBA accredited programs backed by a disciplined campus culture, strong student ecosystem, and placement-driven outcomes.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
             {/* Academic Excellence */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:p-8">
-              <div className="w-14 h-14 bg-ssgmce-blue/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-ssgmce-blue/15 transition-colors">
-                <FaMicroscope className="text-ssgmce-blue text-xl" />
+            <div className="group relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white p-7 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_32px_70px_-42px_rgba(15,23,42,0.34)] md:p-8">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ssgmce-blue/25 to-transparent" />
+              <div className="mb-7 flex h-18 w-18 items-center justify-center rounded-[1.35rem] bg-slate-100 transition-colors group-hover:bg-ssgmce-blue/10 md:h-20 md:w-20">
+                <FaMicroscope className="text-3xl text-ssgmce-blue" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Academic Excellence</h3>
-              <p className="text-ssgmce-muted leading-relaxed mb-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                Academics
+              </p>
+              <h3 className="mb-4 text-[1.7rem] font-bold leading-tight text-slate-900">
+                Academic Excellence
+              </h3>
+              <p className="mb-8 text-[1.02rem] leading-8 text-slate-600">
                 B.E., M.E., MBA and Ph.D. programs across 7 departments affiliated to SGBAU, Amravati with NAAC and NBA accreditation.
               </p>
-              <Link to="/departments/applied-sciences" className="inline-flex items-center text-ssgmce-blue font-semibold hover:text-ssgmce-orange transition-colors text-sm group-hover:gap-2 gap-1">
-                Explore Programs <FaArrowRight className="text-xs" />
+              <Link to="/departments/applied-sciences" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-ssgmce-blue transition-colors hover:text-ssgmce-orange">
+                Explore Programs <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </div>
 
             {/* Student Life */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:p-8">
-              <div className="w-14 h-14 bg-ssgmce-orange/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-ssgmce-orange/15 transition-colors">
-                <FaUsers className="text-ssgmce-orange text-xl" />
+            <div className="group relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white p-7 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_32px_70px_-42px_rgba(15,23,42,0.34)] md:p-8">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ssgmce-orange/30 to-transparent" />
+              <div className="mb-7 flex h-18 w-18 items-center justify-center rounded-[1.35rem] bg-orange-50 transition-colors group-hover:bg-ssgmce-orange/12 md:h-20 md:w-20">
+                <FaUsers className="text-3xl text-ssgmce-orange" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Student Life</h3>
-              <p className="text-ssgmce-muted leading-relaxed mb-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                Campus
+              </p>
+              <h3 className="mb-4 text-[1.7rem] font-bold leading-tight text-slate-900">
+                Student Life
+              </h3>
+              <p className="mb-8 text-[1.02rem] leading-8 text-slate-600">
                 IEEE, ISTE, ACM chapters, GDG club, Drone Club, E-Cell, NSS, NCC and cultural festivals like Pursuit and Parishkriti.
               </p>
-              <Link to="/gallery" className="inline-flex items-center text-ssgmce-blue font-semibold hover:text-ssgmce-orange transition-colors text-sm group-hover:gap-2 gap-1">
-                View Gallery <FaArrowRight className="text-xs" />
+              <Link to="/gallery" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-ssgmce-blue transition-colors hover:text-ssgmce-orange">
+                View Gallery <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </div>
 
             {/* Placements */}
-            <div className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:p-8">
-              <div className="w-14 h-14 bg-ssgmce-accent/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-ssgmce-accent/15 transition-colors">
-                <FaHandshake className="text-ssgmce-accent text-xl" />
+            <div className="group relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white p-7 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_32px_70px_-42px_rgba(15,23,42,0.34)] md:p-8">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ssgmce-accent/30 to-transparent" />
+              <div className="mb-7 flex h-18 w-18 items-center justify-center rounded-[1.35rem] bg-teal-50 transition-colors group-hover:bg-ssgmce-accent/12 md:h-20 md:w-20">
+                <FaHandshake className="text-3xl text-ssgmce-accent" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">Placements</h3>
-              <p className="text-ssgmce-muted leading-relaxed mb-6">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                Outcomes
+              </p>
+              <h3 className="mb-4 text-[1.7rem] font-bold leading-tight text-slate-900">
+                Placements
+              </h3>
+              <p className="mb-8 text-[1.02rem] leading-8 text-slate-600">
                 TCS Top Priority College with 35+ recruiters including Infosys, Wipro, Cognizant, Capgemini and more visiting annually.
               </p>
-              <Link to="/placements/brochure" className="inline-flex items-center text-ssgmce-blue font-semibold hover:text-ssgmce-orange transition-colors text-sm group-hover:gap-2 gap-1">
-                Placement Stats <FaArrowRight className="text-xs" />
+              <Link to="/placements/brochure" className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-ssgmce-blue transition-colors hover:text-ssgmce-orange">
+                Placement Stats <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
@@ -257,9 +346,9 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-white via-ssgmce-blue/[0.02] to-ssgmce-orange/[0.03]">
+      <section className="py-20 md:py-24 bg-gradient-to-br from-white via-ssgmce-blue/[0.02] to-ssgmce-orange/[0.03]">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-14 lg:gap-20 items-center max-w-6xl mx-auto">
             <div className="lg:w-1/2">
               <div className="relative">
                 <img
@@ -295,9 +384,9 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-r from-ssgmce-blue/[0.04] via-ssgmce-surface to-ssgmce-blue/[0.04] border-y border-gray-100">
+      <section className="py-20 md:py-24 bg-gradient-to-r from-ssgmce-blue/[0.04] via-ssgmce-surface to-ssgmce-blue/[0.04] border-y border-gray-100">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800">SSGMCE in <span className="text-ssgmce-blue">Numbers</span></h2>
             <p className="text-ssgmce-muted mt-3">41 years of academic excellence and holistic development</p>
           </div>
@@ -310,7 +399,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-gradient-to-b from-white via-gray-50 to-white border-y border-gray-100">
+      <section className="py-12 md:py-14 bg-gradient-to-b from-white via-gray-50 to-white border-y border-gray-100">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-6xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gray-500">
@@ -324,13 +413,13 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="mx-auto mt-10 grid max-w-6xl gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mx-auto mt-8 grid max-w-6xl gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {HOME_LEADERSHIP.map((member) => (
               <article
                 key={member.id}
                 className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
               >
-                <div className="aspect-[4/3.55] overflow-hidden bg-gray-100">
+                <div className="aspect-[4/3.05] overflow-hidden bg-gray-100">
                   <img
                     src={member.image}
                     alt={member.name}
@@ -338,17 +427,17 @@ const Home = () => {
                   />
                 </div>
 
-                <div className="min-h-[170px] bg-white px-4 py-4">
-                  <div className="mb-3 h-1.5 w-10 rounded-full bg-gray-200" />
+                <div className="min-h-[158px] bg-white px-4 py-3.5">
+                  <div className="mb-2.5 h-1.5 w-10 rounded-full bg-gray-200" />
                   <h3 className="text-[1.2rem] font-bold leading-tight text-gray-900">{member.name}</h3>
-                  <p className="mt-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-ssgmce-blue">
+                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-ssgmce-blue">
                     {member.designation}
                   </p>
-                  <p className="mt-1.5 text-[0.96rem] leading-relaxed text-gray-700">
+                  <p className="mt-1 text-[0.94rem] leading-relaxed text-gray-700">
                     {member.department}
                   </p>
                   {member.email && (
-                    <p className="mt-2.5 text-[12px] text-gray-500 break-all">{member.email}</p>
+                    <p className="mt-2 text-[12px] text-gray-500 break-all">{member.email}</p>
                   )}
                 </div>
 
@@ -356,7 +445,7 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="mt-10 text-center">
+          <div className="mt-8 text-center">
             <Link
               to="/faculty"
               className="inline-flex items-center gap-2 rounded-full border border-ssgmce-blue px-6 py-3 text-sm font-semibold text-ssgmce-blue transition-colors hover:bg-ssgmce-blue hover:text-white"
@@ -620,21 +709,23 @@ const Home = () => {
                 style={{ animation: "recruiterMarquee 28s linear infinite" }}
               >
                 {marqueeRecruiters.map((recruiter, index) => {
-                  const logoUrl = resolveUploadedAssetUrl(recruiter.logoUrl);
+                  const logoUrl = resolveUploadedAssetUrl(recruiter.logoUrl || recruiter.logo);
                   const itemKey = recruiter._id || recruiter.id || `${recruiter.name}-${index}`;
                   const cardContent = (
-                    <div className="group flex h-[88px] w-[170px] shrink-0 items-center justify-center rounded-2xl border border-slate-200/80 bg-white px-5 py-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-ssgmce-blue/30 hover:shadow-md md:h-[96px] md:w-[196px]">
+                    <div className="group flex h-[88px] w-[176px] shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-white px-5 py-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-ssgmce-blue/30 hover:shadow-md md:h-[96px] md:w-[214px]">
                       {logoUrl ? (
                         <img
                           src={logoUrl}
                           alt={recruiter.name}
-                          className="max-h-11 w-full object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100 md:max-h-12"
+                          className="max-h-9 max-w-full object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100 md:max-h-10"
+                          onError={(event) => {
+                            event.currentTarget.style.display = 'none';
+                          }}
                         />
-                      ) : (
-                        <span className="text-center text-base font-bold text-slate-400 transition-colors duration-300 group-hover:text-ssgmce-blue">
-                          {recruiter.name}
-                        </span>
-                      )}
+                      ) : null}
+                      <span className="mt-2 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 transition-colors duration-300 group-hover:text-ssgmce-blue">
+                        {recruiter.name}
+                      </span>
                     </div>
                   );
 

@@ -17,6 +17,11 @@ client/build/
 server/dist/
 server/build/
 
+# Documents - served via API from server/uploads/documents
+client/public/documents/
+server/uploads/documents/*
+!server/uploads/documents/.gitkeep
+
 # Logs
 logs/
 *.log

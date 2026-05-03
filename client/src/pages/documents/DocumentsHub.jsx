@@ -19,6 +19,38 @@ const getActiveSection = (sectionKey) => {
   return getDocumentSection(resolved);
 };
 
+const openPdfPreview = async (pdfUrl) => {
+  // Open a tab immediately to avoid popup blockers, then stream PDF into it.
+  const previewTab = window.open("", "_blank", "noopener,noreferrer");
+
+  if (!previewTab) {
+    return;
+  }
+
+  previewTab.document.write("<title>Loading document...</title><p style='font-family:sans-serif;padding:16px'>Loading document preview...</p>");
+
+  try {
+    const response = await fetch(pdfUrl, { mode: "cors" });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDF: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const pdfBlob = new Blob([blob], { type: "application/pdf" });
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    previewTab.location.replace(blobUrl);
+
+    // Revoke later to prevent memory leaks.
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+    }, 60000);
+  } catch (_error) {
+    previewTab.close();
+    window.open(pdfUrl, "_blank", "noopener,noreferrer");
+  }
+};
+
 const DocumentsHub = () => {
   const { sectionKey } = useParams();
   const activeSection = getActiveSection(sectionKey);
@@ -74,10 +106,9 @@ const DocumentsHub = () => {
               <tbody className="bg-white">
                 {Array.isArray(activeSection.documents) && activeSection.documents.length ? (
                   activeSection.documents.map((document, index) => {
-                    // Use GitHub media CDN for LFS-backed PDFs and open through PDF.js for inline preview.
+                    // Use GitHub media CDN for LFS-backed PDFs.
                     const docPath = document.href.replace(/^\/documents\//, "");
                     const githubMediaUrl = `https://media.githubusercontent.com/media/Saggy2323210/website/main/client/public/documents/${encodeURI(docPath)}`;
-                    const previewUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(githubMediaUrl)}`;
                     
                     return (
                       <tr key={document.href || index} className="odd:bg-white even:bg-gray-50">
@@ -91,14 +122,13 @@ const DocumentsHub = () => {
                           </div>
                         </td>
                         <td className="px-4 py-3 align-top text-right">
-                          <a
-                            href={previewUrl}
-                            target="_blank"
-                            rel="noreferrer"
+                          <button
+                            type="button"
+                            onClick={() => openPdfPreview(githubMediaUrl)}
                             className="inline-flex items-center gap-2 text-sm font-medium text-ssgmce-blue hover:underline"
                           >
                             Open ↗
-                          </a>
+                          </button>
                         </td>
                       </tr>
                     );

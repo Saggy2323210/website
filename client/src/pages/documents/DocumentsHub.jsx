@@ -74,10 +74,9 @@ const DocumentsHub = () => {
               <tbody className="bg-white">
                 {Array.isArray(activeSection.documents) && activeSection.documents.length ? (
                   activeSection.documents.map((document, index) => {
-                    // Convert static path to API endpoint
-                    // Example: /documents/institution/administration/... → /api/document-download/institution/administration/...
-                    const docPath = document.href.replace(/^\/documents\//, '');
-                    const apiUrl = `${import.meta.env.VITE_BACKEND_URL}/api/document-download/download/${docPath}`;
+                    // Serve PDFs from GitHub media CDN so LFS files resolve to real content.
+                    const docPath = document.href.replace(/^\/documents\//, "");
+                    const githubMediaUrl = `https://media.githubusercontent.com/media/Saggy2323210/website/main/client/public/documents/${encodeURI(docPath)}`;
                     
                     return (
                       <tr key={document.href || index} className="odd:bg-white even:bg-gray-50">
@@ -92,7 +91,7 @@ const DocumentsHub = () => {
                         </td>
                         <td className="px-4 py-3 align-top text-right">
                           <a
-                            href={apiUrl}
+                            href={githubMediaUrl}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-2 text-sm font-medium text-ssgmce-blue hover:underline"

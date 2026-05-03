@@ -6,8 +6,12 @@ const path = require("path");
 const { noSqlInjectionGuard } = require("./middleware/nosqlGuard");
 const { streamUploadedFile } = require("./controllers/uploadController");
 
-// Load environment variables
-dotenv.config();
+// Load environment variables. Prefer server/.env, but support the existing
+// project-level "env" file used by the local setup.
+const envResult = dotenv.config();
+if (envResult.error) {
+  dotenv.config({ path: path.resolve(__dirname, "../env") });
+}
 
 const app = express();
 const { protect, adminOnly } = require("./middleware/authMiddleware");

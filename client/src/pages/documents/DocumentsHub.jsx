@@ -74,9 +74,10 @@ const DocumentsHub = () => {
               <tbody className="bg-white">
                 {Array.isArray(activeSection.documents) && activeSection.documents.length ? (
                   activeSection.documents.map((document, index) => {
-                    // Serve PDFs from GitHub media CDN so LFS files resolve to real content.
+                    // Use GitHub media CDN for LFS-backed PDFs and open through PDF.js for inline preview.
                     const docPath = document.href.replace(/^\/documents\//, "");
                     const githubMediaUrl = `https://media.githubusercontent.com/media/Saggy2323210/website/main/client/public/documents/${encodeURI(docPath)}`;
+                    const previewUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(githubMediaUrl)}`;
                     
                     return (
                       <tr key={document.href || index} className="odd:bg-white even:bg-gray-50">
@@ -91,7 +92,7 @@ const DocumentsHub = () => {
                         </td>
                         <td className="px-4 py-3 align-top text-right">
                           <a
-                            href={githubMediaUrl}
+                            href={previewUrl}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-2 text-sm font-medium text-ssgmce-blue hover:underline"

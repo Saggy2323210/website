@@ -1,75 +1,40 @@
 import React from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFileAlt } from "react-icons/fa";
+import { useEdit } from "../contexts/EditContext";
 import MobileSidebarToggle from "./MobileSidebarToggle";
+import { DOCUMENT_SECTIONS } from "../data/documentsCatalog";
 
-const links = [
-  {
-    path: "/documents/policies",
-    pageId: "documents-policies",
-    label: "Policies and Procedure",
-  },
-  {
-    path: "/documents/disclosure",
-    pageId: "documents-mandatory",
-    label: "Mandatory Disclosure",
-  },
-  {
-    path: "/documents/naac",
-    pageId: "documents-naac",
-    label: "NAAC",
-    subsections: [
-      { id: "naac-status", title: "Accreditation Status" },
-      { id: "naac-cycles", title: "Accreditation Cycles" },
-    ],
-  },
-  {
-    path: "/documents/nba",
-    pageId: "documents-nba",
-    label: "NBA",
-    subsections: [
-      { id: "nba-status", title: "Accreditation Status" },
-      { id: "nba-table", title: "Accreditation Details" },
-    ],
-  },
-  { path: "/documents/iso", pageId: "documents-iso", label: "ISO" },
-  {
-    path: "/documents/nirf",
-    pageId: "documents-nirf",
-    label: "NIRF",
-    subsections: [
-      { id: "nirf-about", title: "About NIRF" },
-      { id: "nirf-rankings", title: "Rankings" },
-    ],
-  },
-  {
-    path: "/documents/audit",
-    pageId: "documents-audit",
-    label: "Sustainable Audit",
-    subsections: [
-      { id: "audit-about", title: "About" },
-      { id: "audit-energy", title: "Energy Audit" },
-      { id: "audit-environmental", title: "Environmental Audit" },
-      { id: "audit-green", title: "Green Audit" },
-    ],
-  },
-  { path: "/documents/aicte", pageId: "documents-aicte", label: "AICTE Approval" },
-  { path: "/documents/financial", pageId: "documents-financial", label: "Financial Statements" },
-  { path: "/documents/newsletter", pageId: "documents-newsletter", label: "News Letters" },
-  { path: "/documents/tattwadarshi", pageId: "documents-tattwadarshi", label: "e-Tattwadarshi" },
+const adminLinks = [
+  { pageId: "documents-policies", label: "Policies and Procedure" },
+  { pageId: "documents-mandatory", label: "Mandatory Disclosure" },
+  { pageId: "documents-naac", label: "NAAC" },
+  { pageId: "documents-nba", label: "NBA" },
+  { pageId: "documents-iso", label: "ISO" },
+  { pageId: "documents-nirf", label: "NIRF" },
+  { pageId: "documents-audit", label: "Sustainable Audit" },
+  { pageId: "documents-aicte", label: "AICTE Approval" },
+  { pageId: "documents-financial", label: "Financial Statements" },
+  { pageId: "documents-newsletter", label: "News Letters" },
+  { pageId: "documents-tattwadarshi", label: "e-Tattwadarshi" },
 ];
 
-const DocumentsSidebar = () => {
+const pathToPageId = (path) => path.replace(/^\//, "").replace(/\//g, "-");
+
+const filteredDocumentLinks = DOCUMENT_SECTIONS
+  .filter((section) => section.id !== "office")
+  .map((section) => ({
+    name: section.label,
+    path: `/documents/${section.id}`,
+  }));
+
+const DocumentsSidebar = ({ sections }) => {
   const location = useLocation();
-  const { pageId: activeAdminPageId } = useParams();
+  const navigate = useNavigate();
+  const { isEditing } = useEdit();
   const isAdminEditor =
     location.pathname.startsWith("/admin/pages/editor/") ||
     location.pathname.startsWith("/admin/visual/");
-
-  const getAdminBasePath = () =>
-    location.pathname.startsWith("/admin/visual/")
-      ? "/admin/visual"
-      : "/admin/pages/editor";
 
   const handleScroll = (e, id) => {
     e.preventDefault();
@@ -82,49 +47,82 @@ const DocumentsSidebar = () => {
     }
   };
 
-  const navContent = (
-    <ul className="space-y-1">
-      {links.map((link) => {
-        const targetPath =
-          isAdminEditor && link.pageId
-            ? `${getAdminBasePath()}/${link.pageId}`
-            : link.path;
-        const isActive = isAdminEditor
-          ? activeAdminPageId === link.pageId
-          : location.pathname === link.path;
-        return (
-          <li key={link.path}>
-            <Link
-              to={targetPath}
-              className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              {link.label}
-            </Link>
+  const handleLinkClick = (e, path) => {
+    if (isEditing) {
+      e.preventDefault();
+      navigate(`/admin/visual/${pathToPageId(path)}`);
+    }
+  };
 
-            {!isAdminEditor && isActive && link.subsections && link.subsections.length > 0 && (
-              <ul className="mt-1 mb-2 ml-4 pl-3 border-l-2 border-blue-200 space-y-1">
-                {link.subsections.map((sub) => (
-                  <li key={sub.id}>
-                    <a
-                      href={`#${sub.id}`}
-                      onClick={(e) => handleScroll(e, sub.id)}
+  const publicNavContent = (
+    <nav>
+      <ul className="space-y-1">
+        {filteredDocumentLinks.map((link) => {
+          const isActive =
+            location.pathname === link.path ||
+            (isEditing &&
+              location.pathname === `/admin/visual/${pathToPageId(link.path)}`);
+
+          return (
+            <li key={link.path}>
+              <Link
+                to={isEditing ? `/admin/visual/${pathToPageId(link.path)}` : link.path}
+                onClick={(e) => handleLinkClick(e, link.path)}
+                className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                {link.name}
+              </Link>
+
+              {isActive && sections && sections.length > 0 && (
+                <ul className="mt-1 mb-2 ml-4 space-y-1 border-l-2 border-blue-200 pl-3">
+                  {sections.map((section) => (
+                    <li key={section.sectionId}>
+                      <a
+                        href={`#${section.sectionId}`}
+                        onClick={(e) => handleScroll(e, section.sectionId)}
                         className="block rounded px-3 py-1.5 text-xs text-gray-500 transition-colors hover:bg-blue-50 hover:text-ssgmce-blue"
-                    >
-                      {sub.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
+                      >
+                        {section.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+
+  const adminNavContent = (
+    <div className="space-y-1">
+      {adminLinks.map((link) => {
+        const targetPath = `/admin/visual/${link.pageId}`;
+        const isActive = location.pathname === targetPath;
+
+        return (
+          <Link
+            key={link.pageId}
+            to={targetPath}
+            className={`block rounded-xl px-4 py-2.5 text-sm transition ${
+              isActive
+                ? "bg-ssgmce-blue/10 font-semibold text-ssgmce-blue"
+                : "text-slate-700 hover:bg-slate-100 hover:text-ssgmce-blue"
+            }`}
+          >
+            {link.label}
+          </Link>
         );
       })}
-    </ul>
+    </div>
   );
+
+  const navContent = isAdminEditor ? adminNavContent : publicNavContent;
 
   return (
     <>

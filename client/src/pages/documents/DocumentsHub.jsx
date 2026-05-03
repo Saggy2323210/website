@@ -74,7 +74,11 @@ const DocumentsHub = () => {
               <tbody className="bg-white">
                 {Array.isArray(activeSection.documents) && activeSection.documents.length ? (
                   activeSection.documents.map((document, index) => {
-                    const href = encodeURI(document.href);
+                    // Convert static path to API endpoint
+                    // Example: /documents/institution/administration/... → /api/document-download/institution/administration/...
+                    const docPath = document.href.replace(/^\/documents\//, '');
+                    const apiUrl = `${import.meta.env.VITE_BACKEND_URL}/api/document-download/download/${docPath}`;
+                    
                     return (
                       <tr key={document.href || index} className="odd:bg-white even:bg-gray-50">
                         <td className="px-4 py-3 align-top text-gray-500 w-12">{String(index + 1).padStart(2, "0")}</td>
@@ -88,7 +92,7 @@ const DocumentsHub = () => {
                         </td>
                         <td className="px-4 py-3 align-top text-right">
                           <a
-                            href={href}
+                            href={apiUrl}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-2 text-sm font-medium text-ssgmce-blue hover:underline"

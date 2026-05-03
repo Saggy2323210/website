@@ -4,11 +4,15 @@ const fs = require('fs');
 
 const router = express.Router();
 
-// Serve document by filename
-router.get('/download/:filename(*)', (req, res) => {
+// Serve document by filename (supports nested paths like institution/administration/file.pdf)
+router.get('/download/*', (req, res) => {
   try {
-    // Get the filename from params (supports nested paths like institution/administration/file.pdf)
-    const filename = req.params.filename;
+    // Get the filename from params (params[0] contains the * match)
+    const filename = req.params[0];
+    
+    if (!filename) {
+      return res.status(400).json({ error: 'Filename is required' });
+    }
     
     // Sanitize to prevent directory traversal attacks
     const safePath = path.normalize(filename).replace(/^(\.\.(\/|\\))+/, '');
@@ -32,9 +36,9 @@ router.get('/download/:filename(*)', (req, res) => {
 });
 
 // List documents in a category
-router.get('/list/:category(*)', (req, res) => {
+router.get('/list/*', (req, res) => {
   try {
-    const category = req.params.category || '';
+    const category = req.params[0] || '';
     const dirPath = path.join(__dirname, '../uploads/documents', category);
 
     if (!fs.existsSync(dirPath)) {

@@ -67,9 +67,9 @@ const PREFETCH_GROUPS = {
     "about-principal",
     "about-structure",
     "about-governing",
-    "about-directors",
+    "about-board",
     "about-committees",
-    "contact-us",
+    "about-contact",
   ],
   "facilities-": [
     "facilities-administrative-office",
@@ -806,7 +806,9 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const isLikelyNameColumnHeader = (header = "") => {
-    const normalizedHeader = String(header || "").toLowerCase().trim();
+    const normalizedHeader = String(header || "")
+      .toLowerCase()
+      .trim();
     return (
       normalizedHeader.includes("name") ||
       normalizedHeader.includes("authorit") ||
@@ -1413,16 +1415,18 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const renderAboutVisionPage = () => {
-        const getVisionMissionIcon = (title = "") => {
-          const normalizedTitle = String(title).toLowerCase();
-          if (normalizedTitle.includes("vision")) {
-            return <FaBullseye className="text-ssgmce-orange" aria-hidden="true" />;
-          }
-          if (normalizedTitle.includes("mission")) {
-            return <FaHandshake className="text-ssgmce-orange" aria-hidden="true" />;
-          }
-          return null;
-        };
+    const getVisionMissionIcon = (title = "") => {
+      const normalizedTitle = String(title).toLowerCase();
+      if (normalizedTitle.includes("vision")) {
+        return <FaBullseye className="text-ssgmce-orange" aria-hidden="true" />;
+      }
+      if (normalizedTitle.includes("mission")) {
+        return (
+          <FaHandshake className="text-ssgmce-orange" aria-hidden="true" />
+        );
+      }
+      return null;
+    };
 
     const visionHeading = String(
       displayPage.pageTitle || "Vision-Mission, Core Values & Goals",
@@ -2637,7 +2641,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                     {section.type === "image" && (
                       <figure className="my-6">
                         <EditableImage
-                          value={section.content.url}
+                          src={section.content?.url || ""}
                           path={`sections[${index}].content.url`}
                           className="rounded-lg max-w-full h-auto shadow-md mx-auto"
                           alt={section.content.alt || section.title}

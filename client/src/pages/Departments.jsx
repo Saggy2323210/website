@@ -4,7 +4,7 @@ import DepartmentCard from '../components/DepartmentCard';
 import useFetch from '../hooks/useFetch';
 
 const Departments = () => {
-  const { data: departmentsData, loading } = useFetch('/api/departments');
+  const { data: departmentsData, loading } = useFetch('/departments');
   const [selectedDept, setSelectedDept] = useState(null);
 
   const departments = departmentsData || [

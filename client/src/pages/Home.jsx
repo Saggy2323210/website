@@ -26,7 +26,7 @@ import alumniWankhedeImg from '../assets/images/home/Alumni/Nitin-Wankhede.png';
 import alumniDeuskarImg from '../assets/images/home/Alumni/Ashutosh_Deuskar.jpg';
 
 const Home = () => {
-  const { data: newsData } = useFetch('/api/news');
+  const { data: newsData } = useFetch('/news');
   const [activeCorner, setActiveCorner] = useState('co-curricular');
   const [recruiters, setRecruiters] = useState([]);
   const [alumniHighlights, setAlumniHighlights] = useState([]);
@@ -626,7 +626,8 @@ const Home = () => {
                     >
                       {marqueeAlumni.map((alumni, index) => {
                         const imageUrl = resolveUploadedAssetUrl(alumni.imageUrl || alumni.image);
-                        const itemKey = alumni._id || alumni.id || `${alumni.name}-${index}`;
+                        const baseKey = alumni._id || alumni.id || alumni.name || "alumni";
+                        const itemKey = `${baseKey}-${index}`;
 
                         return (
                           <article
@@ -710,7 +711,8 @@ const Home = () => {
               >
                 {marqueeRecruiters.map((recruiter, index) => {
                   const logoUrl = resolveUploadedAssetUrl(recruiter.logoUrl || recruiter.logo);
-                  const itemKey = recruiter._id || recruiter.id || `${recruiter.name}-${index}`;
+                  const baseKey = recruiter._id || recruiter.id || recruiter.name || "recruiter";
+                  const itemKey = `${baseKey}-${index}`;
                   const cardContent = (
                     <div className="group flex h-[88px] w-[176px] shrink-0 flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-white px-5 py-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-ssgmce-blue/30 hover:shadow-md md:h-[96px] md:w-[214px]">
                       {logoUrl ? (

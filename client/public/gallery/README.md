@@ -1,34 +1,23 @@
-Place gallery assets here.
+Gallery assets can now be managed in two ways:
 
-Photos:
-- Folder: /public/gallery/photos
-- Example files used by Gallery page:
-  - main-building.jpg
-  - central-library.jpg
-  - computer-lab.jpg
-  - engineering-workshop.jpg
-  - auditorium.jpg
-  - seminar-hall.jpg
-  - sports-ground.jpg
-  - innovation-center.jpg
+1) Admin-managed photo gallery (recommended):
+- Open `/admin/gallery` in the admin panel.
+- Upload images there (this stores files in backend `/uploads/images/...`).
+- Use **Category Manager** on `/admin/gallery` to add/edit/delete/reorder tabs (Campus, Events, etc.).
+- Add title/category/order/visibility and save.
+- Public `/gallery` page fetches these images from `/api/gallery`.
 
-Videos:
-- Folder: /public/gallery/videos
-- Example files used by Gallery page:
-  - campus-tour.mp4
-  - infrastructure-overview.mp4
-  - lab-tour.mp4
-  - campus-life-highlights.mp4
+2) Static fallback assets (used when admin gallery is empty or API is unavailable):
+- Photos folder: `/public/gallery/photos`
+- Videos folder: `/public/gallery/videos`
+- Posters folder: `/public/gallery/posters`
 
-Posters (video thumbnails):
-- Folder: /public/gallery/posters
-- Example files used by Gallery page:
-  - campus-tour.jpg
-  - infrastructure-overview.jpg
-  - lab-tour.jpg
-  - campus-life-highlights.jpg
+Example static files:
+- Photos: `main-building.jpg`, `central-library.jpg`, `computer-lab.jpg`
+- Videos: `campus-tour.mp4`, `infrastructure-overview.mp4`
+- Posters: `campus-tour.jpg`, `infrastructure-overview.jpg`
 
-These files are served at runtime as:
-- /gallery/photos/<file>
-- /gallery/videos/<file>
-- /gallery/posters/<file>
+Static files are served as:
+- `/gallery/photos/<file>`
+- `/gallery/videos/<file>`
+- `/gallery/posters/<file>`

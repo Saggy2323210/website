@@ -7,7 +7,7 @@ const News = () => {
     data: noticeData,
     loading,
     error,
-  } = useFetch("/api/notices");
+  } = useFetch("/notices");
 
   // Fallback data from live notices page (used only when API is unavailable).
   const staticNotices = [

@@ -10,8 +10,8 @@ const {
   getBucket,
 } = require("../utils/gridfsStorage");
 
-const IMAGE_MAX_SIZE_BYTES = 20 * 1024 * 1024;
-const DOCUMENT_MAX_SIZE_BYTES = 50 * 1024 * 1024;
+const IMAGE_MAX_SIZE_BYTES = 100 * 1024 * 1024;
+const DOCUMENT_MAX_SIZE_BYTES = 200 * 1024 * 1024;
 
 const resolveUploadPath = (relativePath = "") => {
   const sanitizedRelativePath = String(relativePath || "")

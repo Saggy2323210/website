@@ -18,6 +18,7 @@ import EditableText from "./admin/EditableText";
 import EditableImage from "./admin/EditableImage";
 import EditableSection from "./admin/EditableSection";
 import MarkdownEditor from "./admin/MarkdownEditor";
+import { resolveUploadedAssetUrl } from "../utils/uploadUrls";
 import { useEdit } from "../contexts/EditContext";
 import {
   getErrorMessage,
@@ -1157,16 +1158,17 @@ Constituted By **All India Council for Technical Education, New Delhi**
       );
     };
 
-    const campusImageUrl = String(
+    const rawCampusImageUrl = String(
       campusImageMeta?.section?.content?.url || "",
     ).trim();
+    const campusImageUrl = resolveUploadedAssetUrl(rawCampusImageUrl);
     const campusImageAlt =
       campusImageMeta?.section?.content?.alt || "SSGMCE Campus";
     const campusCaption = campusImageMeta?.section?.content?.caption || "";
     const shouldForceCampusFallback =
-      !campusImageUrl ||
+      !rawCampusImageUrl ||
       /chairman|principal|shivshankar|somani|chairman_c|principal_c/i.test(
-        campusImageUrl,
+        rawCampusImageUrl,
       );
     const resolvedCampusImageUrl = shouldForceCampusFallback
       ? fallbackGlanceImage
@@ -1781,24 +1783,38 @@ Constituted By **All India Council for Technical Education, New Delhi**
   };
 
   const renderAboutPrincipalPage = () => {
-    const principalHeading = normalizeAboutHeading(
-      "about-principal",
-      displayPage.pageTitle,
-    );
+    const isPlacementAboutPage = pageId === "placements-about";
+    const principalHeading = isPlacementAboutPage
+      ? String(displayPage.pageTitle || "Training & Placement Cell").trim()
+      : normalizeAboutHeading("about-principal", displayPage.pageTitle);
 
     const principalImageMeta =
-      getSectionByPriority(["principal-photo", "principal-image"], "image") ||
-      null;
+      getSectionByPriority(
+        isPlacementAboutPage
+          ? [
+              "tp-officer-photo",
+              "training-placement-officer",
+              "officer-photo",
+              "officer-image",
+              "image",
+            ]
+          : ["principal-photo", "principal-image"],
+        "image",
+      ) || null;
 
     const principalMessageMeta =
-      getBestTextSection(["principal-message", "message"]) || null;
+      getBestTextSection(
+        isPlacementAboutPage
+          ? ["officer-message", "message", "intro", "about"]
+          : ["principal-message", "message"],
+      ) || null;
 
     const focusMeta =
-      getSectionByPriority([
-        "leadership-focus",
-        "leadership-focus-areas",
-        "focus-areas",
-      ]) || null;
+      getSectionByPriority(
+        isPlacementAboutPage
+          ? ["focus-areas", "highlights", "key-highlights", "objectives"]
+          : ["leadership-focus", "leadership-focus-areas", "focus-areas"],
+      ) || null;
 
     const principalMessageText = String(
       principalMessageMeta?.section?.content?.text || "",
@@ -1810,12 +1826,22 @@ Constituted By **All India Council for Technical Education, New Delhi**
     const shouldShowPrincipalReadMore =
       !isEditing && principalMessageLength > 700;
 
-    const principalImage = principalImageMeta?.section?.content?.url || "";
-    const principalAlt =
-      principalImageMeta?.section?.content?.alt || "Principal SSGMCE";
-    const principalCaption = parsePrincipalCaption(
-      principalImageMeta?.section?.content?.caption,
+    const principalImage = resolveUploadedAssetUrl(
+      principalImageMeta?.section?.content?.url || "",
     );
+    const principalAlt = principalImageMeta?.section?.content?.alt ||
+      (isPlacementAboutPage ? "Training and Placement Officer" : "Principal SSGMCE");
+    const principalCaption = isPlacementAboutPage
+      ? (() => {
+          const caption = String(
+            principalImageMeta?.section?.content?.caption || "",
+          ).trim();
+          if (!caption) {
+            return { name: "", role: "", org: "" };
+          }
+          return parsePrincipalCaption(caption);
+        })()
+      : parsePrincipalCaption(principalImageMeta?.section?.content?.caption);
 
     const focusCards = Array.isArray(focusMeta?.section?.content?.cards)
       ? focusMeta.section.content.cards
@@ -1834,12 +1860,14 @@ Constituted By **All India Council for Technical Education, New Delhi**
           .filter(Boolean)
       : [];
 
-    const defaultHighlights = [
-      "Quality Education Since 1983",
-      "Industry-Academia Collaboration",
-      "Excellent Placement Records",
-      "Value-Based Education",
-    ];
+    const defaultHighlights = isPlacementAboutPage
+      ? []
+      : [
+          "Quality Education Since 1983",
+          "Industry-Academia Collaboration",
+          "Excellent Placement Records",
+          "Value-Based Education",
+        ];
 
     const highlights =
       focusCards.length > 0
@@ -1894,17 +1922,25 @@ Constituted By **All India Council for Technical Education, New Delhi**
                   </EditableSection>
                 )}
 
-                <div className="text-center mt-5">
-                  <h3 className="text-2xl font-bold text-ssgmce-blue">
-                    {principalCaption.name}
-                  </h3>
-                  <p className="text-ssgmce-orange font-semibold mt-1">
-                    {principalCaption.role}
-                  </p>
-                  <p className="text-gray-500 text-sm mt-2">
-                    {principalCaption.org}
-                  </p>
-                </div>
+                {(principalCaption.name || principalCaption.role || principalCaption.org) && (
+                  <div className="text-center mt-5">
+                    {principalCaption.name && (
+                      <h3 className="text-2xl font-bold text-ssgmce-blue">
+                        {principalCaption.name}
+                      </h3>
+                    )}
+                    {principalCaption.role && (
+                      <p className="text-ssgmce-orange font-semibold mt-1">
+                        {principalCaption.role}
+                      </p>
+                    )}
+                    {principalCaption.org && (
+                      <p className="text-gray-500 text-sm mt-2">
+                        {principalCaption.org}
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 {focusMeta ? (
                   <EditableSection
@@ -1924,25 +1960,27 @@ Constituted By **All India Council for Technical Education, New Delhi**
                         </div>
                       ) : null}
 
-                      <div className="space-y-3">
-                        {highlights.slice(0, 4).map((item, idx) => {
-                          const Icon = highlightIcons[idx] || FaGraduationCap;
-                          return (
-                            <div
-                              key={`${item}-${idx}`}
-                              className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
-                            >
-                              <Icon className="text-ssgmce-orange text-sm flex-shrink-0" />
-                              <span className="text-sm font-medium text-gray-700">
-                                {item}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
+                      {highlights.length > 0 && (
+                        <div className="space-y-3">
+                          {highlights.slice(0, 4).map((item, idx) => {
+                            const Icon = highlightIcons[idx] || FaGraduationCap;
+                            return (
+                              <div
+                                key={`${item}-${idx}`}
+                                className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
+                              >
+                                <Icon className="text-ssgmce-orange text-sm flex-shrink-0" />
+                                <span className="text-sm font-medium text-gray-700">
+                                  {item}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </EditableSection>
-                ) : (
+                ) : highlights.length > 0 ? (
                   <div className="space-y-3 mt-6">
                     {highlights.slice(0, 4).map((item, idx) => {
                       const Icon = highlightIcons[idx] || FaGraduationCap;
@@ -1959,7 +1997,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                       );
                     })}
                   </div>
-                )}
+                ) : null}
               </div>
 
               <div className="xl:col-span-8">
@@ -2024,21 +2062,25 @@ Constituted By **All India Council for Technical Education, New Delhi**
 
                 <FaQuoteRight className="text-3xl text-ssgmce-orange/30 mt-4 mb-4" />
 
-                <div className="rounded-xl border-l-4 border-ssgmce-orange bg-orange-50/50 px-5 py-4 mb-4">
-                  <p className="italic text-gray-800 font-medium">
-                    I take this opportunity to extend my heartiest wishes to all
-                    students to achieve success in their future endeavours.
-                  </p>
-                </div>
+                {!isPlacementAboutPage && (
+                  <>
+                    <div className="rounded-xl border-l-4 border-ssgmce-orange bg-orange-50/50 px-5 py-4 mb-4">
+                      <p className="italic text-gray-800 font-medium">
+                        I take this opportunity to extend my heartiest wishes to all
+                        students to achieve success in their future endeavours.
+                      </p>
+                    </div>
 
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="text-2xl font-bold text-ssgmce-blue">
-                    {principalCaption.name}
-                  </p>
-                  <p className="text-ssgmce-orange font-semibold">
-                    {principalCaption.role}, SSGMCE, Shegaon
-                  </p>
-                </div>
+                    <div className="border-t border-gray-200 pt-4">
+                      <p className="text-2xl font-bold text-ssgmce-blue">
+                        {principalCaption.name}
+                      </p>
+                      <p className="text-ssgmce-orange font-semibold">
+                        {principalCaption.role}, SSGMCE, Shegaon
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -2202,6 +2244,10 @@ Constituted By **All India Council for Technical Education, New Delhi**
   }
 
   if (pageId === "about-principal") {
+    return renderAboutPrincipalPage();
+  }
+
+  if (pageId === "placements-about") {
     return renderAboutPrincipalPage();
   }
 
@@ -2637,7 +2683,7 @@ Constituted By **All India Council for Technical Education, New Delhi**
                     {section.type === "image" && (
                       <figure className="my-6">
                         <EditableImage
-                          value={section.content.url}
+                          src={section.content.url}
                           path={`sections[${index}].content.url`}
                           className="rounded-lg max-w-full h-auto shadow-md mx-auto"
                           alt={section.content.alt || section.title}

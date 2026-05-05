@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Layout from "./components/Layout";
+import PopupBannerModal from "./components/PopupBannerModal";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -117,6 +118,7 @@ const NIRF = lazy(() => import("./pages/documents/NIRF"));
 const StudentForms = lazy(() => import("./pages/documents/StudentForms"));
 const Policies = lazy(() => import("./pages/documents/Policies"));
 const Tattwadarshi = lazy(() => import("./pages/documents/Tattwadarshi"));
+const DocumentsHub = lazy(() => import("./pages/documents/DocumentsHub"));
 
 const AdministrativeOffice = lazy(
   () => import("./pages/facilities/AdministrativeOffice"),
@@ -495,6 +497,7 @@ function App() {
         future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
       >
           <ScrollToTop />
+          <PopupBannerModal />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Admin Login - Public Route */}
@@ -1319,6 +1322,14 @@ function App() {
                 element={
                   <Layout>
                     <AICTE />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/documents"
+                element={
+                  <Layout>
+                    <DocumentsHub />
                   </Layout>
                 }
               />

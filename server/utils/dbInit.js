@@ -4,6 +4,7 @@
  */
 
 const { autoSeedMissingPages } = require("../controllers/pageContentController");
+const { seedHomepageContent } = require("./seedHomepageContent");
 
 /**
  * Initialize database - performs any necessary setup tasks
@@ -20,6 +21,7 @@ async function initializeDatabase() {
     
     // Keep PageContent aligned with seed data while preserving admin edits.
     await autoSeedMissingPages();
+    await seedHomepageContent();
     
     console.log("[DB Init] Database initialization completed");
     return true;

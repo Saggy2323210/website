@@ -134,8 +134,10 @@ const researchRoutes = require("./routes/researchRoutes");
 const placementRoutes = require("./routes/placementRoutes");
 const iqacRoutes = require("./routes/iqacRoutes");
 const documentRoutes = require("./routes/documentRoutes");
+const documentDownloadRoutes = require("./routes/documentDownloadRoutes");
 const nirfRoutes = require("./routes/nirfRoutes");
 const convertRoutes = require("./routes/convertRoutes");
+const popupBannerRoutes = require("./routes/popupBannerRoutes");
 const { initializeDatabase } = require("./utils/dbInit");
 
 // API Routes
@@ -151,8 +153,10 @@ app.use("/api/research", researchRoutes);
 app.use("/api/placements", placementRoutes);
 app.use("/api/iqac", iqacRoutes);
 app.use("/api/documents", documentRoutes);
+app.use("/api/document-download", documentDownloadRoutes);
 app.use("/api/nirf", nirfRoutes);
 app.use("/api/convert", convertRoutes);
+app.use("/api/popup-banners", popupBannerRoutes);
 
 app.use("/api", (_req, res) => {
   res.status(404).json({

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaBars,
@@ -22,7 +22,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeSubDropdown, setActiveSubDropdown] = useState(null);
-  const subDropdownTimeout = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -91,31 +90,34 @@ const Navbar = () => {
         {
           name: "Departments",
           path: "/departments",
-          hasSubDropdown: true,
-          subDropdown: [
-            {
-              name: "Applied Sciences and Humanities",
-              path: "/departments/applied-sciences",
-            },
-            {
-              name: "Computer Science and Engineering",
-              path: "/departments/cse",
-            },
-            {
-              name: "Electrical Engineering (Electronics & Power)",
-              path: "/departments/electrical",
-            },
-            {
-              name: "Electronics and Telecommunication Engg.",
-              path: "/departments/entc",
-            },
-            { name: "Information Technology", path: "/departments/it" },
-            { name: "Mechanical Engineering", path: "/departments/mechanical" },
-            {
-              name: "Master of Business Administration (MBA)",
-              path: "/departments/mba",
-            },
-          ],
+          isSectionHeader: true,
+        },
+        {
+          name: "Applied Science and Humanities",
+          path: "/departments/applied-sciences",
+        },
+        {
+          name: "Computer Science and Engineering",
+          path: "/departments/cse",
+        },
+        {
+          name: "Electrical Engineering (Electronics & Power)",
+          path: "/departments/electrical",
+        },
+        {
+          name: "Electronics and Telecommunication Engg.",
+          path: "/departments/entc",
+        },
+        { name: "Information Technology", path: "/departments/it" },
+        { name: "Mechanical Engineering", path: "/departments/mechanical" },
+        {
+          name: "Master of Business Administration (MBA)",
+          path: "/departments/mba",
+        },
+        {
+          name: "Academic Links",
+          path: "/academics/planner",
+          isSectionHeader: true,
         },
         { name: "Academics Planner & Calendar", path: "/academics/planner" },
         { name: "Teaching Learning Process", path: "/academics/teaching" },
@@ -289,6 +291,7 @@ const Navbar = () => {
       name: "Activities",
       path: "/events",
       megaMenuImage: activitiesNavbarImage,
+      megaMenuImageFit: "contain",
       megaMenuTitle: "Student Activities",
       dropdown: [
         { name: "INNOVO 2025", path: "/activities/innovo" },
@@ -415,14 +418,14 @@ const Navbar = () => {
 
             {/* Desktop Menu */}
             <div
-              className="hidden md:flex items-center flex-1 justify-end"
+              className="hidden min-w-0 md:flex items-center flex-1 justify-end"
               onMouseLeave={() => {
                 setActiveDropdown(null);
                 setActiveSubDropdown(null);
               }}
             >
-              <div className="relative">
-                <ul className="flex items-center gap-0.5 lg:gap-1">
+              <div className="relative w-full">
+                <ul className="flex flex-wrap items-center justify-end gap-x-0.5 gap-y-1 lg:gap-x-1">
                   {menuItems.map((item, index) => (
                     <li
                       key={index}
@@ -435,11 +438,12 @@ const Navbar = () => {
                       {item.dropdown ? (
                         <button
                           onClick={() => {
-                            navigate(getFirstDropdownPath(item));
-                            setActiveDropdown(null);
+                            setActiveDropdown((current) =>
+                              current === item.name ? null : item.name,
+                            );
                             setActiveSubDropdown(null);
                           }}
-                          className={`px-2.5 lg:px-3 py-2.5 text-gray-700 font-medium hover:text-ssgmce-blue transition-colors duration-300 flex items-center whitespace-nowrap text-sm lg:text-base ${
+                          className={`px-2.5 lg:px-3 py-2.5 text-gray-700 font-medium hover:text-ssgmce-blue transition-colors duration-300 flex items-center whitespace-nowrap text-[13px] xl:text-sm ${
                             activeDropdown === item.name
                               ? "text-ssgmce-blue border-b-2 border-ssgmce-orange"
                               : isActive(item.path)
@@ -452,7 +456,7 @@ const Navbar = () => {
                       ) : (
                         <Link
                           to={item.path}
-                          className={`block px-2.5 lg:px-3 py-2.5 text-gray-700 font-medium hover:text-ssgmce-blue transition-colors duration-300 whitespace-nowrap text-sm lg:text-base ${
+                          className={`block px-2.5 lg:px-3 py-2.5 text-gray-700 font-medium hover:text-ssgmce-blue transition-colors duration-300 whitespace-nowrap text-[13px] xl:text-sm ${
                             isActive(item.path)
                               ? "text-ssgmce-blue border-b-2 border-ssgmce-blue"
                               : ""
@@ -473,64 +477,78 @@ const Navbar = () => {
                       (item) => item.name === activeDropdown,
                     );
                     if (!activeItem || !activeItem.dropdown) return null;
-
-                    // All items go into columns (including sub-dropdown items like Departments)
                     const allItems = activeItem.dropdown;
 
                     // Split items into columns
                     const getColumns = (items, colCount) => {
-                      const perCol = Math.ceil(items.length / colCount);
+                      const weightedLength = items.reduce(
+                        (total, item) => total + (item.isSectionHeader ? 0.35 : 1),
+                        0,
+                      );
+                      const perCol = Math.ceil(weightedLength / colCount);
                       const cols = [];
                       for (let i = 0; i < colCount; i++) {
-                        cols.push(items.slice(i * perCol, (i + 1) * perCol));
+                        cols.push([]);
                       }
+                      let currentWeight = 0;
+                      items.forEach((item) => {
+                        const weight = item.isSectionHeader ? 0.35 : 1;
+                        const nextIndex = Math.min(
+                          colCount - 1,
+                          Math.floor(currentWeight / perCol),
+                        );
+                        cols[nextIndex].push(item);
+                        currentWeight += weight;
+                      });
                       return cols;
                     };
 
-                    const colCount =
-                      allItems.length > 16 ? 3 : allItems.length > 8 ? 2 : 2;
+                    const getMenuLayout = (itemName, itemCount) => {
+                      if (itemName === "Academics") {
+                        return { colCount: 4, imageWidth: "w-[220px]" };
+                      }
+                      if (itemName === "Activities") {
+                        return { colCount: 4, imageWidth: "hidden" };
+                      }
+                      return {
+                        colCount:
+                          itemCount > 18 ? 4 : itemCount > 10 ? 3 : 2,
+                        imageWidth: "w-[240px]",
+                      };
+                    };
+
+                    const { colCount, imageWidth } = getMenuLayout(
+                      activeItem.name,
+                      allItems.length,
+                    );
                     const columns = getColumns(allItems, colCount);
 
                     return (
-                      <div className="absolute left-0 right-0 top-full pt-3 z-50">
-                        <div className="bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.12)] relative">
-                          <div className="px-8 py-8">
-                            <div className="flex min-w-0 items-stretch gap-8">
+                      <div className="absolute left-1/2 top-full z-50 w-[min(calc(100vw-2rem),1280px)] -translate-x-1/2 pt-2">
+                        <div className="relative overflow-hidden rounded-lg bg-white shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
+                          <div className="px-5 py-4 lg:px-7 lg:py-5">
+                            <div className="flex min-w-0 items-stretch gap-5">
                               {/* Left Side - Menu Items */}
-                              <div className="flex min-w-0 flex-1 gap-8">
+                              <div
+                                className={`grid min-w-0 flex-1 gap-x-7 gap-y-2 ${
+                                  colCount === 4
+                                    ? "lg:grid-cols-4"
+                                    : colCount === 3
+                                      ? "lg:grid-cols-3"
+                                      : "lg:grid-cols-2"
+                                }`}
+                              >
                                 {columns.map((col, colIdx) => (
                                   <div
                                     key={`col-${colIdx}`}
                                     className="min-w-0 flex-1"
                                   >
-                                    <ul className="space-y-1.5">
+                                    <ul className="space-y-0.5">
                                       {col.map((subItem, subIndex) => (
                                         <li key={subIndex} className="relative">
-                                          {subItem.hasSubDropdown ? (
-                                            <div
-                                              onMouseEnter={() => {
-                                                clearTimeout(
-                                                  subDropdownTimeout.current,
-                                                );
-                                                setActiveSubDropdown(
-                                                  subItem.name,
-                                                );
-                                              }}
-                                              onMouseLeave={() => {
-                                                subDropdownTimeout.current =
-                                                  setTimeout(
-                                                    () =>
-                                                      setActiveSubDropdown(
-                                                        null,
-                                                      ),
-                                                    150,
-                                                  );
-                                              }}
-                                            >
-                                              <button className="w-full flex items-center justify-between py-1.5 text-gray-700 hover:text-ssgmce-orange transition-all text-base font-medium group">
-                                                {subItem.name}
-                                                <FaChevronRight className="text-[10px] text-gray-400 group-hover:text-ssgmce-orange transition-colors" />
-                                              </button>
+                                          {subItem.isSectionHeader ? (
+                                            <div className="mb-1 mt-2 border-b border-gray-100 pb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-ssgmce-blue first:mt-0">
+                                              {subItem.name}
                                             </div>
                                           ) : (
                                             <Link
@@ -539,7 +557,7 @@ const Navbar = () => {
                                                 setActiveDropdown(null);
                                                 setActiveSubDropdown(null);
                                               }}
-                                              className="block py-1.5 text-gray-700 hover:text-ssgmce-orange hover:underline transition-all text-base font-medium"
+                                              className="block min-w-0 break-words py-1.5 text-[13px] font-medium leading-snug text-gray-700 transition-all hover:text-ssgmce-orange hover:underline xl:text-sm"
                                             >
                                               {subItem.name}
                                             </Link>
@@ -552,76 +570,47 @@ const Navbar = () => {
                               </div>
 
                               {/* Right Side - Promotional Image */}
-                              <div className="relative h-[300px] w-[280px] overflow-hidden rounded-lg shadow-lg shrink-0 lg:w-[320px] xl:w-[350px]">
-                                <img
-                                  src={activeItem.megaMenuImage}
-                                  alt={activeItem.megaMenuTitle}
-                                  className={`h-full w-full object-center ${
-                                    activeItem.megaMenuImageFit === "contain"
-                                      ? "bg-white object-contain p-6"
-                                      : "object-cover"
-                                  }`}
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
-                                  <h3 className="text-white text-2xl font-bold mb-2">
-                                    {activeItem.megaMenuTitle}
-                                  </h3>
-                                  <p className="text-white/90 text-sm mb-4">
-                                    Explore our comprehensive offerings
-                                  </p>
-                                  <button className="bg-ssgmce-orange hover:bg-ssgmce-light-orange text-white px-5 py-2.5 rounded-md text-sm font-semibold transition-all hover:shadow-lg w-fit">
-                                    Learn More
-                                  </button>
+                              {imageWidth !== "hidden" && (
+                                <div
+                                  className={`hidden ${imageWidth} shrink-0 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg lg:block`}
+                                >
+                                  <div className="h-[130px] bg-gray-50">
+                                    <img
+                                      src={activeItem.megaMenuImage}
+                                      alt={activeItem.megaMenuTitle}
+                                      className={`h-full w-full object-center ${
+                                        activeItem.megaMenuImageFit ===
+                                        "contain"
+                                          ? "object-contain p-4"
+                                          : "object-cover"
+                                      }`}
+                                    />
+                                  </div>
+                                  <div className="border-t border-gray-100 p-3">
+                                    <h3 className="text-base font-bold leading-tight text-gray-900">
+                                      {activeItem.megaMenuTitle}
+                                    </h3>
+                                    <p className="mt-1.5 text-xs leading-relaxed text-gray-500">
+                                      Explore our comprehensive offerings
+                                    </p>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        navigate(
+                                          getFirstDropdownPath(activeItem),
+                                        );
+                                        setActiveDropdown(null);
+                                        setActiveSubDropdown(null);
+                                      }}
+                                      className="mt-2 w-fit rounded-md bg-ssgmce-orange px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-ssgmce-light-orange hover:shadow-md"
+                                    >
+                                      Learn More
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           </div>
-
-                          {/* Sub-dropdown panel - anchored to mega menu container */}
-                          {(() => {
-                            const subItem = activeItem.dropdown.find(
-                              (item) =>
-                                item.hasSubDropdown &&
-                                item.name === activeSubDropdown,
-                            );
-                            if (!subItem) return null;
-                            return (
-                              <div
-                                className="absolute right-full top-0 bottom-0 pr-2 z-50"
-                                onMouseEnter={() => {
-                                  clearTimeout(subDropdownTimeout.current);
-                                  setActiveSubDropdown(subItem.name);
-                                }}
-                                onMouseLeave={() => {
-                                  subDropdownTimeout.current = setTimeout(
-                                    () => setActiveSubDropdown(null),
-                                    150,
-                                  );
-                                }}
-                              >
-                                <div className="bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.12)] h-full py-6 px-6 min-w-[300px] flex flex-col justify-center">
-                                  <ul className="flex flex-col justify-between h-full">
-                                    {subItem.subDropdown.map(
-                                      (nestedItem, nestedIndex) => (
-                                        <li key={nestedIndex}>
-                                          <Link
-                                            to={nestedItem.path}
-                                            onClick={() => {
-                                              setActiveDropdown(null);
-                                              setActiveSubDropdown(null);
-                                            }}
-                                            className="block py-1.5 text-gray-600 hover:text-ssgmce-orange hover:underline transition-all text-base"
-                                          >
-                                            {nestedItem.name}
-                                          </Link>
-                                        </li>
-                                      ),
-                                    )}
-                                  </ul>
-                                </div>
-                              </div>
-                            );
-                          })()}
                         </div>
                       </div>
                     );
@@ -664,7 +653,11 @@ const Navbar = () => {
                           <ul className="ml-2 mt-1 space-y-1">
                             {item.dropdown.map((subItem, subIndex) => (
                               <li key={subIndex}>
-                                {subItem.hasSubDropdown ? (
+                                {subItem.isSectionHeader ? (
+                                  <div className="px-3 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ssgmce-blue">
+                                    {subItem.name}
+                                  </div>
+                                ) : subItem.hasSubDropdown ? (
                                   <>
                                     <button
                                       onClick={() =>

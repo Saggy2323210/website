@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import apiClient from "../../utils/apiClient";
 import AdminLayout from "../../components/admin/AdminLayout";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import {
   FaEye,
   FaEyeSlash,
@@ -62,12 +63,14 @@ const AdminPopupBanner = () => {
       const response = await apiClient.post("/upload/image", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
-      if (response.data.success) {
-        const imageUrl = response.data.url;
-        setFormData((prev) => ({ ...prev, imageUrl }));
-        setImagePreview(imageUrl);
+
+      const imageUrl = response.data?.fileUrl || response.data?.url;
+      if (!imageUrl) {
+        throw new Error("Upload URL missing");
       }
+
+      setFormData((prev) => ({ ...prev, imageUrl }));
+      setImagePreview(imageUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to upload image");
@@ -80,15 +83,23 @@ const AdminPopupBanner = () => {
     e.preventDefault();
 
     try {
+      const payload = {
+        ...formData,
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        imageUrl: formData.imageUrl.trim(),
+        linkUrl: formData.linkUrl.trim(),
+      };
+
       if (editingId) {
         // Update existing banner
-        const response = await apiClient.put(`/popup-banners/${editingId}`, formData);
+        const response = await apiClient.put(`/popup-banners/${editingId}`, payload);
         if (response.data.success) {
           alert("Banner updated successfully!");
         }
       } else {
         // Create new banner
-        const response = await apiClient.post("/popup-banners", formData);
+        const response = await apiClient.post("/popup-banners", payload);
         if (response.data.success) {
           alert("Banner created successfully!");
         }
@@ -105,7 +116,7 @@ const AdminPopupBanner = () => {
   const handleEdit = (banner) => {
     setEditingId(banner._id);
     setFormData({
-      title: banner.title,
+      title: banner.title || "",
       description: banner.description || "",
       imageUrl: banner.imageUrl,
       linkUrl: banner.linkUrl || "",
@@ -210,15 +221,18 @@ const AdminPopupBanner = () => {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Banner Title *
+                    Display Name (optional)
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="Internal name, e.g. NAAC congratulations"
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#003366] focus:border-[#003366]"
-                    required
                   />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Leave this blank if the uploaded banner already contains all text.
+                  </p>
                 </div>
 
                 {/* Description */}
@@ -256,9 +270,9 @@ const AdminPopupBanner = () => {
                     {imagePreview && (
                       <div className="relative">
                         <img
-                          src={imagePreview}
+                          src={resolveUploadedAssetUrl(imagePreview)}
                           alt="Preview"
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full max-h-80 object-contain rounded-lg bg-gray-50 dark:bg-gray-900"
                         />
                       </div>
                     )}
@@ -284,8 +298,8 @@ const AdminPopupBanner = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      <FaCalendar className="inline mr-2" />
-                      Start Date
+                    <FaCalendar className="inline mr-2" />
+                      Start Date (show from)
                     </label>
                     <input
                       type="date"
@@ -296,8 +310,8 @@ const AdminPopupBanner = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      <FaCalendar className="inline mr-2" />
-                      End Date
+                    <FaCalendar className="inline mr-2" />
+                      End Date (show until)
                     </label>
                     <input
                       type="date"
@@ -355,7 +369,7 @@ const AdminPopupBanner = () => {
                 <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
-                    disabled={!formData.title || !formData.imageUrl || uploading}
+                    disabled={!formData.imageUrl || uploading}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#003366] text-white rounded-lg hover:bg-[#004080] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <FaSave /> {editingId ? "Update Banner" : "Create Banner"}
@@ -398,9 +412,9 @@ const AdminPopupBanner = () => {
                     {/* Banner Image */}
                     <div className="flex-shrink-0">
                       <img
-                        src={banner.imageUrl}
-                        alt={banner.title}
-                        className="w-32 h-32 object-cover rounded-lg"
+                        src={resolveUploadedAssetUrl(banner.imageUrl)}
+                        alt={banner.title || "Popup banner"}
+                        className="w-32 h-32 object-contain rounded-lg bg-gray-50 dark:bg-gray-900"
                       />
                     </div>
 
@@ -408,7 +422,9 @@ const AdminPopupBanner = () => {
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">{banner.title}</h3>
+                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">
+                            {banner.title || "Image-only banner"}
+                          </h3>
                           {banner.description && (
                             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{banner.description}</p>
                           )}

@@ -50,7 +50,16 @@ const AdminEvents = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await apiClient.get("/events");
+      let res;
+      try {
+        res = await apiClient.get("/events/admin");
+      } catch (adminRouteError) {
+        const status = adminRouteError?.response?.status;
+        if (![404, 500].includes(status)) {
+          throw adminRouteError;
+        }
+        res = await apiClient.get("/events");
+      }
       setEvents(Array.isArray(res.data) ? res.data : []);
       setError("");
     } catch (err) {

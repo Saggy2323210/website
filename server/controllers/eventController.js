@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const mongoose = require('mongoose');
 
 // @desc    Get all events
 // @route   GET /api/events
@@ -6,6 +7,17 @@ exports.getAllEvents = async (req, res) => {
   try {
     const events = await Event.find({ isActive: true })
       .sort({ eventDate: -1 });
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Get all events for admin
+// @route   GET /api/events/admin
+exports.getAdminEvents = async (req, res) => {
+  try {
+    const events = await Event.find().sort({ eventDate: -1, createdAt: -1 });
     res.json(events);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -32,6 +44,10 @@ exports.getUpcomingEvents = async (req, res) => {
 // @route   GET /api/events/:id
 exports.getEventById = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid event ID' });
+    }
+
     const event = await Event.findById(req.params.id);
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });

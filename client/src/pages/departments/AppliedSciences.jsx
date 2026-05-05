@@ -8,6 +8,7 @@ import EditableImage from "../../components/admin/EditableImage";
 import MarkdownEditor from "../../components/admin/MarkdownEditor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
 import appliedSciencesBanner from "../../assets/images/departments/applied-sciences/banner.png";
 import { AnimatePresence, motion } from "framer-motion";
 import apiClient from "../../utils/apiClient";
@@ -37,6 +38,11 @@ import {
   FaTrash,
   FaPalette,
   FaUpload,
+  FaUsers,
+  FaUserGraduate,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 // Import HOD Photo
@@ -428,6 +434,73 @@ const APPLIED_DEFAULT_LABS = [
   },
 ];
 
+const APPLIED_DEFAULT_ACTIVITIES = [
+  {
+    title: "Expressive Fusion (TED Talk & Story Telling)",
+    date: "22nd March 2024",
+    participants: "B.E. All Branches Students",
+    organizer: "",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Industrial Visit\nVinodrai Engineers, Jalna",
+    date: "12-14 March 2024",
+    participants: "B.E. First Year Students",
+    organizer: "",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Science Day Celebration",
+    date: "28th February 2024",
+    participants: "B.E. First Year Students",
+    organizer: "",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Workshop on Design Thinking and Innovation Design",
+    date: "24 February 2024",
+    participants: "B.E. First Year Students",
+    organizer: "",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Online (Zoom) Meeting on Problem Solving and Ideation Workshop",
+    date: "Saturday, 28 October 2023",
+    participants: "B.E. First Year Students",
+    organizer: "",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Workshop on ROBOTICS",
+    date: "16th September-17th September 2023",
+    participants: "B.E. First Year Students",
+    organizer: "ASH Dept., SSGMCE, Shegaon",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Elocution Competition One Nation, One Election",
+    date: "Saturday, 9th September 2023",
+    participants: "B.E. First Year Students",
+    organizer: "ASH Dept., SSGMCE, Shegaon",
+    resource: "",
+    image: "",
+  },
+  {
+    title: "Student Induction & Orientation Program",
+    date: "7th August-25th August 2023",
+    participants: "B.E. First Year Students\nVenue: New Auditorium",
+    organizer: "ASH Dept., SSGMCE, Shegaon",
+    resource: "",
+    image: "",
+  },
+];
+
 const APPLIED_DEFAULT_ACHIEVEMENTS = {
   faculty: [
     {
@@ -642,6 +715,121 @@ function AshPrideMdView({ markdown = "" }) {
 }
 // ---- End ASH Pride helpers ----
 
+const normalizeAshActivity = (activity = {}) => ({
+  title: String(activity.title || "").trim(),
+  date: String(activity.date || "").trim(),
+  participants: String(
+    activity.participants || activity.beneficiary || "",
+  ).trim(),
+  organizer: String(activity.organizer || "").trim(),
+  resource: String(activity.resource || "").trim(),
+  image: String(activity.image || "").trim(),
+});
+
+const defaultAshActivityCards =
+  APPLIED_DEFAULT_ACTIVITIES.map(normalizeAshActivity);
+
+const getRenderedAshActivityImage = (activity = {}) =>
+  resolveUploadedAssetUrl(String(activity?.image || "").trim());
+
+const formatAshActivityMarkdownField = (
+  label,
+  value,
+  includeEmpty = false,
+) => {
+  const lines = String(value || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (!lines.length && !includeEmpty) return "";
+
+  return [
+    `- ${label}: ${lines[0] || ""}`,
+    ...lines.slice(1).map((line) => `  ${line}`),
+  ].join("\n");
+};
+
+const ashActivitiesToMarkdown = (activities = []) =>
+  activities
+    .map((activity) => normalizeAshActivity(activity))
+    .filter((activity) => activity.title)
+    .map((activity) =>
+      [
+        `## ${activity.title}`,
+        formatAshActivityMarkdownField("Date", activity.date, true),
+        formatAshActivityMarkdownField(
+          "Participants",
+          activity.participants,
+          true,
+        ),
+        formatAshActivityMarkdownField("Organized by", activity.organizer, true),
+        formatAshActivityMarkdownField("Resource Person", activity.resource, true),
+        formatAshActivityMarkdownField("Image", activity.image, true),
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    )
+    .join("\n\n");
+
+const parseAshActivitiesMarkdown = (markdown = "") => {
+  if (typeof markdown !== "string" || !markdown.trim()) return [];
+
+  return markdown
+    .split(/^(?=## )/m)
+    .map((section) => section.trim())
+    .filter(Boolean)
+    .map((section) => {
+      const lines = section.split("\n");
+      const titleLine = lines.shift() || "";
+      const title = titleLine.replace(/^##\s+/, "").trim();
+      const fieldMap = {
+        date: [],
+        participants: [],
+        organizer: [],
+        resource: [],
+        image: [],
+      };
+      let activeField = null;
+
+      lines.forEach((line) => {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) return;
+
+        const fieldMatch = trimmedLine.match(
+          /^-\s*(Date|Participants|Organized by|Resource Person|Image)\s*:\s*(.*)$/i,
+        );
+
+        if (fieldMatch) {
+          const [, rawLabel, rawValue] = fieldMatch;
+          activeField =
+            {
+              date: "date",
+              participants: "participants",
+              "organized by": "organizer",
+              "resource person": "resource",
+              image: "image",
+            }[rawLabel.toLowerCase()] || null;
+
+          if (activeField) fieldMap[activeField].push(rawValue.trim());
+          return;
+        }
+
+        if (activeField) fieldMap[activeField].push(trimmedLine);
+      });
+
+      return normalizeAshActivity({
+        title,
+        date: fieldMap.date.join("\n").trim(),
+        participants: fieldMap.participants.join("\n").trim(),
+        organizer: fieldMap.organizer.join("\n").trim(),
+        resource: fieldMap.resource.join("\n").trim(),
+        image: fieldMap.image.join("\n").trim(),
+      });
+    })
+    .filter((activity) => activity.title);
+};
+
 const AppliedSciences = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(() =>
@@ -653,6 +841,8 @@ const AppliedSciences = () => {
   const [researchTab, setResearchTab] = useState("projects");
   const [projectYear, setProjectYear] = useState("2023-24");
   const [achievementTab, setAchievementTab] = useState("faculty");
+  const [activitiesVisible, setActivitiesVisible] = useState(6);
+  const [lightboxActivity, setLightboxActivity] = useState(null);
   const [expandedFacultyEditorIndex, setExpandedFacultyEditorIndex] =
     useState(null);
 
@@ -663,6 +853,13 @@ const AppliedSciences = () => {
       currentTab === requestedTab ? currentTab : requestedTab,
     );
   }, [location.search]);
+
+  useEffect(() => {
+    if (activeTab === "activities") {
+      setActivitiesVisible(6);
+      setLightboxActivity(null);
+    }
+  }, [activeTab]);
 
   // Load department data (works in both edit and public view modes)
   const {
@@ -682,6 +879,104 @@ const AppliedSciences = () => {
     const arr = [...t(key, defaultArr)];
     arr[index] = value;
     updateData(key, arr);
+  };
+
+  const legacyActivities = (
+    t("templateData.activities", defaultAshActivityCards) ||
+    defaultAshActivityCards
+  ).map(normalizeAshActivity);
+  const storedActivitiesMarkdown = t("templateData.activitiesMarkdown", "");
+  const parsedActivities = parseAshActivitiesMarkdown(
+    storedActivitiesMarkdown,
+  );
+  const activitiesData = parsedActivities.length
+    ? parsedActivities
+    : legacyActivities;
+
+  const updateActivityList = (updater) => {
+    const nextActivities = updater(
+      activitiesData.map((activity) => normalizeAshActivity(activity)),
+    );
+    updateField("templateData.activities", nextActivities);
+    updateField(
+      "templateData.activitiesMarkdown",
+      ashActivitiesToMarkdown(nextActivities),
+    );
+  };
+
+  const updateActivity = (index, field, value) => {
+    if (!activitiesData[index]) return;
+    updateActivityList((items) =>
+      items.map((activity, activityIndex) =>
+        activityIndex === index
+          ? normalizeAshActivity({ ...activity, [field]: value })
+          : activity,
+      ),
+    );
+  };
+
+  const addActivityCard = () => {
+    updateActivityList((items) => [
+      {
+        title: "New Department Activity",
+        date: "Add activity date",
+        participants: "Add participant details",
+        organizer: "Add organizer details",
+        resource: "",
+        image: "",
+      },
+      ...items,
+    ]);
+  };
+
+  const deleteActivityCard = (index) => {
+    updateActivityList((items) =>
+      items.filter((_, itemIndex) => itemIndex !== index),
+    );
+  };
+
+  const activityMarkdownComponents = {
+    p: ({ node, ...props }) => (
+      <p className="text-gray-700 leading-relaxed" {...props} />
+    ),
+    ul: ({ node, ...props }) => (
+      <ul className="list-disc pl-5 space-y-1 text-gray-700" {...props} />
+    ),
+    ol: ({ node, ...props }) => (
+      <ol className="list-decimal pl-5 space-y-1 text-gray-700" {...props} />
+    ),
+    li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
+    strong: ({ node, ...props }) => (
+      <strong className="font-semibold text-gray-800" {...props} />
+    ),
+    a: ({ node, ...props }) => (
+      <a
+        className="text-ssgmce-blue hover:text-ssgmce-orange underline underline-offset-2"
+        target="_blank"
+        rel="noopener noreferrer"
+        {...props}
+      />
+    ),
+  };
+
+  const renderActivityMarkdown = (value, emptyText = "Not specified") => {
+    const trimmedValue = String(value || "").trim();
+    if (!trimmedValue) {
+      return (
+        <p className="text-gray-400 italic leading-relaxed">{emptyText}</p>
+      );
+    }
+
+    return (
+      <div className="prose prose-sm max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={activityMarkdownComponents}
+        >
+          {trimmedValue}
+        </ReactMarkdown>
+      </div>
+    );
   };
 
   const defaultCourseMaterials = [
@@ -1542,6 +1837,7 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
                 <div className="md:col-span-5 bg-gray-50 p-6 border-r border-gray-100">
                   <EditableImage
                     src={lab.image || ""}
+                    fallbackSrc={APPLIED_DEFAULT_LABS[index]?.image || ""}
                     onSave={(url) => {
                       const updated = [
                         ...t("templateData.laboratories", APPLIED_DEFAULT_LABS),
@@ -3016,159 +3312,321 @@ The department has three well equipped laboratories namely **Physics, Chemistry 
     activities: (
       <div className="space-y-8">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Activities @ Department
-          </h2>
-          <div className="w-24 h-1 bg-orange-500 mx-auto mt-2"></div>
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold text-gray-800 border-l-4 border-orange-500 pl-4">
+            <EditableText
+              value={t("templateData.activitiesTitle", "Activities @ Department")}
+              onSave={(val) => updateField("templateData.activitiesTitle", val)}
+            />
+          </h3>
+          <span className="hidden sm:inline-block text-sm text-gray-500 bg-gray-100 px-4 py-1.5 rounded-full">
+            {activitiesData.length} Activities
+          </span>
         </div>
 
-        {/* Activities Grid */}
-        <div className="space-y-6">
-          {[
-            {
-              title: "Expressive Fusion (TED Talk & Story Telling)",
-              date: "22nd March 2024",
-              beneficiary: "B.E. All Branches Students",
-              image: "activity-photo-placeholder",
-              imageAlt: "TED Talk event",
-            },
-            {
-              title: "Industrial Visit",
-              subtitle: "Vinodrai Engineers, Jalna",
-              date: "12-14 March 2024",
-              beneficiary: "B.E. First Year Students",
-              image: "industrial-visit-placeholder",
-              imageAlt: "Industrial Visit",
-            },
-            {
-              title: "Science Day Celebration",
-              date: "28th February 2024",
-              beneficiary: "B.E. First Year Students",
-              image: "science-day-placeholder",
-              imageAlt: "Science Day Celebration",
-            },
-            {
-              title: "Workshop on Design Thinking and Innovation Design",
-              date: "24 February 2024",
-              beneficiary: "B.E. First Year Students",
-              image: "design-thinking-placeholder",
-              imageAlt: "Design Thinking Workshop",
-            },
-            {
-              title:
-                "Online (Zoom) Meeting on Problem Solving and Ideation Workshop",
-              date: "Saturday, 28 October 2023",
-              beneficiary: "B.E. First Year Students",
-              image: "online-workshop-placeholder",
-              imageAlt: "Problem Solving Workshop",
-            },
-            {
-              title: "Workshop on ROBOTICS",
-              date: "16th September-17th September 2023",
-              beneficiary: "B.E. First Year Students",
-              organizer: "ASH Dept., SSGMCE, Shegaon",
-              image: "robotics-placeholder",
-              imageAlt: "Robotics Workshop",
-            },
-            {
-              title: "Elocution Competition One Nation, One Election",
-              date: "Saturday, 9th September 2023",
-              beneficiary: "B.E. First Year Students",
-              organizer: "ASH Dept., SSGMCE, Shegaon",
-              image: "elocution-placeholder",
-              imageAlt: "Elocution Competition",
-            },
-            {
-              title: "Student Induction & Orientation Program",
-              date: "7th August-25th August 2023",
-              beneficiary: "B.E. First Year Students",
-              venue: "New Auditorium",
-              organizer: "ASH Dept., SSGMCE, Shegaon",
-              image: "orientation-placeholder",
-              imageAlt: "Student Orientation Program",
-            },
-          ].map((activity, index) => (
+        {isEditing && (
+          <div className="flex justify-end">
+            <button
+              onClick={addActivityCard}
+              className="px-5 py-2.5 bg-ssgmce-blue text-white rounded-lg hover:bg-ssgmce-dark-blue transition-colors font-medium shadow-sm"
+            >
+              + Add New Activity
+            </button>
+          </div>
+        )}
+
+        {/* Activity List */}
+        <div className="space-y-5">
+          {activitiesData.slice(0, activitiesVisible).map((activity, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+              transition={{ delay: index * 0.03, duration: 0.35 }}
+              className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden relative"
             >
-              <div className="grid md:grid-cols-12">
-                {/* Activity Photo Section */}
-                <div className="md:col-span-5 bg-gradient-to-br from-blue-50 to-blue-100 p-6 flex items-center justify-center border-r border-gray-200">
-                  <div className="text-center w-full">
-                    <div className="bg-white rounded-lg shadow-inner p-8 aspect-video flex items-center justify-center">
-                      <div className="text-center">
-                        <FaCalendarAlt className="text-6xl text-blue-400 mx-auto mb-3" />
-                        <p className="text-sm text-gray-500 font-semibold">
-                          Activity Photo
-                        </p>
-                      </div>
+              {isEditing && (
+                <button
+                  onClick={() => deleteActivityCard(index)}
+                  className="absolute top-3 right-3 z-10 bg-red-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-md hover:bg-red-600 transition-colors"
+                  title="Delete activity"
+                >
+                  Delete Activity
+                </button>
+              )}
+
+              <div className="flex flex-col sm:flex-row">
+                <div
+                  className={`sm:w-72 flex-shrink-0 ${isEditing ? "" : "cursor-pointer"}`}
+                  onClick={() => {
+                    if (!isEditing) setLightboxActivity(index);
+                  }}
+                >
+                  {isEditing ? (
+                    <EditableImage
+                      src={activity.image}
+                      fallbackSrc={defaultAshActivityCards[index]?.image || ""}
+                      onSave={(url) => updateActivity(index, "image", url)}
+                      alt={activity.title}
+                      className="w-full h-48 sm:h-full object-contain bg-gray-50"
+                      placeholder="Click to add activity poster"
+                    />
+                  ) : activity.image ? (
+                    <img
+                      src={getRenderedAshActivityImage(activity)}
+                      alt={activity.title}
+                      className="w-full h-48 sm:h-full object-contain bg-gray-50"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-48 sm:h-full flex items-center justify-center bg-gray-50">
+                      <FaCalendarAlt className="text-4xl text-gray-300" />
                     </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Activity Details Section */}
-                <div className="md:col-span-7 p-6">
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 leading-tight">
-                      {activity.title}
-                    </h3>
-
-                    {activity.subtitle && (
-                      <p className="text-ssgmce-blue font-semibold">
-                        {activity.subtitle}
-                      </p>
-                    )}
-
-                    <div className="space-y-2 pt-2">
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
-                        <span className="font-bold text-gray-700 sm:min-w-[140px]">
-                          Date:
-                        </span>
-                        <span className="text-gray-600">{activity.date}</span>
-                      </div>
-
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
-                        <span className="font-bold text-gray-700 sm:min-w-[140px]">
-                          Beneficiary/Participant:
-                        </span>
-                        <span className="text-gray-600">
-                          {activity.beneficiary}
-                        </span>
-                      </div>
-
-                      {activity.venue && (
-                        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
-                          <span className="font-bold text-gray-700 sm:min-w-[140px]">
-                            Venue:
-                          </span>
-                          <span className="text-gray-600">
-                            {activity.venue}
-                          </span>
-                        </div>
+                <div className="flex-1 p-5 sm:p-6">
+                  <div className="mb-4">
+                    <span className="inline-flex items-center bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded mb-3">
+                      {isEditing ? (
+                        <EditableText
+                          value={activity.date}
+                          onSave={(val) => updateActivity(index, "date", val)}
+                        />
+                      ) : (
+                        activity.date || "Date to be updated"
                       )}
+                    </span>
 
-                      {activity.organizer && (
-                        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
-                          <span className="font-bold text-gray-700 sm:min-w-[140px]">
-                            Organized by:
-                          </span>
-                          <span className="text-gray-600">
-                            {activity.organizer}
-                          </span>
-                        </div>
+                    <div className="text-lg sm:text-xl font-bold text-gray-800 leading-snug tracking-tight">
+                      {isEditing ? (
+                        <EditableText
+                          value={activity.title}
+                          onSave={(val) => updateActivity(index, "title", val)}
+                          multiline
+                          className="w-full"
+                        />
+                      ) : (
+                        activity.title
                       )}
                     </div>
+                  </div>
+
+                  <div className="space-y-4 text-sm text-gray-600">
+                    <div className="flex items-start gap-2.5">
+                      <FaUsers className="text-blue-500 mt-0.5 flex-shrink-0" />
+                      <div className="min-w-0 w-full">
+                        <p className="font-semibold text-gray-800 mb-2">
+                          Participants
+                        </p>
+                        {isEditing ? (
+                          <MarkdownEditor
+                            value={activity.participants}
+                            onSave={(val) =>
+                              updateActivity(index, "participants", val)
+                            }
+                            placeholder="Add participant details..."
+                          />
+                        ) : (
+                          renderActivityMarkdown(activity.participants)
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5">
+                      <FaUserGraduate className="text-orange-500 mt-0.5 flex-shrink-0" />
+                      <div className="min-w-0 w-full">
+                        <p className="font-semibold text-gray-800 mb-2">
+                          Organized by
+                        </p>
+                        {isEditing ? (
+                          <MarkdownEditor
+                            value={activity.organizer}
+                            onSave={(val) =>
+                              updateActivity(index, "organizer", val)
+                            }
+                            placeholder="Add organizer details..."
+                          />
+                        ) : (
+                          renderActivityMarkdown(activity.organizer)
+                        )}
+                      </div>
+                    </div>
+
+                    {(activity.resource || isEditing) && (
+                      <div className="flex items-start gap-2.5">
+                        <FaChalkboardTeacher className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <div className="min-w-0 w-full">
+                          <p className="font-semibold text-gray-800 mb-2">
+                            Resource Person
+                          </p>
+                          {isEditing ? (
+                            <MarkdownEditor
+                              value={activity.resource}
+                              onSave={(val) =>
+                                updateActivity(index, "resource", val)
+                              }
+                              placeholder="Add resource person details..."
+                            />
+                          ) : (
+                            renderActivityMarkdown(
+                              activity.resource,
+                              "Not specified",
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Load More / Show Less */}
+        {activitiesData.length > 6 && (
+          <div className="flex justify-center pt-2">
+            <button
+              onClick={() =>
+                setActivitiesVisible((prev) =>
+                  prev >= activitiesData.length
+                    ? 6
+                    : Math.min(prev + 6, activitiesData.length),
+                )
+              }
+              className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition-colors duration-200 text-sm"
+            >
+              {activitiesVisible >= activitiesData.length
+                ? "Show Less"
+                : `Load More (${activitiesData.length - activitiesVisible} more)`}
+            </button>
+          </div>
+        )}
+
+        {/* Lightbox Modal */}
+        <AnimatePresence>
+          {lightboxActivity !== null &&
+            (() => {
+              const activity = activitiesData[lightboxActivity];
+              if (!activity) return null;
+              return (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+                  onClick={() => setLightboxActivity(null)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-gray-50">
+                      <span className="text-sm text-gray-500">
+                        {lightboxActivity + 1} / {activitiesData.length}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() =>
+                            setLightboxActivity((prev) =>
+                              prev > 0 ? prev - 1 : activitiesData.length - 1,
+                            )
+                          }
+                          className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <FaChevronLeft className="text-gray-500 text-sm" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setLightboxActivity((prev) =>
+                              prev < activitiesData.length - 1 ? prev + 1 : 0,
+                            )
+                          }
+                          className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                          <FaChevronRight className="text-gray-500 text-sm" />
+                        </button>
+                        <button
+                          onClick={() => setLightboxActivity(null)}
+                          className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors ml-1"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                    </div>
+
+                    {activity.image ? (
+                      <div className="bg-gray-100">
+                        <img
+                          src={getRenderedAshActivityImage(activity)}
+                          alt={activity.title}
+                          className="w-full max-h-[50vh] object-contain mx-auto"
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 bg-gray-50 flex items-center justify-center">
+                        <FaCalendarAlt className="text-5xl text-gray-300" />
+                      </div>
+                    )}
+
+                    <div className="p-6 space-y-4 overflow-y-auto max-h-[35vh]">
+                      <div>
+                        <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded mb-2">
+                          {activity.date}
+                        </span>
+                        <h3 className="text-xl font-bold text-gray-800 leading-snug">
+                          {activity.title}
+                        </h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div className="flex items-start gap-2.5 p-3 bg-blue-50 rounded-lg">
+                          <FaUsers className="text-blue-600 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-xs font-semibold text-blue-600 uppercase">
+                              Participants
+                            </p>
+                            <div className="mt-1">
+                              {renderActivityMarkdown(activity.participants)}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-2.5 p-3 bg-orange-50 rounded-lg">
+                          <FaUserGraduate className="text-orange-600 mt-0.5 flex-shrink-0" />
+                          <div>
+                            <p className="text-xs font-semibold text-orange-600 uppercase">
+                              Organized by
+                            </p>
+                            <div className="mt-1">
+                              {renderActivityMarkdown(activity.organizer)}
+                            </div>
+                          </div>
+                        </div>
+                        {activity.resource && (
+                          <div className="flex items-start gap-2.5 p-3 bg-green-50 rounded-lg sm:col-span-2">
+                            <FaChalkboardTeacher className="text-green-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <p className="text-xs font-semibold text-green-600 uppercase">
+                                Resource Person
+                              </p>
+                              <div className="mt-1">
+                                {renderActivityMarkdown(activity.resource)}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })()}
+        </AnimatePresence>
       </div>
     ),
   };

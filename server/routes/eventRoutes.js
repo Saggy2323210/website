@@ -3,6 +3,7 @@ const router = express.Router();
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 const {
   getAllEvents,
+  getAdminEvents,
   getUpcomingEvents,
   getEventById,
   createEvent,
@@ -11,6 +12,7 @@ const {
 } = require('../controllers/eventController');
 
 router.get('/', getAllEvents);
+router.get('/admin', protect, adminOnly, getAdminEvents);
 router.get('/upcoming', getUpcomingEvents);
 router.get('/:id', getEventById);
 

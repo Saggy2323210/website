@@ -3,7 +3,7 @@ import PageHeader from '../components/PageHeader';
 import useFetch from '../hooks/useFetch';
 
 const Events = () => {
-  const { data: eventsData, loading } = useFetch('/api/events');
+  const { data: eventsData, loading, error } = useFetch('/events');
   const [filter, setFilter] = useState('All');
 
   const sampleEvents = [
@@ -41,7 +41,12 @@ const Events = () => {
     },
   ];
 
-  const displayEvents = eventsData || sampleEvents;
+  const displayEvents =
+    Array.isArray(eventsData) && eventsData.length > 0
+      ? eventsData
+      : error
+        ? sampleEvents
+        : [];
   const categories = ['All', 'Technical', 'Workshop', 'Cultural', 'Sports'];
 
   const filteredEvents = filter === 'All' 

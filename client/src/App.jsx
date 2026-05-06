@@ -103,20 +103,7 @@ const IT = lazy(() => import("./pages/departments/IT"));
 const MBA = lazy(() => import("./pages/departments/MBA"));
 const Mechanical = lazy(() => import("./pages/departments/Mechanical"));
 
-const AICTE = lazy(() => import("./pages/documents/AICTE"));
-const Audit = lazy(() => import("./pages/documents/Audit"));
-const Financial = lazy(() => import("./pages/documents/Financial"));
-const ISO = lazy(() => import("./pages/documents/ISO"));
-const MandatoryDisclosure = lazy(
-  () => import("./pages/documents/MandatoryDisclosure"),
-);
-const NAAC = lazy(() => import("./pages/documents/NAAC"));
-const NBA = lazy(() => import("./pages/documents/NBA"));
-const Newsletter = lazy(() => import("./pages/documents/Newsletter"));
-const NIRF = lazy(() => import("./pages/documents/NIRF"));
-const StudentForms = lazy(() => import("./pages/documents/StudentForms"));
-const Policies = lazy(() => import("./pages/documents/Policies"));
-const Tattwadarshi = lazy(() => import("./pages/documents/Tattwadarshi"));
+const DocumentsHub = lazy(() => import("./pages/documents/DocumentsHub"));
 
 const AdministrativeOffice = lazy(
   () => import("./pages/facilities/AdministrativeOffice"),
@@ -1315,98 +1302,18 @@ function App() {
                 }
               />
               <Route
-                path="/documents/aicte"
+                path="/documents"
                 element={
                   <Layout>
-                    <AICTE />
+                    <DocumentsHub />
                   </Layout>
                 }
               />
               <Route
-                path="/documents/audit"
+                path="/documents/:sectionKey"
                 element={
                   <Layout>
-                    <Audit />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/financial"
-                element={
-                  <Layout>
-                    <Financial />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/iso"
-                element={
-                  <Layout>
-                    <ISO />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/disclosure"
-                element={
-                  <Layout>
-                    <MandatoryDisclosure />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/naac"
-                element={
-                  <Layout>
-                    <NAAC />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/nba"
-                element={
-                  <Layout>
-                    <NBA />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/newsletter"
-                element={
-                  <Layout>
-                    <Newsletter />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/nirf"
-                element={
-                  <Layout>
-                    <NIRF />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/student-forms"
-                element={
-                  <Layout>
-                    <StudentForms />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/policies"
-                element={
-                  <Layout>
-                    <Policies />
-                  </Layout>
-                }
-              />
-              <Route
-                path="/documents/tattwadarshi"
-                element={
-                  <Layout>
-                    <Tattwadarshi />
+                    <DocumentsHub />
                   </Layout>
                 }
               />

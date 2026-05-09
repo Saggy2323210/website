@@ -5,9 +5,14 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { noSqlInjectionGuard } = require("./middleware/nosqlGuard");
 const { streamUploadedFile } = require("./controllers/uploadController");
+const {
+  getAuthCookieOptions,
+  getJwtSecret,
+} = require("./utils/authSecurity");
 
 // Load environment variables
 dotenv.config();
+getJwtSecret();
 
 const app = express();
 const { protect, adminOnly } = require("./middleware/authMiddleware");
@@ -33,6 +38,7 @@ const isLocalDevOrigin = (origin = "") =>
   /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(String(origin || ""));
 
 const securityHeaders = (req, res, next) => {
+  const authCookieOptions = getAuthCookieOptions();
   const cspDirectives = [
     "default-src 'self'",
     "base-uri 'self'",
@@ -42,7 +48,9 @@ const securityHeaders = (req, res, next) => {
     "font-src 'self' data: https:",
     "style-src 'self' 'unsafe-inline' https:",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    `connect-src 'self' ${allowedOrigins.join(" ")} https: ws: wss:`,
+    `connect-src 'self' ${allowedOrigins.join(" ")} ${
+      authCookieOptions.secure ? "https:" : "http:"
+    } ws: wss:`,
     "form-action 'self'",
   ];
 
@@ -55,6 +63,12 @@ const securityHeaders = (req, res, next) => {
   );
   res.setHeader("X-XSS-Protection", "1; mode=block");
   res.setHeader("Content-Security-Policy", cspDirectives.join("; "));
+  if (authCookieOptions.secure || req.secure) {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains",
+    );
+  }
 
   next();
 };
@@ -198,7 +212,8 @@ app.use((err, req, res, next) => {
 
   if (
     typeof err.message === "string" &&
-    err.message.toLowerCase().includes("invalid file type")
+    (err.message.toLowerCase().includes("invalid file type") ||
+      err.message.toLowerCase().includes("only "))
   ) {
     return res.status(400).json({
       success: false,
@@ -206,9 +221,26 @@ app.use((err, req, res, next) => {
     });
   }
 
+  if (err.name === "ValidationError") {
+    return res.status(400).json({
+      success: false,
+      error: "Validation failed. Please review the submitted data.",
+    });
+  }
+
+  if (err.name === "CastError") {
+    return res.status(400).json({
+      success: false,
+      error: "Invalid request parameter.",
+    });
+  }
+
+  const requestLabel = `${req.method} ${req.originalUrl}`;
+  console.error(`[ERROR] ${requestLabel}`, err);
+
   res.status(500).json({
     success: false,
-    error: err.message || "Something went wrong!",
+    error: "Something went wrong. Please try again later.",
   });
 });
 

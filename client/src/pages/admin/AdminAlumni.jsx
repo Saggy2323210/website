@@ -13,6 +13,49 @@ import {
 import AdminLayout from "../../components/admin/AdminLayout";
 import apiClient from "../../utils/apiClient";
 import { resolveUploadedAssetUrl } from "../../utils/uploadUrls";
+import alumniWaghImg from "../../assets/images/home/Alumni/Abhay_Wagh.jpg";
+import alumniKaulImg from "../../assets/images/home/Alumni/Umesh_Kaul.jpg";
+import alumniWankhedeImg from "../../assets/images/home/Alumni/Nitin-Wankhede.png";
+import alumniDeuskarImg from "../../assets/images/home/Alumni/Ashutosh_Deuskar.jpg";
+
+const defaultHomepageAlumni = [
+  {
+    organization: "DTE, Mumbai",
+    name: "Mr. Abhay Wagh",
+    role: "Director",
+    imageUrl: alumniWaghImg,
+    department: "Computer Science and Engineering",
+    order: 1,
+    showOnHome: true,
+  },
+  {
+    organization: "IBM",
+    name: "Mr. Umesh Kaul",
+    role: "Executive Architect / Consultant",
+    imageUrl: alumniKaulImg,
+    department: "Computer Science and Engineering",
+    order: 2,
+    showOnHome: true,
+  },
+  {
+    organization: "Value Momentum, Hyderabad",
+    name: "Mr. Nitin Wankhede",
+    role: "Vice President - Client Services",
+    imageUrl: alumniWankhedeImg,
+    department: "Information Technology",
+    order: 3,
+    showOnHome: true,
+  },
+  {
+    organization: "VDA Infosolutions",
+    name: "Mr. Ashutosh Deuskar",
+    role: "Director",
+    imageUrl: alumniDeuskarImg,
+    department: "Computer Science and Engineering",
+    order: 4,
+    showOnHome: true,
+  },
+];
 
 const emptyForm = () => ({
   name: "",
@@ -158,6 +201,27 @@ const AdminAlumni = () => {
     }
   };
 
+  const importDefaultHomepageAlumni = async () => {
+    try {
+      setError("");
+      setSuccess("");
+      setLoading(true);
+
+      await Promise.all(
+        defaultHomepageAlumni.map((item) =>
+          apiClient.post("/placements/alumni", item, authHeader()),
+        ),
+      );
+
+      setSuccess("Default homepage alumni imported. You can edit them now.");
+      await fetchAlumni();
+    } catch (err) {
+      setError(err.response?.data?.error || err.response?.data?.message || "Failed to import default alumni.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const sortedAlumni = alumni
     .slice()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name));
@@ -204,8 +268,27 @@ const AdminAlumni = () => {
             <FaUserGraduate className="mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
             <h3 className="mb-2 text-xl font-bold text-gray-800 dark:text-gray-200">No Alumni Yet</h3>
             <p className="text-gray-500 dark:text-gray-400">
-              Add your first prestigious alumni card to show it on the homepage carousel.
+              The homepage is currently using built-in fallback alumni. Import them here to edit from admin.
             </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={importDefaultHomepageAlumni}
+                className="inline-flex items-center gap-2 rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-cyan-700"
+              >
+                <FaUpload /> Import Homepage Alumni
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  resetForm();
+                  setShowForm(true);
+                }}
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800"
+              >
+                <FaPlus /> Add Manually
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">

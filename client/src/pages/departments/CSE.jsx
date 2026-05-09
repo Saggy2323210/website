@@ -988,6 +988,17 @@ const getLocalCseActivityImageUrl = (imageUrl = "") => {
   const normalizedUrl = String(imageUrl || "").trim();
   if (!normalizedUrl) return "";
 
+  if (
+    normalizedUrl
+      .toLowerCase()
+      .startsWith(CSE_ACTIVITY_REMOTE_IMAGE_PREFIX.toLowerCase())
+  ) {
+    const fileName = normalizedUrl.split("/").pop()?.split("?")[0] || "";
+    return resolveUploadedAssetUrl(
+      fileName ? `/uploads/images/cse/activities/${fileName}` : normalizedUrl,
+    );
+  }
+
   return resolveUploadedAssetUrl(normalizedUrl);
 };
 

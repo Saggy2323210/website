@@ -4,13 +4,13 @@ import useFetch from "../hooks/useFetch";
 
 const News = () => {
   const {
-    data: noticeData,
+    data: newsData,
     loading,
     error,
-  } = useFetch("/api/notices");
+  } = useFetch("/news");
 
-  // Fallback data from live notices page (used only when API is unavailable).
-  const staticNotices = [
+  // Fallback data is used only when the backend is unavailable.
+  const staticNews = [
     {
       _id: "1",
       title: "Registration Open for SWAYAM/NPTEL Course",
@@ -62,16 +62,18 @@ const News = () => {
     },
   ];
 
-  const noticeItems =
-    Array.isArray(noticeData) && noticeData.length > 0
-      ? noticeData
-      : staticNotices;
+  const newsItems =
+    Array.isArray(newsData) && newsData.length > 0
+      ? newsData
+      : error
+        ? staticNews
+        : [];
 
   return (
     <div className="animation-fade-in">
       <PageHeader
-        title="Latest Notices"
-        subtitle="All official notices and announcements from SSGMCE"
+        title="Latest News"
+        subtitle="All news articles and updates from SSGMCE"
       />
 
       <section className="py-12 md:py-16 bg-gradient-to-b from-white to-ssgmce-surface">
@@ -80,24 +82,24 @@ const News = () => {
             {loading ? (
               <div className="text-center py-12">
                 <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-ssgmce-blue"></div>
-                <p className="mt-4 text-gray-600">Loading notices...</p>
+                <p className="mt-4 text-gray-600">Loading news...</p>
               </div>
             ) : (
               <>
                 {error && (
                   <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                    Live notices could not be fetched, showing latest available
+                    Live news could not be fetched, showing latest available
                     updates.
                   </div>
                 )}
 
-                {noticeItems.length > 0 ? (
+                {newsItems.length > 0 ? (
                   <div className="space-y-4">
-                    {noticeItems.map((item, index) => (
+                    {newsItems.map((item, index) => (
                       <NewsCard
                         key={item._id || `${item.title}-${index}`}
                         title={item.title}
-                        date={item.publishDate || item.date}
+                        date={item.publishDate || item.date || item.createdAt}
                         dateLabel={
                           item.day && item.month ? `${item.day} ${item.month}` : ""
                         }
@@ -110,7 +112,7 @@ const News = () => {
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
-                    <p className="text-gray-600">No notices available right now.</p>
+                    <p className="text-gray-600">No news available right now.</p>
                   </div>
                 )}
               </>

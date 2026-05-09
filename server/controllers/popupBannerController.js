@@ -1,5 +1,25 @@
 const PopupBanner = require("../models/PopupBanner");
 
+const normalizeBannerPayload = (payload = {}) => {
+  const normalized = {
+    ...payload,
+    title: String(payload.title || "").trim(),
+    description: String(payload.description || "").trim(),
+    imageUrl: String(payload.imageUrl || "").trim(),
+    linkUrl: String(payload.linkUrl || "").trim(),
+    priority: Number.isFinite(Number(payload.priority)) ? Number(payload.priority) : 0,
+  };
+
+  normalized.startDate = payload.startDate
+    ? new Date(`${String(payload.startDate).slice(0, 10)}T00:00:00.000`)
+    : null;
+  normalized.endDate = payload.endDate
+    ? new Date(`${String(payload.endDate).slice(0, 10)}T23:59:59.999`)
+    : null;
+
+  return normalized;
+};
+
 // Get all popup banners
 const getAllPopupBanners = async (req, res) => {
   try {
@@ -47,7 +67,11 @@ const getPopupBannerById = async (req, res) => {
 // Create new popup banner
 const createPopupBanner = async (req, res) => {
   try {
-    const bannerData = req.body;
+    const bannerData = normalizeBannerPayload(req.body);
+
+    if (!bannerData.imageUrl) {
+      return res.status(400).json({ success: false, message: "Banner image is required" });
+    }
     
     // If this banner is set to active, deactivate all other banners
     if (bannerData.isActive) {
@@ -72,7 +96,11 @@ const createPopupBanner = async (req, res) => {
 const updatePopupBanner = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = normalizeBannerPayload(req.body);
+
+    if (!updateData.imageUrl) {
+      return res.status(400).json({ success: false, message: "Banner image is required" });
+    }
 
     // If this banner is being set to active, deactivate all other banners
     if (updateData.isActive) {

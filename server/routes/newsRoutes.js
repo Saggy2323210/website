@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 const {
   getAllNews,
   getNewsById,
@@ -10,11 +11,11 @@ const {
 
 router.route('/')
   .get(getAllNews)
-  .post(createNews);
+  .post(protect, adminOnly, createNews);
 
 router.route('/:id')
   .get(getNewsById)
-  .put(updateNews)
-  .delete(deleteNews);
+  .put(protect, adminOnly, updateNews)
+  .delete(protect, adminOnly, deleteNews);
 
 module.exports = router;

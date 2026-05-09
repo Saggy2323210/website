@@ -4,7 +4,7 @@ const popupBannerSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      default: "",
       trim: true,
     },
     description: {

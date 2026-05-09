@@ -12,16 +12,21 @@ import {
 } from "react-icons/fa";
 import { getErrorMessage, logUnexpectedError } from "../../utils/apiErrors";
 
+const NEWS_CATEGORIES = ["Achievement", "Event", "Placement", "Research", "General"];
+
+const emptyForm = () => ({
+  title: "",
+  description: "",
+  content: "",
+  category: "General",
+  isActive: true,
+});
+
 const AdminNews = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    category: "Academic",
-    isActive: true,
-  });
+  const [formData, setFormData] = useState(emptyForm());
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
 
@@ -32,10 +37,8 @@ const AdminNews = () => {
   const fetchNews = async () => {
     try {
       const res = await apiClient.get("/news");
-      if (res.data.success) {
-        setNews(res.data.data);
-        setError("");
-      }
+      setNews(Array.isArray(res.data) ? res.data : res.data.data || []);
+      setError("");
     } catch (err) {
       logUnexpectedError("Error fetching news:", err);
       setError(getErrorMessage(err, "Failed to load news"));
@@ -60,23 +63,20 @@ const AdminNews = () => {
       fetchNews();
       setShowForm(false);
       setEditingId(null);
-      setFormData({
-        title: "",
-        content: "",
-        category: "Academic",
-        isActive: true,
-      });
+      setFormData(emptyForm());
     } catch (err) {
-      console.error(err);
+      logUnexpectedError("Error saving news:", err);
+      setError(getErrorMessage(err, "Failed to save news"));
     }
   };
 
   const handleEdit = (item) => {
     setFormData({
-      title: item.title,
-      content: item.content,
-      category: item.category,
-      isActive: item.isActive,
+      title: item.title || "",
+      description: item.description || "",
+      content: item.content || "",
+      category: NEWS_CATEGORIES.includes(item.category) ? item.category : "General",
+      isActive: item.isActive !== false,
     });
     setEditingId(item._id);
     setShowForm(true);
@@ -91,7 +91,8 @@ const AdminNews = () => {
       });
       fetchNews();
     } catch (err) {
-      console.error(err);
+      logUnexpectedError("Error deleting news:", err);
+      setError(getErrorMessage(err, "Failed to delete news"));
     }
   };
 
@@ -138,12 +139,7 @@ const AdminNews = () => {
               setShowForm(!showForm);
               if (showForm) {
                 setEditingId(null);
-                setFormData({
-                  title: "",
-                  content: "",
-                  category: "Academic",
-                  isActive: true,
-                });
+                setFormData(emptyForm());
               }
             }}
             className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 font-medium"
@@ -175,7 +171,21 @@ const AdminNews = () => {
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Content
+                  Short Description
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  rows="3"
+                  className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Full Content
                 </label>
                 <textarea
                   value={formData.content}
@@ -184,7 +194,6 @@ const AdminNews = () => {
                   }
                   rows="4"
                   className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  required
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -199,10 +208,9 @@ const AdminNews = () => {
                     }
                     className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option>Academic</option>
-                    <option>Events</option>
-                    <option>Achievements</option>
-                    <option>General</option>
+                    {NEWS_CATEGORIES.map((category) => (
+                      <option key={category}>{category}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -236,12 +244,7 @@ const AdminNews = () => {
                   onClick={() => {
                     setShowForm(false);
                     setEditingId(null);
-                    setFormData({
-                      title: "",
-                      content: "",
-                      category: "Academic",
-                      isActive: true,
-                    });
+                    setFormData(emptyForm());
                   }}
                   className="px-6 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
@@ -291,7 +294,7 @@ const AdminNews = () => {
                             {item.title}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                            {item.content}
+                            {item.description || item.content}
                           </p>
                         </div>
                       </div>
@@ -304,7 +307,7 @@ const AdminNews = () => {
                     <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                       <div className="flex items-center gap-1.5">
                         <FaClock className="text-gray-400 dark:text-gray-500" />
-                        {formatDate(item.createdAt)}
+                        {formatDate(item.publishDate || item.createdAt)}
                       </div>
                     </td>
                     <td className="px-6 py-4">

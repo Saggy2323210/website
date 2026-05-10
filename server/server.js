@@ -111,8 +111,8 @@ app.use("/api/admin", protect, adminOnly, (_req, res) => {
   });
 });
 
-// Serve static files from uploads folder
-app.get("/uploads/:category/:filename", streamUploadedFile);
+// Serve uploaded files (supports nested filenames like /uploads/documents/iqac/file.pdf)
+app.get("/uploads/:category/:filename(*)", streamUploadedFile);
 
 app.use(
   "/uploads",

@@ -78,7 +78,6 @@ const ensureProtectedPathAccess = async (req, res, requestedPath = "") => {
 // Serve document by filename (supports nested paths like institution/administration/file.pdf)
 router.get("/download/*", async (req, res) => {
   try {
-    // Get the filename from params (params[0] contains the * match)
     const filename = req.params[0];
 
     if (!filename) {

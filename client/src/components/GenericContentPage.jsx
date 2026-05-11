@@ -742,6 +742,51 @@ const GenericContentPage = ({ pageId }) => {
   }, [isEditing, pageId, sections, updateData]);
 
   useEffect(() => {
+    naacDvvInitializedRef.current = false;
+  }, [pageId]);
+
+  useEffect(() => {
+    if (!isEditing || pageId !== "iqac-aqar") return;
+    if (!sections.length) return;
+
+    sections.forEach((section, index) => {
+      if (!AQAR_DATA_SECTION_IDS.has(section?.sectionId)) return;
+
+      const currentText = String(section?.content?.text || "").trim();
+      if (currentText && /^\s*1\.\s+/m.test(currentText)) return;
+
+      const items = getAqarItems(section);
+      const nextMarkdown = buildAqarMarkdownFromItems(items, section.title);
+      if (!nextMarkdown) return;
+
+      updateData(`sections[${index}].content.text`, nextMarkdown);
+    });
+  }, [isEditing, pageId, sections, updateData]);
+
+  useEffect(() => {
+    if (!isEditing || pageId !== "iqac-naac") return;
+    if (naacDvvInitializedRef.current) return;
+    if (!sections.length) return;
+
+    const docsSectionIndex = sections.findIndex(
+      (section) => section?.sectionId === "naac-docs",
+    );
+    if (docsSectionIndex === -1) return;
+
+    const existingTable = String(
+      sections[docsSectionIndex]?.content?.dvvTable || "",
+    ).trim();
+    if (!existingTable) {
+      updateData(
+        `sections[${docsSectionIndex}].content.dvvTable`,
+        NAAC_DVV_TABLE_MARKDOWN,
+      );
+    }
+
+    naacDvvInitializedRef.current = true;
+  }, [isEditing, pageId, sections, updateData]);
+
+  useEffect(() => {
     // When rendered inside VisualPageEditor the data is already loaded into
     // EditContext — skip the redundant network request to avoid a double
     // fetch (and a double error in the console if the server is momentarily
